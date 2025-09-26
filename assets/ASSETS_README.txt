@@ -1,0 +1,1 @@
+Place banner.png and logo.png here (or keep embedded).

@@ -1,0 +1,248 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Grid — Code Race</title>
+  <style>
+    :root{--bg:#0b0a09;--card:#1a1716;--accent1:#6d4a46;--accent2:#827a5b;--paper:#f0eded;--accent3:#b44b52;--muted:rgba(240,237,237,0.65);--glass:rgba(255,255,255,0.03);}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,sans-serif}
+    body{background:linear-gradient(180deg,var(--bg) 0%, #0d0c0b 60%);color:var(--paper)}
+    .wrap{max-width:1200px;margin:24px auto;padding:18px}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:72px;height:72px;border-radius:8px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--paper);font-size:24px;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+    .brand-title {font-weight:900;font-size:32px;letter-spacing:1px;}
+    .brand-sub {font-size:13px;color:var(--muted);}
+    .cta-row{display:flex;gap:12px;margin-top:8px}
+    .btn{background:var(--accent2);color:#0b0a09;padding:10px 14px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--paper);}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;margin-top:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass);padding:18px;border-radius:12px}
+    .stats{display:flex;gap:12px}
+    .stat{flex:1;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;text-align:center}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    .feature{background:rgba(255,255,255,0.01);padding:10px;border-radius:8px}
+    .register{display:flex;flex-direction:column;gap:8px}
+    input,select,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    footer{margin-top:20px;color:var(--muted);font-size:13px}
+    .hero{height:220px;border-radius:12px;overflow:hidden;display:flex;align-items:center}
+    .hero img{width:100%;height:100%;object-fit:cover;display:block}
+    .hero-overlay{position:relative;margin-top:-100px;padding:14px}
+    .hero-card{background:linear-gradient(180deg, rgba(11,10,9,0.6), rgba(11,10,9,0.4));border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px)}
+    .ticker{margin-top:12px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);font-size:14px;color:var(--muted)}
+    .logo-square{width:140px;height:140px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:40px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+    /* Sponsor carousel */
+    .sponsor-row{display:flex;overflow:hidden;border-radius:10px;padding:8px;gap:18px;align-items:center;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));margin-top:14px}
+    .sponsor-track{display:flex;gap:28px;animation:scroll 20s linear infinite;align-items:center}
+    .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,0.02);min-width:120px;height:60px}
+    @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    /* FAQ accordion */
+    .faq{margin-top:16px}
+    .faq-item{border-radius:8px;background:rgba(255,255,255,0.015);margin-bottom:8px;padding:10px}
+    .faq-q{cursor:pointer;font-weight:700}
+    .faq-a{display:none;color:var(--muted);margin-top:8px}
+    /* sticky register modal */
+    .sticky-register-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent3),var(--accent1));color:var(--paper);border-radius:999px;padding:14px 18px;font-weight:800;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:999}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:1000}
+    .modal{background:var(--card);padding:18px;border-radius:12px;width:min(720px,95%);max-height:90vh;overflow:auto}
+    .modal h3{margin-top:0}
+    .discord-cta{display:flex;gap:10px;align-items:center;margin-top:12px}
+    .proof-template{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;color:var(--muted);margin-top:12px}
+    @media(max-width:880px){.grid{grid-template-columns:1fr}.logo{width:44px;height:44px}.hero{height:140px}.hero-overlay{margin-top:-64px}.brand-title{font-size:22px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
+        <div>
+          <div class="brand-title">THE GRID</div>
+          <div class="brand-sub">Race the Clock. Rule the Code.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <a class="btn ghost" href="rules.html">Rules</a>
+        <a class="btn" href="#register" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Register</a>
+      </div>
+    </div>
+
+    <div class="hero" aria-hidden="true">
+      <img src="assets/banner.png" alt="The Grid banner">
+    </div>
+
+    <div class="hero-overlay">
+      <div class="hero-card">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="logo-square"><img src="assets/logo.png" alt="G" style="width:86%;height:86%;object-fit:contain"></div>
+          <div style="flex:1">
+            <h1 style="margin:0 0 6px 0;font-size:26px">Enter the arena. Code fast. Win harder.</h1>
+            <div style="color:var(--muted)">48-hour rapid hackathon. 10 limited slots. ₹100 entry. Prize doubles when rounds fill. Join the ranked code races.</div>
+            <div class="cta-row" style="margin-top:10px">
+              <button class="btn" onclick="openRegister()">Claim a slot</button>
+              <a class="btn ghost" href="#faq" onclick="document.getElementById('faq').scrollIntoView({behavior:'smooth'})">FAQ</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sponsor carousel -->
+      <div class="sponsor-row" aria-hidden="true">
+        <div class="sponsor-track" id="sponsorTrack">
+          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
+          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
+          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
+          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
+          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
+          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div class="stats" style="margin-top:6px">
+            <div class="stat"><div style="font-size:18px;font-weight:800">10</div><div style="color:var(--muted)">Starting slots</div></div>
+            <div class="stat"><div style="font-size:18px;font-weight:800">₹100</div><div style="color:var(--muted)">Entry fee</div></div>
+            <div class="stat"><div style="font-size:18px;font-weight:800">48h</div><div style="color:var(--muted)">Round length</div></div>
+          </div>
+
+          <div class="features">
+            <div class="feature">Fast rounds — 48 hour challenges</div>
+            <div class="feature">Judge transparency & payout proof</div>
+            <div class="feature">Community on Discord</div>
+            <div class="feature">Sponsor-backed growth (pilot only entry-funded)</div>
+          </div>
+
+          <div class="ticker">Current: Round 1 — 7 slots left • Next round doubles slots & prize when this round fills</div>
+        </div>
+
+        <!-- FAQ accordion -->
+        <div id="faq" class="card faq">
+          <h3>FAQ</h3>
+          <div class="faq-item"><div class="faq-q">Who can participate?</div><div class="faq-a">Anyone with a Discord account and the drive to ship. Solo or teams up to 3.</div></div>
+          <div class="faq-item"><div class="faq-q">How to submit?</div><div class="faq-a">Submit a GitHub repo link and a 2-minute demo video before the deadline. Follow the submission template in the Discord #submissions channel.</div></div>
+          <div class="faq-item"><div class="faq-q">How are projects judged?</div><div class="faq-a">Innovation 30% • Functionality 30% • Design 20% • Presentation 20% — judges will post scores and short notes.</div></div>
+          <div class="faq-item"><div class="faq-q">What if slots don’t fill?</div><div class="faq-a">Prize and slot doubling only happens when a round fully fills. If the round doesn't fill, we run it as a regular round and publish next steps publicly.</div></div>
+          <div class="faq-item"><div class="faq-q">How are winners paid?</div><div class="faq-a">Winners are paid within 48 hours. We publish masked transaction receipts in the Proofs section and in the Discord #winners channel.</div></div>
+        </div>
+
+        <!-- Proof of payout template -->
+        <div class="card" style="margin-top:12px">
+          <h3>Proof of Payout (Template)</h3>
+          <div class="proof-template">
+            <strong>Winner:</strong> Team Alpha<br>
+            <strong>Prize:</strong> ₹500<br>
+            <strong>Date:</strong> 2025-10-12<br>
+            <strong>Txn (masked):</strong> UPI ****1234<br>
+            <div style="margin-top:8px;color:var(--muted)">We will upload a screenshot of the transaction (sensitive details redacted) to #winners and in the site admin panel.</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h3>How scaling works</h3>
+          <p style="color:var(--muted)">If current round fills all slots, next round doubles both the number of slots and the prize pool (slot growth is capped by realistic capacity — we will not promise rounds we cannot pay).</p>
+          <pre style="background:rgba(0,0,0,0.25);padding:10px;border-radius:8px;color:var(--muted)">Week n: Slots = 10 × 2^(n-1)
+Prize = Slots × ₹100 × 0.5
+Organizer cut = Slots × ₹100 × 0.5</pre>
+        </div>
+      </div>
+
+      <aside>
+        <div id="register" class="card register">
+          <h3>Register — Round 1</h3>
+          <label>Discord tag</label>
+          <input id="discord" placeholder="e.g. Hein#1234">
+          <label>Real name</label>
+          <input id="name" placeholder="Your name">
+          <label>Txn ID / Payment Proof (UPI)</label>
+          <input id="txn" placeholder="UPI transaction id or link">
+          <button class="btn" onclick="submitRegistration()">Submit Registration</button>
+          <div id="regmsg" style="color:var(--muted);font-size:13px">Payments verified by mods within 12 hours.</div>
+
+          <div style="margin-top:12px">
+            <div style="font-weight:700">Join our Discord</div>
+            <div class="discord-cta">
+              <a class="btn" href="https://discord.gg/" target="_blank">Join Discord</a>
+              <div style="color:var(--muted);font-size:13px">Or search: THE GRID on Discord</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>Quick FAQ</h4>
+          <div style="color:var(--muted);font-size:13px">How to pay: UPI to <strong>UPI_ID_PLACEHOLDER</strong>. Save txn screenshot. Post txn in #register on Discord.</div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>Event Mode</h4>
+          <div style="color:var(--muted);font-size:13px">Current mode: <strong>Overdrive</strong> — Amplify slots and prize when round fills. Keep an eye on alerts for live updates.</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      © The Grid • Race the Clock. Rule the Code. • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a>
+    </footer>
+  </div>
+
+  <!-- Sticky register button -->
+  <button class="sticky-register-btn" onclick="openRegister()">CLAIM SLOT</button>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+      <h3 id="registerTitle">Register for Round 1</h3>
+      <p style="color:var(--muted)">Fill and submit — a CSV will download for testing. Admins will manually verify payments.</p>
+      <label>Discord tag</label><input id="m-discord"><label>Real name</label><input id="m-name"><label>Txn ID / Payment proof</label><input id="m-txn">
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn" onclick="modalSubmit()">Submit</button>
+        <button class="btn ghost" onclick="closeRegister()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // FAQ accordion behavior
+    document.querySelectorAll('.faq-q').forEach(function(q){{ q.addEventListener('click', function(){{ var a = q.nextElementSibling; if(a.style.display === 'block') a.style.display = 'none'; else a.style.display = 'block'; }}); }});
+
+    // Sponsor track speed control on hover
+    var sponsorTrack = document.getElementById('sponsorTrack');
+    if(sponsorTrack){{ sponsorTrack.addEventListener('mouseenter', function(){{ sponsorTrack.style.animationPlayState = 'paused'; }}); sponsorTrack.addEventListener('mouseleave', function(){{ sponsorTrack.style.animationPlayState = 'running'; }}); }}
+
+    // Sticky modal controls
+    function openRegister(){{ document.getElementById('modalBackdrop').style.display='flex'; }}
+    function closeRegister(){{ document.getElementById('modalBackdrop').style.display='none'; }}
+
+    function modalSubmit(){{ 
+      var d = document.getElementById('m-discord').value.trim();
+      var n = document.getElementById('m-name').value.trim();
+      var t = document.getElementById('m-txn').value.trim();
+      if(!d||!n||!t){{ alert('Fill all fields'); return; }}
+      var data = ['Discord','Name','Txn'].join(',') + '\n' + ['"' + d.replace(/"/g,'""') + '"','"' + n.replace(/"/g,'""') + '"','"' + t.replace(/"/g,'""') + '"'].join(',') + '\n';
+      var blob = new Blob([data], {{type:'text/csv'}});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a'); a.href = url; a.download = 'registration_demo.csv'; a.click(); URL.revokeObjectURL(url);
+      alert('Submitted — admins will verify payments within 12 hours.');
+      closeRegister();
+    }}
+
+    // Sidebar register submit (non-modal)
+    function submitRegistration(){{ 
+      var d = document.getElementById('discord').value.trim();
+      var n = document.getElementById('name').value.trim();
+      var t = document.getElementById('txn').value.trim();
+      var msg = document.getElementById('regmsg');
+      if(!d||!n||!t){{ msg.textContent='Fill all fields before submitting.'; return; }}
+      var data = ['Discord','Name','Txn'].join(',') + '\n' + ['"' + d.replace(/"/g,'""') + '"','"' + n.replace(/"/g,'""') + '"','"' + t.replace(/"/g,'""') + '"'].join(',') + '\n';
+      var blob = new Blob([data], {{type:'text/csv'}});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a'); a.href = url; a.download = 'registration.csv'; a.click(); URL.revokeObjectURL(url);
+      msg.textContent='Submitted — admins will verify in 12 hours.';
+    }}
+  </script>
+</body>
+</html>
