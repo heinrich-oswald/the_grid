@@ -1,32 +1,613 @@
 
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>The Grid — Rules</title>
-<style>
-body{font-family:Inter,system-ui,Roboto,sans-serif;background:#0b0a09;color:#f0eded;padding:24px}a{color:#b44b52}
-.card{background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);max-width:900px;margin:auto}
-h1{font-size:28px}
-.rule-list{margin-top:12px}
-.rule-list li{margin-bottom:8px}
-</style></head><body>
-<div class="card">
-  <h1>The Grid — Official Rules & Judging</h1>
-  <p style="color:rgba(240,237,237,0.75)">Read carefully. Violations can lead to disqualification. This is a rapid competitive event — fair play is enforced.</p>
-  <ol class="rule-list">
-    <li><strong>Eligibility:</strong> Open to anyone with a Discord account. Participants must comply with local laws. One account per participant.</li>
-    <li><strong>Teams:</strong> Teams up to 3 members. If a member leaves mid-round, the remaining team may continue.</li>
-    <li><strong>Entry & Payment:</strong> Entry fee is ₹100 per person (pilot). Payment via UPI/Razorpay as announced. Save payment receipts — required for verification.</li>
-    <li><strong>Slots & Scaling:</strong> Rounds start with 10 slots. Once a round fills, next round slots/prize double. We will not promise rounds we cannot fund.</li>
-    <li><strong>Submission:</strong> Submit a GitHub repo link and a 2-minute demo video. Use the official submission template in Discord. Late submissions disqualify.</li>
-    <li><strong>Judging:</strong> Innovation 30% • Functionality 30% • Design 20% • Presentation 20%. Judges' decisions are final; scores and short notes will be published.</li>
-    <li><strong>Code Ownership & Licenses:</strong> Projects must respect copyrights. Use only assets you have rights to. You may open-source your project if you wish.</li>
-    <li><strong>Fraud & Cheating:</strong> No plagiarism, no automated entries, no payment scams. If fraud is detected, involved entries are disqualified and reported.</li>
-    <li><strong>Refunds:</strong> Refund policy: If we cancel a round, refunds will be processed within 7 days. Admins will post masked txn proof of refunds.</li>
-    <li><strong>Payouts & Proof:</strong> Winners paid within 48 hours. Wallet txns will be masked and screenshots posted to #winners and on the site in Proofs.</li>
-    <li><strong>Code of Conduct:</strong> Respect others. No hate speech, harassment, or illegal content. Infractions: warn → mute → ban.</li>
-    <li><strong>Contact & Support:</strong> For disputes email admin@thegrid.example. Appeals will be logged and reviewed by moderators.</li>
-  </ol>
-  <p style="margin-top:16px;color:rgba(240,237,237,0.7)">By participating you agree to these rules.</p>
-  <p style="margin-top:18px"><a href="index.html">← Back to Home</a></p>
-</div>
-</body></html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>The Grid — General Rules</title>
+    <style>
+        /* Global variables */
+        :root {
+            --bg: #0b0a09;
+            --card: rgba(255, 255, 255, 0.03);
+            --paper: #f0eded;
+            --muted: rgba(240, 237, 237, 0.6);
+            --accent1: #00ff80;
+            --accent2: #00cc66;
+            --accent3: #00994d;
+            --glass: rgba(0, 255, 128, 0.1);
+            --error: #ff4444;
+        }
+
+        /* Base styles */
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: Inter, system-ui, Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--paper);
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 20px 20px, rgba(0, 255, 128, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        /* Container */
+        .wrap {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--glass);
+            margin-bottom: 32px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent1) 0%, var(--accent3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 255, 128, 0.2);
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: 800;
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Main content */
+        main {
+            flex: 1;
+        }
+
+        /* Card styling */
+        .card {
+            background: var(--card);
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid var(--glass);
+            box-shadow: 0 0 30px rgba(0, 255, 128, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 40px rgba(0, 255, 128, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20px 20px, rgba(0, 255, 128, 0.05) 1px, transparent 0);
+            background-size: 20px 20px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 32px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-top: 0;
+            margin-bottom: 24px;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: var(--accent1);
+            position: relative;
+            z-index: 1;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            color: var(--paper);
+            position: relative;
+            z-index: 1;
+        }
+
+        p {
+            line-height: 1.7;
+            color: var(--muted);
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Lists */
+        ul {
+            padding-left: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        strong {
+            color: var(--paper);
+            font-weight: 600;
+        }
+
+        /* Quick access buttons */
+        .quick-access {
+            display: flex;
+            gap: 16px;
+            margin: 24px 0;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--accent1) 0%, var(--accent3) 100%);
+            color: var(--bg);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.7s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 128, 0.3);
+        }
+
+        .btn.ghost {
+            background: transparent;
+            border: 1px solid var(--accent1);
+            color: var(--accent1);
+        }
+
+        .btn.ghost:hover {
+            background: rgba(0, 255, 128, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 48px;
+            padding: 24px;
+            border-top: 1px solid var(--glass);
+            color: var(--muted);
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        footer a {
+            color: var(--accent1);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent2);
+            text-decoration: underline;
+        }
+
+        /* Footer layout - simplified for perfect centering */
+        footer .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+        }
+
+        footer .footer-main {
+            margin-bottom: 12px;
+            text-align: center;
+            width: 100%;
+        }
+
+        footer .footer-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+        }
+
+        footer .separator {
+            display: none;
+        }
+
+        /* Code of Conduct button in footer */
+        footer .code-of-conduct-btn {
+            color: var(--accent1);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background-color: rgba(75, 118, 180, 0.1);
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            display: block;
+            text-align: center;
+        }
+
+        footer .code-of-conduct-btn:hover {
+            background-color: rgba(75, 118, 180, 0.2);
+            text-decoration: none;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 24px;
+            font-size: 16px;
+            color: var(--accent1);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-link:hover {
+            color: var(--accent2);
+        }
+
+        .back-link::before {
+            content: '←';
+            margin-right: 8px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .wrap {
+                padding: 16px;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            /* Footer responsive styles */
+            footer {
+                padding: 16px;
+                margin-top: 32px;
+            }
+            
+            footer .footer-content {
+                gap: 8px;
+            }
+            
+            footer .footer-links {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+                width: 100%;
+            }
+            
+            footer .code-of-conduct-btn {
+                margin: 0 auto;
+                display: block;
+                width: fit-content;
+            }
+            
+            /* Event cards responsive styles */
+            .event-cards {
+                gap: 16px;
+                margin-top: 24px;
+            }
+            
+            .event-card {
+                padding: 16px;
+            }
+            
+            .event-card .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                max-width: 180px;
+                margin: 0 auto;
+            }
+            
+            /* Quick access buttons responsive */
+            .quick-access {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .quick-access .btn {
+                width: 100%;
+                text-align: center;
+                max-width: 280px;
+            }
+        }
+
+        /* Rules sections */
+        .rules-section {
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Event cards */
+        .event-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+            position: relative;
+            z-index: 1;
+            align-items: stretch;
+        }
+
+        .event-card {
+            background: var(--card);
+            border-radius: 16px;
+            border: 1px solid var(--glass);
+            padding: 24px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-sizing: border-box;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 255, 128, 0.1);
+            border-color: var(--accent1);
+        }
+
+        .event-card h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--accent1);
+            text-align: center;
+        }
+
+        .event-card p {
+            flex-grow: 1;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .event-card .btn {
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
+            display: block;
+            padding: 12px 24px;
+            max-width: 200px;
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: rgba(0, 255, 128, 0.05);
+            border-left: 4px solid var(--accent1);
+            padding: 16px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Code of Conduct link */
+        .coc-link {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(0, 255, 128, 0.03);
+            border: 1px solid var(--glass);
+            border-radius: 12px;
+            color: var(--accent1);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .coc-link:hover {
+            background: rgba(0, 255, 128, 0.1);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header class="nav">
+            <div class="brand">
+                <div class="logo"><span style="color: #0b0a09; font-size: 30px; font-weight: 900;">G</span></div>
+                <div class="brand-title">THE GRID</div>
+            </div>
+        </header>
+
+        <main>
+            <div class="card">
+                <h1>The Grid — General Rules</h1>
+                <p>Welcome to The Grid! These are the general rules that apply to all our coding challenges and hackathons. Please read them carefully to ensure a fair and enjoyable experience for everyone.</p>
+                
+                <!-- Quick access buttons -->
+                <div class="quick-access">
+                    <a href="code_of_conduct.html" class="btn">Code of Conduct</a>
+                    <a href="rules.html" class="btn ghost">General Rules</a>
+                </div>
+
+                <div class="event-cards">
+                    <div class="event-card">
+                        <h3>Multiplier Challenge</h3>
+                        <p>Test your algorithmic skills in our solo coding competition where efficiency and optimization are key.</p>
+                        <a href="multiplier_rules.html" class="btn">View Rules</a>
+                    </div>
+                    <div class="event-card">
+                        <h3>Teams Challenge</h3>
+                        <p>Collaborate with your team to solve complex problems and build innovative solutions together.</p>
+                        <a href="teams_rules.html" class="btn">View Rules</a>
+                    </div>
+                    <div class="event-card">
+                        <h3>Time Bound Challenge</h3>
+                        <p>Put your coding speed to the test in our time-limited challenge with increasing difficulty.</p>
+                        <a href="timebound_rules.html" class="btn">View Rules</a>
+                    </div>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Eligibility</h2>
+                    <ul>
+                        <li><strong>Age Requirement:</strong> Participants must be at most 17 years old and have parental consent to participate.</li>
+                        <li><strong>Geographic Restrictions:</strong> The Grid is open to participants worldwide, unless restricted by local laws or regulations.</li>
+                        <li><strong>Multiple Entries:</strong> Each participant is allowed only one entry per challenge, unless otherwise specified.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>General Guidelines</h2>
+                    <ul>
+                        <li><strong>Original Work:</strong> All submissions must be the original work of the participant(s). Plagiarism will result in disqualification.</li>
+                        <li><strong>Code Quality:</strong> Submitted code should be well-commented, readable, and follow best practices for the chosen programming language.</li>
+                        <li><strong>Fair Play:</strong> No cheating, hacking, or any form of unfair advantage will be tolerated.</li>
+                        <li><strong>Submission Deadline:</strong> All submissions must be received by the specified deadline. Late submissions will not be accepted.</li>
+                        <li><strong>Judging:</strong> All submissions will be judged based on the criteria specified for each challenge.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Entry and Payment</h2>
+                    <ul>
+                        <li><strong>Entry Fee:</strong> Each challenge may have an entry fee, which will be clearly stated on the challenge page.</li>
+                        <li><strong>Payment Methods:</strong> We accept various payment methods. Details will be provided during registration.</li>
+                        <li><strong>Refund Policy:</strong> Refunds will only be considered if requested at least 48 hours before the start of the challenge.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Code Ownership and Usage</h2>
+                    <ul>
+                        <li><strong>Intellectual Property:</strong> Participants retain ownership of their code, but grant The Grid a non-exclusive, royalty-free license to use, display, and modify their submissions for promotional and educational purposes.</li>
+                        <li><strong>Open Source:</strong> Participants are encouraged to make their code open source, but it is not required.</li>
+                        <li><strong>Privacy:</strong> Personal information will be handled in accordance with our privacy policy.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Fraud and Disqualification</h2>
+                    <ul>
+                        <li><strong>Fraudulent Activity:</strong> Any attempt to manipulate the competition or payment system will result in immediate disqualification and may lead to legal action.</li>
+                        <li><strong>Disqualification:</strong> The Grid reserves the right to disqualify any participant at any time for violating the rules or engaging in unethical behavior.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Payouts</h2>
+                    <ul>
+                        <li><strong>Prize Distribution:</strong> Prizes will be distributed within 7 days after the announcement of results.</li>
+                        <li><strong>Payout Methods:</strong> Prizes will be paid via the method specified by the winner, subject to verification.</li>
+                        <li><strong>Taxes:</strong> Winners are responsible for any taxes associated with their prizes.</li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <p><strong>Note:</strong> Specific rules for each challenge (Multiplier, Teams, Time Bound) are available on their respective rules pages. These general rules apply to all challenges, but the specific rules may contain additional details and requirements.</p>
+                    <p><strong>Stay Active:</strong> Make sure to stay active in the Discord server as all important announcements will be shared there.</p>
+                </div>
+
+                <a href="index.html" class="back-link">Back to Home</a>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-main">© The Grid • Code Challenges & Hackathons • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a></div>
+                <div class="footer-links">
+                    <a href="https://discord.gg/Xy28vhgA" target="_blank" rel="noopener noreferrer">Join Discord</a>
+                    <a href="code_of_conduct.html" class="code-of-conduct-btn">Code of Conduct</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

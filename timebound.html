@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Grid — Time Bound Event</title>
+  <style>
+    :root{--bg:#0b0a09;--card:#1a1716;--accent1:#4a466d;--accent2:#5b7a82;--paper:#f0eded;--accent3:#4b76b4;--muted:rgba(240,237,237,0.65);--glass:rgba(255,255,255,0.03);}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,sans-serif;overflow-x:hidden}
+    body{background:linear-gradient(180deg,var(--bg) 0%, #0d0c0b 60%);color:var(--paper)}
+    .wrap{max-width:1200px;margin:24px auto;padding:18px}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:72px;height:72px;border-radius:8px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--paper);font-size:24px;box-shadow:0 6px 18px rgba(0,0,0,0.6);transition: transform 0.3s ease, box-shadow 0.3s ease}
+    .logo:hover{transform: translateY(-4px);box-shadow:0 12px 24px rgba(75, 118, 180, 0.4)}
+    .brand-title {font-weight:900;font-size:32px;letter-spacing:1px;background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .brand-sub {font-size:13px;color:var(--muted);}
+    .cta-row{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+    .btn{background:linear-gradient(135deg,var(--accent2),var(--accent3));color:#0b0a09;padding:10px 14px;border-radius:10px;border:0;font-weight:700;cursor:pointer;transition: transform 0.3s ease, box-shadow 0.3s ease;position:relative;overflow:hidden}
+    .btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);transition: left 0.5s ease}
+    .btn:hover::before{left:100%}
+    .btn:hover{transform: translateY(-2px);box-shadow:0 8px 24px rgba(75, 118, 180, 0.3)}
+    .btn.ghost{background:transparent;border:1px solid rgba(75, 118, 180, 0.3);color:var(--paper);transition: all 0.3s ease}
+    .btn.ghost:hover{background:linear-gradient(135deg, rgba(75, 118, 180, 0.2), rgba(74, 70, 109, 0.2));border-color:var(--accent3);transform: translateY(-2px);box-shadow:0 6px 18px rgba(75, 118, 180, 0.2)}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;margin-top:18px;position:relative}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass);padding:18px;border-radius:12px;position:relative;overflow:hidden;transition: transform 0.3s ease, box-shadow 0.3s ease}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg, var(--accent1), var(--accent3), var(--accent1));opacity:0.7}
+    .card:hover{transform: translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,0.4)}
+    .stats{display:flex;gap:12px;flex-wrap:wrap}
+    .stat{flex:1;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;text-align:center;transition: all 0.3s ease;transform: translateY(20px);opacity:0}
+    .stat:hover{background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));transform: translateY(-2px)}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    .feature{background:rgba(255,255,255,0.01);padding:10px;border-radius:8px;transition: all 0.3s ease;display:flex;align-items:center;gap:8px}
+    .feature:hover{background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));transform: translateX(4px)}
+    .register{display:flex;flex-direction:column;gap:8px}
+    input,select,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;transition: all 0.3s ease}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent3);box-shadow:0 0 0 3px rgba(75, 118, 180, 0.15)}
+    footer{margin-top:20px;color:var(--muted);font-size:13px;border-top:1px solid var(--glass);padding-top:12px}
+    .hero{height:220px;border-radius:12px;overflow:hidden;display:flex;align-items:center;position:relative;transition: transform 0.3s ease}
+    .hero:hover{transform: scale(1.02)}
+    .hero img{width:100%;height:100%;object-fit:cover;display:block;transition: filter 0.3s ease}
+    .hero:hover img{filter: brightness(1.1)}
+    .hero-overlay{position:relative;margin-top:-100px;padding:14px}
+    .hero-card{background:linear-gradient(180deg, rgba(11,10,9,0.6), rgba(11,10,9,0.4));border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px);transition: transform 0.3s ease, box-shadow 0.3s ease}
+    .hero-card:hover{transform: translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,0.4)}
+    .ticker{margin-top:12px;padding:8px;border-radius:8px;background:linear-gradient(90deg, rgba(75, 118, 180, 0.1), rgba(74, 70, 109, 0.1));color:var(--accent3);font-weight:600;border-left:3px solid var(--accent3)}
+    .logo-square{width:140px;height:140px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:40px;box-shadow:0 10px 30px rgba(0,0,0,0.6);transition: transform 0.3s ease, box-shadow 0.3s ease}
+    .logo-square:hover{transform: scale(1.05);box-shadow:0 15px 35px rgba(75, 118, 180, 0.4)}
+    /* Sponsor carousel */
+    .sponsor-row{display:flex;overflow:hidden;border-radius:10px;padding:8px;gap:18px;align-items:center;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));margin-top:14px;border:1px solid var(--glass)}
+    .sponsor-track{display:flex;gap:28px;animation:scroll 20s linear infinite;align-items:center}
+    .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,0.02);width:200px;height:100px;transition: all 0.3s ease}
+    .sponsor:hover{background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));transform: scale(1.05)}
+    @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    /* FAQ accordion */
+    .faq{margin-top:16px}
+    .faq-item{border-radius:8px;background:rgba(255,255,255,0.015);margin-bottom:8px;padding:10px;transition: all 0.3s ease}
+    .faq-item:hover{background:linear-gradient(180deg, rgba(75, 118, 180, 0.05), rgba(75, 118, 180, 0.02))}
+    .faq-q{cursor:pointer;font-weight:700;transition: all 0.3s ease;position:relative;padding-right:24px}
+    .faq-q:hover{color:var(--accent3)}
+    .faq-q::after{content:'→';position:absolute;right:8px;transition: transform 0.3s ease}
+    .faq-q.active::after{transform: rotate(90deg)}
+    .faq-a{display:none;color:var(--muted);margin-top:8px;max-height:0;overflow:hidden;transition: max-height 0.3s ease, margin-top 0.3s ease}
+    /* sticky register modal */
+    .sticky-register-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent3),var(--accent1));color:var(--paper);border-radius:999px;padding:14px 18px;font-weight:800;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:999;transition: all 0.3s ease;animation: float 3s ease-in-out infinite}
+    .sticky-register-btn:hover{transform: translateY(-4px);box-shadow:0 15px 35px rgba(75, 118, 180, 0.4)}
+    @keyframes float{0%{transform: translateY(0)}50%{transform: translateY(-6px)}100%{transform: translateY(0)}}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;visibility:hidden;transition: opacity 0.3s ease, visibility 0.3s ease}
+    .modal-backdrop.active{opacity:1;visibility:visible}
+    .modal{background:var(--card);padding:18px;border-radius:12px;width:min(720px,95%);max-height:90vh;overflow:auto;transform: scale(0.9);transition: transform 0.3s ease;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+    .modal-backdrop.active .modal{transform: scale(1)}
+    .modal h3{margin-top:0}
+    .discord-cta{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+    .proof-template{background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:12px;border-radius:8px;color:var(--paper);margin-top:12px;border-left:3px solid var(--accent3)}
+    /* Toast notification */
+    .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);padding:12px 20px;border-radius:999px;color:#0b0a09;font-weight:700;z-index:1001;box-shadow:0 8px 24px rgba(0,0,0,0.4);opacity:0;transition: opacity 0.3s ease, transform 0.3s ease;backdrop-filter: blur(4px);text-align:center;min-width:250px}
+    /* Responsive design */
+    @media(max-width:640px){
+      .grid{grid-template-columns:1fr}
+      .logo{width:44px;height:44px}
+      .hero{height:140px}
+      .hero-overlay{margin-top:-64px}
+      .brand-title{font-size:22px}
+      .features{grid-template-columns:1fr}
+      .stats{justify-content:space-around}
+      .stat{flex:0 0 calc(45% - 6px)}
+      .hero-card{padding:12px}
+      .logo-square{width:100px;height:100px}
+      .sticky-register-btn{padding:12px 16px;right:12px;bottom:12px}
+      .modal{padding:14px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
+        <div>
+          <div class="brand-title">THE GRID</div>
+          <div class="brand-sub">Time Bound Event</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="multiplier.html">Multiplier</a>
+        <a class="btn ghost" href="teams.html">Teams</a>
+        <a class="btn ghost" href="timebound_rules.html">Rules</a>
+        <a class="btn" href="#register" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Register</a>
+      </div>
+    </div>
+
+    <div class="hero" aria-hidden="true">
+      <img src="assets/banner.png" alt="The Grid banner">
+    </div>
+
+    <div class="hero-overlay">
+      <div class="hero-card">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <!-- Decorative elements -->
+            <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:var(--accent3);opacity:0.1;border-radius:50%;filter:blur(20px);z-index:0;"></div>
+            <div style="position:absolute;bottom:-10px;left:40%;width:80px;height:80px;background:var(--accent1);opacity:0.1;border-radius:50%;filter:blur(15px);z-index:0;"></div>
+            
+            <!-- Logo -->
+            <div class="logo-square" style="animation: pulse 2s infinite;">
+              <img src="assets/logo.png" alt="T" style="width:86%;height:86%;object-fit:contain;filter:brightness(1.2)">
+            </div>
+            
+            <!-- Hero content -->
+            <div style="flex:1">
+              <div style="position:relative;z-index:1;">
+                <!-- Event badge -->
+                <div style="display:inline-block;background:linear-gradient(135deg,var(--accent3),var(--accent1));padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-bottom:6px;">🚀 Time Bound</div>
+                
+                <!-- Title with gradient -->
+                <h1 style="margin:0 0 6px 0;font-size:26px;background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.8));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+                  Race Against the Clock
+                </h1>
+                
+                <!-- Description -->
+                <div style="color:var(--muted);margin-bottom:12px;">
+                  Push your limits with an intense 2-hour coding sprint. Limited to 10 slots with a ₹500 cash prize for the fastest and most creative solution.
+                </div>
+                
+                <!-- Prize highlight -->
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                  <div style="color:var(--accent3);font-weight:700;">💰 Grand Prize:</div>
+                  <div style="font-size:18px;font-weight:800;background:linear-gradient(90deg, var(--paper), var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹500</div>
+                </div>
+                
+                <!-- CTA buttons -->
+                <div class="cta-row" style="margin-top:10px;">
+                  <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank">Ready for the Challenge?</a>
+                  <a class="btn ghost" href="timebound_rules.html">Competition Rules</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Countdown timer with improved styling -->
+          <div style="margin-top:14px;text-align:center;">
+            <div style="font-size:12px;margin-bottom:6px;color:var(--accent3);font-weight:600;">NEXT CHALLENGE STARTS IN</div>
+            <div style="display:flex;justify-content:center;gap:6px;">
+              <div style="background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:6px 10px;border-radius:6px;border:1px solid rgba(75, 118, 180, 0.2);">
+                <span style="font-weight:700;">03</span><span style="font-size:10px;">d</span>
+              </div>
+              <div style="background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:6px 10px;border-radius:6px;border:1px solid rgba(75, 118, 180, 0.2);">
+                <span style="font-weight:700;">12</span><span style="font-size:10px;">h</span>
+              </div>
+              <div style="background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:6px 10px;border-radius:6px;border:1px solid rgba(75, 118, 180, 0.2);">
+                <span style="font-weight:700;">45</span><span style="font-size:10px;">m</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <style>
+          @keyframes pulse {0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);}}
+        </style>
+
+      <!-- Sponsor carousel -->
+      <div class="sponsor-row" aria-hidden="true">
+        <div class="sponsor-track" id="sponsorTrack">
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <!-- Stats Card -->
+        <div class="card">
+          <div class="stats" style="margin-top:6px">
+            <div class="stat"><div style="font-size:18px;font-weight:800;color:var(--accent3)">₹100</div><div style="color:var(--muted)">Entry fee</div></div>
+            <div class="stat"><div style="font-size:18px;font-weight:800;color:var(--accent3)">TBA</div><div style="color:var(--muted)">Cash prize</div></div>
+            <div class="stat"><div style="font-size:18px;font-weight:800;color:var(--accent3)">2 hrs</div><div style="color:var(--muted)">Challenge time</div></div>
+            <div class="stat"><div style="font-size:18px;font-weight:800;color:var(--accent3)">Weekly</div><div style="color:var(--muted)">Frequency</div></div>
+          </div>
+
+          <!-- Features -->
+          <div class="features">
+            <div class="feature">⏱️ Weekly 2-hour coding sessions</div>
+            <div class="feature">👤 Individual participation only</div>
+            <div class="feature">🎯 Prompts provided via Discord</div>
+            <div class="feature">⚡ Immediate judging after deadline</div>
+            <div class="feature">📅 No limited slots</div>
+            <div class="feature">🏆 Prizes to be announced soon</div>
+          </div>
+
+          <!-- Ticker with flame emoji -->
+          <div class="ticker">🔥 Current: Round 1 • Prepare for a weekly 2-hour coding sprint based on Discord prompts</div>
+        </div>
+
+        <!-- What Makes Time Bound Unique? -->
+        <div class="card" style="margin-top:18px">
+          <h3 style="margin-top:0;margin-bottom:12px;background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+            What Makes Time Bound Unique?
+          </h3>
+          
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:12px;">
+            <div style="background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:14px;border-radius:8px;border:1px solid rgba(75, 118, 180, 0.2);transition: transform 0.3s ease;">
+              <div style="font-size:24px;margin-bottom:8px;">🏃</div>
+              <div style="font-weight:700;margin-bottom:4px;">Speed is Key</div>
+              <div style="color:var(--muted);font-size:13px;">Test your ability to think and code under pressure with our strict 2-hour time limit.</div>
+            </div>
+            
+            <div style="background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:14px;border-radius:8px;border:1px solid rgba(75, 118, 180, 0.2);transition: transform 0.3s ease;">
+              <div style="font-size:24px;margin-bottom:8px;">🎯</div>
+              <div style="font-weight:700;margin-bottom:4px;">Focused Development</div>
+              <div style="color:var(--muted);font-size:13px;">The tight timeline forces you to prioritize features and create minimum viable products quickly.</div>
+            </div>
+            
+            <div style="background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:14px;border-radius:8px;border:1px solid rgba(75, 118, 180, 0.2);transition: transform 0.3s ease;">
+              <div style="font-size:24px;margin-bottom:8px;">🏆</div>
+              <div style="font-weight:700;margin-bottom:4px;">Instant Gratification</div>
+              <div style="color:var(--muted);font-size:13px;">Get immediate feedback from judges and see results right after submission.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ accordion with improved styling -->
+        <div id="faq" class="card faq" style="margin-top:18px;">
+          <h3 style="background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:0;">Time Bound Event FAQ</h3>
+          <div class="faq-item"><div class="faq-q">👤 Who can participate?</div><div class="faq-a">Anyone with a Discord account and the drive to code under pressure. Individual participation only.</div></div>
+          <div class="faq-item"><div class="faq-q">⏱️ What is the timeline?</div><div class="faq-a">Weekly 2-hour sessions. Each week, participants will be given 2 hours to make something based on the prompt provided in the Discord server. No limited slots.</div></div>
+          <div class="faq-item"><div class="faq-q">🎯 Will there be a theme?</div><div class="faq-a">Yes, the challenge theme will be revealed at the start of the event. All participants must build around this theme.</div></div>
+          <div class="faq-item"><div class="faq-q">📊 How are projects judged?</div><div class="faq-a">Speed 30% • Functionality 30% • Creativity 20% • Quality 20% — judges will provide immediate feedback after submission.</div></div>
+          <div class="faq-item"><div class="faq-q">🏆 When will winners be announced?</div><div class="faq-a">Winners will be announced immediately after the judging period concludes. Prize money will be announced soon.</div></div>
+          <div class="faq-item"><div class="faq-q">💸 What's the entry fee for?</div><div class="faq-a">The ₹100 entry fee helps cover prize costs and ensures participants are committed to completing the challenge once registered.</div></div>
+        </div>
+
+        <!-- Proof of payout template with improved styling -->
+        <div class="card" style="margin-top:18px;">
+          <h3 style="background:linear-gradient(90deg, var(--accent3), rgba(75, 118, 180, 0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Proof of Payout (Template)</h3>
+          <div class="proof-template">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <div style="font-size:20px;">🏆</div>
+              <strong style="color:var(--accent3);">Winner:</strong> <span>Participant Name</span>
+            </div>
+            <div style="margin-bottom:4px;"><strong style="color:var(--accent3);">Prize:</strong> ₹500</div>
+            <div style="margin-bottom:4px;"><strong style="color:var(--accent3);">Date:</strong> 2025-10-12</div>
+            <div style="margin-bottom:4px;"><strong style="color:var(--accent3);">Txn (masked):</strong> UPI ****1234</div>
+            <div style="margin-top:8px;color:var(--muted);font-size:13px;">We will upload a screenshot of the transaction (sensitive details redacted) to #winners and in the site admin panel.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <aside>
+        <!-- Registration section with improved styling -->
+        <div id="register" class="card register">
+          <h3 style="background:linear-gradient(90deg, var(--accent3), rgba(75, 118, 180, 0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+            Register — Time Bound Event
+          </h3>
+          <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">
+            Limited to 10 slots • ₹100 entry fee • ₹500 grand prize
+          </div>
+          <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" style="width: 100%; text-align: center; margin-bottom: 16px; padding: 12px;">Register Now</a>
+          <div style="color:var(--muted);font-size:13px">Fill out the Google Form to register. Payments will be verified by moderators within 12 hours.</div>
+
+          <!-- Registration progress bar -->
+          <div style="margin-top:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+              <div style="font-size:12px;">Registration Progress</div>
+              <div style="font-size:12px;color:var(--accent3);font-weight:600;">3/10 slots filled</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.02);border-radius:999px;height:6px;overflow:hidden;">
+              <div style="background:linear-gradient(90deg,var(--accent1),var(--accent3));height:100%;width:30%;transition: width 0.8s ease;"></div>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;">
+            <div style="font-weight:700">Join our Discord</div>
+            <div class="discord-cta">
+              <a class="btn" href="https://discord.gg/Xy28vhgA" target="_blank">Join Discord</a>
+              <div style="color:var(--muted);font-size:13px">Or search: THE GRID on Discord</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick FAQ with improved styling -->
+        <div class="card" style="margin-top:18px;">
+          <h4 style="background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Quick FAQ</h4>
+          <div style="color:var(--paper);font-size:13px;background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:10px;border-radius:6px;">
+            How to pay: UPI to <strong style="color:var(--accent3);">UPI_ID_PLACEHOLDER</strong>. Save txn screenshot. Post txn in #register on Discord.
+          </div>
+          <div style="color:var(--paper);font-size:13px;background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:10px;border-radius:6px;margin-top:8px;">
+            Stay active in Discord: All important announcements will be shared there.
+          </div>
+        </div>
+
+        <!-- Event Details with improved styling -->
+        <div class="card" style="margin-top:18px;">
+          <h4 style="background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Event Details</h4>
+          <div style="color:var(--paper);font-size:13px;background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:10px;border-radius:6px;">
+            Registration closes when all slots are filled. Event start time will be announced in Discord and via direct message to registered participants.
+          </div>
+        </div>
+
+        <!-- Important note -->
+        <div class="card" style="margin-top:18px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;">
+            <div style="font-size:18px;">⚠️</div>
+            <div style="color:var(--accent3);font-size:13px;">
+              <strong>Important:</strong> Make sure to verify your payment by sharing the transaction ID in our Discord. Slots are confirmed only after payment verification.
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      © The Grid • Time Bound Event • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
+    </footer>
+  </div>
+
+  <!-- Sticky register button -->
+  <a class="sticky-register-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank">CLAIM SLOT</a>
+
+  <script>
+      // FAQ accordion with smooth animations
+      document.querySelectorAll('.faq-q').forEach(el => {
+        el.addEventListener('click', () => {
+          const item = el.closest('.faq-item');
+          const answer = el.nextElementSibling;
+          const isActive = item.classList.toggle('active');
+          
+          if (isActive) {
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            answer.style.marginTop = '8px';
+            el.style.fontWeight = '700';
+            el.style.color = 'var(--accent3)';
+          } else {
+            answer.style.maxHeight = '0';
+            answer.style.marginTop = '0';
+            el.style.fontWeight = '';
+            el.style.color = '';
+          }
+        });
+      });
+
+
+      
+      // Speed control for sponsor track
+      const setSponsorTrackSpeed = (speed) => {
+        const sponsorTrack = document.getElementById('sponsorTrack');
+        sponsorTrack.style.animationDuration = `${speed}s`;
+      };
+      
+      // Initialize sponsor track speed
+      setSponsorTrackSpeed(30);
+      
+      // Animate stats on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        const stats = document.querySelectorAll('.stat');
+        
+        // Add animation to stats
+        stats.forEach((stat, index) => {
+          setTimeout(() => {
+            stat.style.opacity = '1';
+            stat.style.transform = 'translateY(0)';
+          }, 100 * index);
+        });
+      });
+    </script>
+</body>
+</html>

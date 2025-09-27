@@ -6,20 +6,80 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>The Grid — Code Race</title>
   <style>
-    :root{--bg:#0b0a09;--card:#1a1716;--accent1:#6d4a46;--accent2:#827a5b;--paper:#f0eded;--accent3:#b44b52;--muted:rgba(240,237,237,0.65);--glass:rgba(255,255,255,0.03);}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,sans-serif}
-    body{background:linear-gradient(180deg,var(--bg) 0%, #0d0c0b 60%);color:var(--paper)}
-    .wrap{max-width:1200px;margin:24px auto;padding:18px}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;align-items:center;gap:14px}
-    .logo{width:72px;height:72px;border-radius:8px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--paper);font-size:24px;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
-    .brand-title {font-weight:900;font-size:32px;letter-spacing:1px;}
-    .brand-sub {font-size:13px;color:var(--muted);}
+    :root{--bg:#0a0a0a;--card:#151515;--accent1:#00ff41;--accent2:#0b5345;--paper:#f0f7f0;--accent3:#00ff80;--muted:rgba(240,247,240,0.65);--glass:rgba(0,255,128,0.07);--gradient-lightness:100%;}
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;700&display=swap');
+      html,body{height:100%;margin:0;font-family:Inter,system-ui,sans-serif}
+      body{background:linear-gradient(135deg, var(--bg) 0%, #030704 40%, #070f09 80%);color:var(--paper);position:relative;overflow-x:hidden}
+      
+
+      /* Matrix background pattern - more subtle */
+      body::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 30px 30px, rgba(0,255,128,0.04) 1px, transparent 0);
+        background-size:60px 60px;
+        z-index:-1;
+      }
+      .wrap{max-width:1200px;margin:24px auto;padding:18px}
+      .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--glass);backdrop-filter:blur(10px);border-radius:12px}
+      .brand{display:flex;align-items:center;gap:16px}
+      .logo{width:76px;height:76px;border-radius:12px;background:linear-gradient(135deg,var(--accent1) 0%, var(--accent3) 100%);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--paper);font-size:24px;box-shadow:0 0 25px rgba(0,255,128,0.25);transition:all 0.3s ease}
+      .logo:hover{transform:scale(1.05);box-shadow:0 0 35px rgba(0,255,128,0.35);}
+    .brand-title {font-weight:900;font-size:36px;letter-spacing:1px;font-family:'Rajdhani', sans-serif;position:relative;text-shadow:0 0 15px rgba(0,255,128,0.15)}
+      .brand-sub {font-size:14px;color:var(--muted);font-family:'Rajdhani', sans-serif;letter-spacing:0.5px;}
     .cta-row{display:flex;gap:12px;margin-top:8px}
-    .btn{background:var(--accent2);color:#0b0a09;padding:10px 14px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--paper);}
+    .btn{background:linear-gradient(135deg, var(--accent2), var(--accent3));color:var(--bg);padding:12px 20px;border-radius:12px;border:1px solid transparent;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);position:relative;overflow:hidden;box-shadow:0 0 15px rgba(0,255,128,0.25);text-shadow:0 1px 2px rgba(0,0,0,0.3);text-decoration:none;display:inline-block;font-size:15px;letter-spacing:0.5px}
+      .btn::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:-100%;
+        width:100%;
+        height:100%;
+        background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition:all 0.6s ease;
+      }
+      .btn::after{
+        content:'';
+        position:absolute;
+        bottom:0;
+        left:0;
+        right:0;
+        height:3px;
+        background:linear-gradient(90deg, transparent, var(--accent1), transparent);
+        transform:scaleX(0);
+        transform-origin:left;
+        transition:transform 0.3s ease;
+      }
+      .btn:hover::before{
+        left:100%;
+      }
+      .btn:hover::after{
+        transform:scaleX(1);
+      }
+      .btn:hover{
+        background:linear-gradient(135deg, var(--accent1), var(--accent2));
+        transform:translateY(-2px) scale(1.02);
+        box-shadow:0 0 25px rgba(0,255,128,0.5);
+        border-color:rgba(0,255,128,0.5);
+        animation:glowBorder 2s infinite;
+      }
+      @keyframes glowBorder{
+        0%{box-shadow:0 0 15px rgba(0,255,128,0.4); border-color:rgba(0,255,128,0.3);}
+        50%{box-shadow:0 0 30px rgba(0,255,128,0.6); border-color:rgba(0,255,128,0.7);}
+        100%{box-shadow:0 0 15px rgba(0,255,128,0.4); border-color:rgba(0,255,128,0.3);}
+      }
+      .btn.ghost{background:transparent;border:1px solid rgba(0,255,128,0.3);color:var(--paper);}
     .grid{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;margin-top:18px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass);padding:18px;border-radius:12px}
+    .card{background:linear-gradient(180deg, rgba(18,18,18,0.9), rgba(18,18,18,0.8));border:1px solid var(--glass);padding:18px;border-radius:12px;position:relative;overflow:hidden;transition:all 0.3s ease}
+      .card:hover{
+        box-shadow:0 0 30px rgba(0,255,128,0.1);
+        transform:translateY(-2px);
+      }
     .stats{display:flex;gap:12px}
     .stat{flex:1;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;text-align:center}
     .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
@@ -27,30 +87,162 @@
     .register{display:flex;flex-direction:column;gap:8px}
     input,select,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
     footer{margin-top:20px;color:var(--muted);font-size:13px}
-    .hero{height:220px;border-radius:12px;overflow:hidden;display:flex;align-items:center}
-    .hero img{width:100%;height:100%;object-fit:cover;display:block}
-    .hero-overlay{position:relative;margin-top:-100px;padding:14px}
-    .hero-card{background:linear-gradient(180deg, rgba(11,10,9,0.6), rgba(11,10,9,0.4));border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px)}
-    .ticker{margin-top:12px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);font-size:14px;color:var(--muted)}
-    .logo-square{width:140px;height:140px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:40px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+    .hero{height:280px;border-radius:12px;overflow:hidden;display:flex;align-items:center;position:relative}
+      .hero img{width:100%;height:100%;object-fit:cover;display:block}
+      /* Hero overlay effects */
+      .hero::after{
+        content:'';
+        position:absolute;
+        bottom:0;
+        left:0;
+        right:0;
+        height:120px;
+        background:linear-gradient(to top, rgba(10,10,10,0.9), transparent);
+        z-index:1;
+      }
+      /* Card styling */
+      .feature-card{
+        position:relative;
+        border:1px solid rgba(255,255,255,0.1);
+        border-radius:12px;
+        padding:24px;
+        background:var(--card);
+        margin-top:20px;
+      }
+      .hero-card{background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.9) 100%);border-radius:24px;padding:48px 64px;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(0,255,128,0.15);border:1px solid var(--glass);backdrop-filter:blur(10px);transition:all 0.3s ease}
+      .hero-card:hover{box-shadow:0 0 50px rgba(0,255,128,0.2);transform:translateY(-5px)}
+      .hero-card::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 20px 20px, rgba(0,255,128,0.05) 1px, transparent 0);
+        background-size:20px 20px;
+        z-index:0;
+      }
+    .ticker{margin-top:12px;padding:10px 16px;border-radius:10px;background:var(--glass);font-size:14px;color:var(--muted);border:1px solid rgba(0,255,128,0.1);backdrop-filter:blur(5px)}
+    .logo-square{width:150px;height:150px;border-radius:16px;background:linear-gradient(135deg, var(--accent1) 0%, var(--accent3) 100%);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:48px;box-shadow:0 0 40px rgba(0,255,128,0.35);animation:glowPulse 3s ease-in-out infinite alternate;position:relative;overflow:hidden;transition:all 0.3s ease}
+      .logo-square::after{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+        animation:shine 2s infinite;
+      }
     /* Sponsor carousel */
-    .sponsor-row{display:flex;overflow:hidden;border-radius:10px;padding:8px;gap:18px;align-items:center;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));margin-top:14px}
-    .sponsor-track{display:flex;gap:28px;animation:scroll 20s linear infinite;align-items:center}
-    .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,0.02);min-width:120px;height:60px}
+    .sponsor-carousel {background:var(--card);border-radius:20px;padding:24px;margin-top:40px;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(0,255,128,0.15);border:1px solid var(--glass);backdrop-filter:blur(10px)}
+    .sponsor-row{display:flex;overflow:hidden;border-radius:12px;padding:12px;gap:24px;align-items:center;background:linear-gradient(90deg, var(--glass), transparent, var(--glass));margin-top:16px}
+    .sponsor-track{display:flex;gap:32px;animation:scroll 25s linear infinite;align-items:center}
+    .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:10px 20px;border-radius:12px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);width:220px;height:110px;border:1px solid rgba(0,255,128,0.1);transition:all 0.3s ease;box-shadow:0 0 15px rgba(0,255,128,0.05)}
+    .sponsor:hover{transform:scale(1.03);box-shadow:0 0 25px rgba(0,255,128,0.2);border-color:rgba(0,255,128,0.3)}
     @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+      @keyframes glowPulse{0%{box-shadow:0 0 10px rgba(0,255,128,0.2)}100%{box-shadow:0 0 30px rgba(0,255,128,0.4)}}
+      @keyframes shine{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(200%) rotate(45deg)}}
     /* FAQ accordion */
-    .faq{margin-top:16px}
-    .faq-item{border-radius:8px;background:rgba(255,255,255,0.015);margin-bottom:8px;padding:10px}
-    .faq-q{cursor:pointer;font-weight:700}
-    .faq-a{display:none;color:var(--muted);margin-top:8px}
+    .faq{margin-top:40px}
+    .faq-item{border-radius:12px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);margin-bottom:12px;padding:16px 20px;border:1px solid rgba(0,255,128,0.1);box-shadow:0 0 15px rgba(0,255,128,0.05);transition:all 0.3s ease}
+    .faq-item:hover{box-shadow:0 0 20px rgba(0,255,128,0.1);border-color:rgba(0,255,128,0.2)}
+    .faq-q{cursor:pointer;font-weight:700;font-size:18px;transition:all 0.3s ease;position:relative;display:flex;justify-content:space-between;align-items:center}
+    .faq-q::after{
+      content:'+';
+      color:var(--accent2);
+      font-size:20px;
+      font-weight:900;
+      transition:transform 0.3s ease;
+    }
+    .faq-q.active::after{
+      transform:rotate(45deg);
+    }
+    .faq-a{display:none;color:var(--muted);margin-top:12px;line-height:1.6;font-size:16px}
     /* sticky register modal */
-    .sticky-register-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent3),var(--accent1));color:var(--paper);border-radius:999px;padding:14px 18px;font-weight:800;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:999}
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:1000}
-    .modal{background:var(--card);padding:18px;border-radius:12px;width:min(720px,95%);max-height:90vh;overflow:auto}
+
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(4px);background-image:radial-gradient(circle at 20px 20px, rgba(0,255,128,0.03) 2px, transparent 0);background-size:40px 40px}
+      .modal{background:var(--card);padding:18px;border-radius:12px;width:min(720px,95%);max-height:90vh;overflow:auto;border:1px solid var(--glass);position:relative;overflow:hidden}
+      .modal::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 20px 20px, rgba(0,255,128,0.05) 1px, transparent 0);
+        background-size:20px 20px;
+        z-index:0;
+        pointer-events:none;
+      }
     .modal h3{margin-top:0}
     .discord-cta{display:flex;gap:10px;align-items:center;margin-top:12px}
     .proof-template{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;color:var(--muted);margin-top:12px}
-    @media(max-width:880px){.grid{grid-template-columns:1fr}.logo{width:44px;height:44px}.hero{height:140px}.hero-overlay{margin-top:-64px}.brand-title{font-size:22px}}
+    @media(max-width:880px){.grid{grid-template-columns:1fr}.logo{width:44px;height:44px}.hero{height:180px}.brand-title{font-size:22px}}
+      /* Matrix code rain styles */
+      .matrix-bg{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 20px 20px, rgba(0,255,128,0.05) 1px, transparent 0);
+        background-size:20px 20px;
+        z-index:0;
+        pointer-events:none;
+      }
+      /* Feature icons */
+      .feature-icon{
+        color:var(--accent1);
+        margin-right:8px;
+        display:inline-block;
+        width:24px;
+        text-align:center;
+      }
+      /* Event ticker */
+      .event-ticker{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-top:12px;
+        padding:8px;
+        border-radius:8px;
+        background:rgba(0,255,128,0.03);
+        font-size:14px;
+        color:var(--muted);
+        position:relative;
+        z-index:1;
+      }
+      /* Circuit board background */
+      .circuit-bg{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:
+          linear-gradient(to right, transparent 90%, rgba(0,255,128,0.1) 95%, transparent 100%),
+          linear-gradient(to bottom, transparent 90%, rgba(0,255,128,0.1) 95%, transparent 100%);
+        background-size:20px 20px;
+        z-index:0;
+        pointer-events:none;
+      }
+      /* About section styling */
+      .about-grid p{
+        position:relative;
+        z-index:1;
+        line-height:1.7;
+        margin-bottom:16px;
+      }
+      .about-grid h3{
+        position:relative;
+        z-index:1;
+        font-family:'Rajdhani', sans-serif;
+        font-size:24px;
+        margin-bottom:20px;
+        color:var(--accent1);
+        text-shadow:0 0 10px rgba(0,255,128,0.3);
+      }
   </style>
 </head>
 <body>
@@ -60,189 +252,293 @@
         <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
         <div>
           <div class="brand-title">THE GRID</div>
-          <div class="brand-sub">Race the Clock. Rule the Code.</div>
+          <div class="brand-sub">Code Challenges & Hackathons</div>
         </div>
       </div>
       <div style="display:flex;gap:12px;align-items:center">
-        <a class="btn ghost" href="rules.html">Rules</a>
-        <a class="btn" href="#register" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Register</a>
+        <a class="btn" href="multiplier.html" target="_self">Multiplier</a>
+        <a class="btn" href="teams.html" target="_self">Teams</a>
+        <a class="btn" href="timebound.html" target="_self">TimeBound</a>
+        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer">Register</a>
       </div>
     </div>
 
+    <!-- Banner section -->
     <div class="hero" aria-hidden="true">
       <img src="assets/banner.png" alt="The Grid banner">
+      <!-- Banner caption -->
+      <div style="position:absolute;bottom:20px;left:20px;right:20px;z-index:2;">
+        <div style="font-size:18px;font-weight:800;color:var(--paper);text-shadow:0 2px 10px rgba(0,0,0,0.8);">THE GRID • CODE CHALLENGES & HACKATHONS</div>
+      </div>
     </div>
 
-    <div class="hero-overlay">
-      <div class="hero-card">
-        <div style="display:flex;align-items:center;gap:14px;">
-          <div class="logo-square"><img src="assets/logo.png" alt="G" style="width:86%;height:86%;object-fit:contain"></div>
-          <div style="flex:1">
-            <h1 style="margin:0 0 6px 0;font-size:26px">Enter the arena. Code fast. Win harder.</h1>
-            <div style="color:var(--muted)">48-hour rapid hackathon. 10 limited slots. ₹100 entry. Prize doubles when rounds fill. Join the ranked code races.</div>
-            <div class="cta-row" style="margin-top:10px">
-              <button class="btn" onclick="openRegister()">Claim a slot</button>
-              <a class="btn ghost" href="#faq" onclick="document.getElementById('faq').scrollIntoView({behavior:'smooth'})">FAQ</a>
-            </div>
+    <!-- Hero content - moved below the banner -->
+    <div class="feature-card">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="logo-square"><img src="assets/logo.png" alt="G" style="width:86%;height:86%;object-fit:contain"></div>
+        <div style="flex:1">
+          <h1 style="margin:0 0 6px 0;font-size:26px;font-family:'Rajdhani', sans-serif;color:var(--accent1)">Code Challenges & Hackathons</h1>
+          <div style="color:var(--muted)">Join THE GRID, an online hackathon platform where developers compete in various coding challenges, collaborate in teams, and win exciting prizes.</div>
+          <div class="cta-row" style="margin-top:10px">
+            <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer">
+              Register Now
+            </a>
+            <a class="btn ghost" href="rules.html" target="_self">
+              <span class="feature-icon">ℹ️</span>
+              Learn More
+            </a>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Sponsor carousel -->
-      <div class="sponsor-row" aria-hidden="true">
-        <div class="sponsor-track" id="sponsorTrack">
-          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
-          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
-          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
-          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
-          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
-          <div class="sponsor"><img src="assets/logo.png" alt="sponsor" style="height:40px;object-fit:contain"></div>
-        </div>
+    <!-- Sponsor carousel -->
+    <div class="sponsor-row" aria-hidden="true" style="margin-top:20px">
+      <div class="sponsor-track" id="sponsorTrack">
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
       </div>
     </div>
 
     <div class="grid">
       <div>
         <div class="card">
-          <div class="stats" style="margin-top:6px">
-            <div class="stat"><div style="font-size:18px;font-weight:800">10</div><div style="color:var(--muted)">Starting slots</div></div>
-            <div class="stat"><div style="font-size:18px;font-weight:800">₹100</div><div style="color:var(--muted)">Entry fee</div></div>
-            <div class="stat"><div style="font-size:18px;font-weight:800">48h</div><div style="color:var(--muted)">Round length</div></div>
+          <!-- Matrix code rain effect -->
+          <div class="matrix-bg" aria-hidden="true"></div>
+          
+          <div class="stats" style="margin-top:6px;position:relative;z-index:1;">
+            <div class="stat"><div style="font-size:18px;font-weight:800">3</div><div style="color:var(--muted)">Event Types</div></div>
+            <div class="stat"><div style="font-size:18px;font-weight:800">50+</div><div style="color:var(--muted)">Active Coders</div></div>
+            <div class="stat"><div style="font-size:18px;font-weight:800">₹500</div><div style="color:var(--muted)">Top Prize</div></div>
           </div>
 
-          <div class="features">
-            <div class="feature">Fast rounds — 48 hour challenges</div>
-            <div class="feature">Judge transparency & payout proof</div>
-            <div class="feature">Community on Discord</div>
-            <div class="feature">Sponsor-backed growth (pilot only entry-funded)</div>
+          <div class="features" style="position:relative;z-index:1;">
+            <div class="feature"><span class="feature-icon">✅</span> Multiple coding challenges & formats</div>
+            <div class="feature"><span class="feature-icon">👥</span> Team collaboration opportunities</div>
+            <div class="feature"><span class="feature-icon">👪</span> Supportive developer community</div>
+            <div class="feature"><span class="feature-icon">📊</span> Transparent judging & fair competition</div>
           </div>
 
-          <div class="ticker">Current: Round 1 — 7 slots left • Next round doubles slots & prize when this round fills</div>
+          <div class="ticker event-ticker" style="animation:pulse 2s infinite alternate;">
+            <span>Event calendar: Multiplier Challenge starts in 3 days • Time Bound Challenge in 1 week • Teams Competition in 2 weeks</span>
+          </div>
         </div>
+        
+        <!-- Event selection buttons -->
+        <div style="margin-top:24px;display:flex;flex-direction:column;gap:16px">
+          <h3 style="text-align:center">Choose Your Challenge</h3>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <a href="multiplier.html" class="event-btn multiplier">
+              <div class="event-btn-content">
+                <h4>Multiplier Event</h4>
+                <p>10 slots • ₹100 entry • ₹500 prize • 7 days prep</p>
+              </div>
+            </a>
+            <a href="timebound.html" class="event-btn timebound">
+              <div class="event-btn-content">
+                <h4>Time Bound Challenge</h4>
+                <p>10 slots • ₹100 entry • ₹500 prize • 2-hour coding</p>
+              </div>
+            </a>
+            <a href="teams.html" class="event-btn teams">
+              <div class="event-btn-content">
+                <h4>Teams Competition</h4>
+                <p>5 team slots • ₹300/team • ₹750 prize • 1-week dev</p>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <style>
+          .event-btn {
+            display: block;
+            padding: 20px;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+          }
+          .event-btn {
+            border: 1px solid rgba(0, 255, 128, 0.3);
+            position: relative;
+            overflow: hidden;
+          }
+          .event-btn.multiplier {
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.15), rgba(11, 83, 69, 0.05));
+          }
+          .event-btn.timebound {
+            background: linear-gradient(135deg, rgba(0, 255, 128, 0.15), rgba(11, 83, 69, 0.05));
+          }
+          .event-btn.teams {
+            background: linear-gradient(135deg, rgba(0, 200, 100, 0.15), rgba(11, 83, 69, 0.05));
+          }
+          .event-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 128, 0.1), transparent);
+            transition: all 0.7s ease;
+          }
+          .event-btn:hover::before {
+            left: 100%;
+          }
+          .event-btn:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 128, 0.3);
+            border-color: var(--accent1);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+          }
+          .event-btn.multiplier:hover {
+            border-color: #ff6b6b;
+            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.2);
+          }
+          .event-btn.timebound:hover {
+            border-color: #4ecdc4;
+            box-shadow: 0 12px 30px rgba(78, 205, 196, 0.2);
+          }
+          .event-btn.teams:hover {
+            border-color: #9d65c9;
+            box-shadow: 0 12px 30px rgba(157, 101, 201, 0.2);
+          }
+          .event-btn-content h4 {
+            margin: 0 0 6px 0;
+            color: var(--paper);
+            font-size: 20px;
+          }
+          .event-btn-content p {
+            margin: 0;
+            color: var(--muted);
+          }
+          .event-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+              to right, 
+              rgba(255, 255, 255, 0) 0%,
+              rgba(255, 255, 255, 0.1) 50%,
+              rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            transition: all 0.6s ease;
+          }
+          .event-btn:hover::after {
+            transform: translateX(200%) rotate(30deg);
+          }
+          
 
-        <!-- FAQ accordion -->
+        </style>
+
+        <!-- FAQ Section -->
         <div id="faq" class="card faq">
-          <h3>FAQ</h3>
-          <div class="faq-item"><div class="faq-q">Who can participate?</div><div class="faq-a">Anyone with a Discord account and the drive to ship. Solo or teams up to 3.</div></div>
-          <div class="faq-item"><div class="faq-q">How to submit?</div><div class="faq-a">Submit a GitHub repo link and a 2-minute demo video before the deadline. Follow the submission template in the Discord #submissions channel.</div></div>
-          <div class="faq-item"><div class="faq-q">How are projects judged?</div><div class="faq-a">Innovation 30% • Functionality 30% • Design 20% • Presentation 20% — judges will post scores and short notes.</div></div>
-          <div class="faq-item"><div class="faq-q">What if slots don’t fill?</div><div class="faq-a">Prize and slot doubling only happens when a round fully fills. If the round doesn't fill, we run it as a regular round and publish next steps publicly.</div></div>
-          <div class="faq-item"><div class="faq-q">How are winners paid?</div><div class="faq-a">Winners are paid within 48 hours. We publish masked transaction receipts in the Proofs section and in the Discord #winners channel.</div></div>
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-item"><div class="faq-q">Who can join THE GRID?</div><div class="faq-a">Anyone with a Discord account and an interest in coding! We welcome developers of all skill levels to join our coding competitions and challenge themselves on THE GRID.</div></div>
+          <div class="faq-item"><div class="faq-q">What event formats are available?</div><div class="faq-a">THE GRID features three different event types: Multiplier Challenges (strategic long-term challenges), Time Bound Competitions (short, intensive coding sessions), and Teams Competitions (collaborative team projects).</div></div>
+          <div class="faq-item"><div class="faq-q">How do I register for an event?</div><div class="faq-a">Register through our Google Form to create your profile. Then, check the event calendar, pick your challenge, and complete the registration process for that specific event.</div></div>
+          <div class="faq-item"><div class="faq-q">How are event winners determined?</div><div class="faq-a">Our panel of expert developers judges projects on innovation, code quality, and overall performance. Detailed scoring rubrics are available for each event.</div></div>
+          <div class="faq-item"><div class="faq-q">How do winners claim prizes?</div><div class="faq-a">Winners are celebrated on our Discord server and receive their prizes within 48 hours of results being announced. We ensure full transparency in all prize distributions.</div></div>
         </div>
 
-        <!-- Proof of payout template -->
-        <div class="card" style="margin-top:12px">
-          <h3>Proof of Payout (Template)</h3>
-          <div class="proof-template">
-            <strong>Winner:</strong> Team Alpha<br>
-            <strong>Prize:</strong> ₹500<br>
-            <strong>Date:</strong> 2025-10-12<br>
-            <strong>Txn (masked):</strong> UPI ****1234<br>
-            <div style="margin-top:8px;color:var(--muted)">We will upload a screenshot of the transaction (sensitive details redacted) to #winners and in the site admin panel.</div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <h3>How scaling works</h3>
-          <p style="color:var(--muted)">If current round fills all slots, next round doubles both the number of slots and the prize pool (slot growth is capped by realistic capacity — we will not promise rounds we cannot pay).</p>
-          <pre style="background:rgba(0,0,0,0.25);padding:10px;border-radius:8px;color:var(--muted)">Week n: Slots = 10 × 2^(n-1)
-Prize = Slots × ₹100 × 0.5
-Organizer cut = Slots × ₹100 × 0.5</pre>
+        <!-- Event Overview -->
+        <div class="card about-grid" style="margin-top:12px">
+          <!-- Circuit board pattern background -->
+          <div class="circuit-bg" aria-hidden="true"></div>
+          
+          <h3>About THE GRID</h3>
+          
+          <p>THE GRID is your platform for coding challenges and hackathons. This is where developers come together to test their skills, collaborate, and create amazing projects.</p>
+          
+          <p>Born from a passion for coding competitions, THE GRID was created to provide developers of all skill levels with a place to learn, grow, and showcase their talents. Whether you're a seasoned programmer looking for a challenge or a newcomer eager to develop your skills, our community welcomes you.</p>
+          
+          <p>Our platform offers multiple event formats designed to test different aspects of your coding abilities. The Multiplier Challenge is a long-term project that rewards consistent progress. The Time Bound Competition challenges you to create something amazing in a limited time. And our Teams Competition lets you collaborate with other developers to tackle complex problems together.</p>
+          
+          <p>At THE GRID, we believe in fair play and transparency. All our events are judged by experienced developers who provide detailed feedback to help you improve. We also prioritize community building, offering a supportive environment where you can connect with fellow coders, share knowledge, and grow together.</p>
+          
+          <p>Each challenge on THE GRID is an opportunity to enhance your coding skills. You'll learn to optimize your code, master new technologies, and develop problem-solving skills that will benefit you in your coding journey.</p>
+          
+          <p>Our journey began with a simple idea: to create a space where coding enthusiasts could come together, compete, and learn. As we grow, we remain committed to our core values of inclusivity, learning, and community. We're constantly evolving, adding new features and challenges to keep the experience fresh and exciting.</p>
+          
+          <p>Join us on THE GRID and become part of a community that celebrates the art and science of coding. Push your limits, learn new skills, and connect with fellow developers from around the world. The grid awaits—are you ready to join?</p>
         </div>
       </div>
 
       <aside>
-        <div id="register" class="card register">
-          <h3>Register — Round 1</h3>
-          <label>Discord tag</label>
-          <input id="discord" placeholder="e.g. Hein#1234">
-          <label>Real name</label>
-          <input id="name" placeholder="Your name">
-          <label>Txn ID / Payment Proof (UPI)</label>
-          <input id="txn" placeholder="UPI transaction id or link">
-          <button class="btn" onclick="submitRegistration()">Submit Registration</button>
-          <div id="regmsg" style="color:var(--muted);font-size:13px">Payments verified by mods within 12 hours.</div>
+        <div class="card">
+          <h3 style="color:var(--accent1);text-align:center">Register Now</h3>
+          <p style="text-align:center;margin-bottom:20px;">Click below to register through our Google Form:</p>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer" class="btn">
+            Register via Google Form
+          </a>
+        </div>
 
-          <div style="margin-top:12px">
-            <div style="font-weight:700">Join our Discord</div>
-            <div class="discord-cta">
-              <a class="btn" href="https://discord.gg/" target="_blank">Join Discord</a>
-              <div style="color:var(--muted);font-size:13px">Or search: THE GRID on Discord</div>
-            </div>
+        <div class="card" style="margin-top:12px">
+          <h4>Why Join THE GRID?</h4>
+          <ul style="margin:0;padding-left:18px;color:var(--muted);font-size:13px">
+            <li>Compete in diverse coding challenges</li>
+            <li>Win exciting prizes and recognition</li>
+            <li>Learn new skills and technologies</li>
+            <li>Connect with fellow developers</li>
+            <li>Build your portfolio with real projects</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>Upcoming Events</h4>
+          <div style="color:var(--muted);font-size:13px">Multiplier Event: Starts in 3 days<br>Time Bound Challenge: Starts in 1 week<br>Teams Competition: Starts in 2 weeks</div>
+        </div>
+
+        <div class="card" style="margin-top:12px;background:linear-gradient(135deg, rgba(0,255,128,0.1), rgba(0,0,0,0))">
+          <h4 style="font-weight:700">Join our Discord</h4>
+          <div class="discord-cta">
+            <a class="btn" href="https://discord.gg/Xy28vhgA" target="_blank">Join Discord</a>
+            <div style="color:var(--muted);font-size:13px">Or search: THE GRID on Discord</div>
           </div>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <h4>Quick FAQ</h4>
-          <div style="color:var(--muted);font-size:13px">How to pay: UPI to <strong>UPI_ID_PLACEHOLDER</strong>. Save txn screenshot. Post txn in #register on Discord.</div>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <h4>Event Mode</h4>
-          <div style="color:var(--muted);font-size:13px">Current mode: <strong>Overdrive</strong> — Amplify slots and prize when round fills. Keep an eye on alerts for live updates.</div>
         </div>
       </aside>
     </div>
 
     <footer>
-      © The Grid • Race the Clock. Rule the Code. • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a>
+      © The Grid • Code Challenges & Hackathons • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a> • <a href="https://discord.gg/Xy28vhgA" style="color: var(--accent1)" target="_blank" rel="noopener noreferrer">Join Discord</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
     </footer>
   </div>
 
-  <!-- Sticky register button -->
-  <button class="sticky-register-btn" onclick="openRegister()">CLAIM SLOT</button>
 
-  <!-- Modal -->
-  <div class="modal-backdrop" id="modalBackdrop">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
-      <h3 id="registerTitle">Register for Round 1</h3>
-      <p style="color:var(--muted)">Fill and submit — a CSV will download for testing. Admins will manually verify payments.</p>
-      <label>Discord tag</label><input id="m-discord"><label>Real name</label><input id="m-name"><label>Txn ID / Payment proof</label><input id="m-txn">
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn" onclick="modalSubmit()">Submit</button>
-        <button class="btn ghost" onclick="closeRegister()">Cancel</button>
-      </div>
-    </div>
-  </div>
 
   <script>
-    // FAQ accordion behavior
-    document.querySelectorAll('.faq-q').forEach(function(q){{ q.addEventListener('click', function(){{ var a = q.nextElementSibling; if(a.style.display === 'block') a.style.display = 'none'; else a.style.display = 'block'; }}); }});
+    // FAQ accordion behavior - make all answers visible by default and enhance the interaction
+    document.querySelectorAll('.faq-q').forEach(function(q){
+      q.addEventListener('click', function(){
+        var a = q.nextElementSibling;
+        if(a.style.display === 'block' || !a.style.display) {
+          a.style.display = 'none';
+          q.style.color = '';
+        } else {
+          a.style.display = 'block';
+          q.style.color = 'var(--accent1)';
+        }
+      });
+      // Initially show all answers
+      q.nextElementSibling.style.display = 'block';
+      q.style.cursor = 'pointer';
+      q.style.transition = 'color 0.3s ease';
+    });
 
     // Sponsor track speed control on hover
     var sponsorTrack = document.getElementById('sponsorTrack');
     if(sponsorTrack){{ sponsorTrack.addEventListener('mouseenter', function(){{ sponsorTrack.style.animationPlayState = 'paused'; }}); sponsorTrack.addEventListener('mouseleave', function(){{ sponsorTrack.style.animationPlayState = 'running'; }}); }}
+    
 
-    // Sticky modal controls
-    function openRegister(){{ document.getElementById('modalBackdrop').style.display='flex'; }}
-    function closeRegister(){{ document.getElementById('modalBackdrop').style.display='none'; }}
-
-    function modalSubmit(){{ 
-      var d = document.getElementById('m-discord').value.trim();
-      var n = document.getElementById('m-name').value.trim();
-      var t = document.getElementById('m-txn').value.trim();
-      if(!d||!n||!t){{ alert('Fill all fields'); return; }}
-      var data = ['Discord','Name','Txn'].join(',') + '\n' + ['"' + d.replace(/"/g,'""') + '"','"' + n.replace(/"/g,'""') + '"','"' + t.replace(/"/g,'""') + '"'].join(',') + '\n';
-      var blob = new Blob([data], {{type:'text/csv'}});
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement('a'); a.href = url; a.download = 'registration_demo.csv'; a.click(); URL.revokeObjectURL(url);
-      alert('Submitted — admins will verify payments within 12 hours.');
-      closeRegister();
-    }}
-
-    // Sidebar register submit (non-modal)
-    function submitRegistration(){{ 
-      var d = document.getElementById('discord').value.trim();
-      var n = document.getElementById('name').value.trim();
-      var t = document.getElementById('txn').value.trim();
-      var msg = document.getElementById('regmsg');
-      if(!d||!n||!t){{ msg.textContent='Fill all fields before submitting.'; return; }}
-      var data = ['Discord','Name','Txn'].join(',') + '\n' + ['"' + d.replace(/"/g,'""') + '"','"' + n.replace(/"/g,'""') + '"','"' + t.replace(/"/g,'""') + '"'].join(',') + '\n';
-      var blob = new Blob([data], {{type:'text/csv'}});
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement('a'); a.href = url; a.download = 'registration.csv'; a.click(); URL.revokeObjectURL(url);
-      msg.textContent='Submitted — admins will verify in 12 hours.';
-    }}
   </script>
 </body>
 </html>

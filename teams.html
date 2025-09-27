@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Grid — Teams Event</title>
+  <style>
+    :root{--bg:#0b0a09;--card:#151515;--accent1:#8a844e;--accent2:#99718e;--paper:#f0eded;--accent3:#d4b858;--muted:rgba(240,237,237,0.65);--glass:rgba(255,255,255,0.03);--gradient-lightness: rgba(240,240,240,0.85);}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,sans-serif;scroll-behavior:smooth}
+      body{background:linear-gradient(135deg, var(--bg) 0%, #030704 40%, #070f09 80%);color:var(--paper);position:relative}
+      body::before{
+        content:'';
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 20px 20px, rgba(138, 132, 78, 0.05) 1px, transparent 0);
+        background-size:30px 30px;
+        z-index:-1;
+      }
+    .wrap{max-width:1200px;margin:24px auto;padding:18px}
+      .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--glass);backdrop-filter:blur(10px);border-radius:12px}
+      .brand{display:flex;align-items:center;gap:16px}
+      .logo{width:76px;height:76px;border-radius:12px;background:linear-gradient(135deg,var(--accent1) 0%, var(--accent3) 100%);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--paper);font-size:24px;box-shadow:0 0 25px rgba(138, 132, 78, 0.25);transition:all 0.3s ease}
+      .logo:hover{transform:scale(1.05);box-shadow:0 0 35px rgba(138, 132, 78, 0.35);}
+      .brand-title {font-weight:900;font-size:36px;letter-spacing:1px;text-shadow:0 0 15px rgba(138, 132, 78, 0.15);background:linear-gradient(90deg, var(--paper), var(--gradient-lightness));-webkit-background-clip:text;background-clip:text;color:transparent}
+      .brand-sub {font-size:14px;color:var(--muted);letter-spacing:0.5px;}
+      .cta-row{display:flex;gap:12px;margin-top:8px}
+    .btn{background:linear-gradient(135deg, var(--accent2), var(--accent3));color:var(--bg);padding:12px 20px;border-radius:12px;border:1px solid transparent;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);position:relative;overflow:hidden;box-shadow:0 0 15px rgba(138, 132, 78, 0.25);text-shadow:0 1px 2px rgba(0,0,0,0.3);text-decoration:none;display:inline-block;font-size:15px;letter-spacing:0.5px}
+      .btn::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:-100%;
+        width:100%;
+        height:100%;
+        background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition:all 0.6s ease;
+      }
+      .btn::after{
+        content:'';
+        position:absolute;
+        bottom:0;
+        left:0;
+        right:0;
+        height:3px;
+        background:linear-gradient(90deg, transparent, var(--accent1), transparent);
+        transform:scaleX(0);
+        transform-origin:left;
+        transition:transform 0.3s ease;
+      }
+      .btn:hover::before{
+        left:100%;
+      }
+      .btn:hover::after{
+        transform:scaleX(1);
+      }
+      .btn:hover{
+        background:linear-gradient(135deg, var(--accent1), var(--accent2));
+        transform:translateY(-2px) scale(1.02);
+        box-shadow:0 0 25px rgba(138, 132, 78, 0.5);
+        border-color:rgba(138, 132, 78, 0.5);
+        animation:glowBorder 2s infinite;
+      }
+      @keyframes glowBorder{
+        0%{box-shadow:0 0 15px rgba(138, 132, 78, 0.4); border-color:rgba(138, 132, 78, 0.3);}
+        50%{box-shadow:0 0 30px rgba(138, 132, 78, 0.6); border-color:rgba(138, 132, 78, 0.7);}
+        100%{box-shadow:0 0 15px rgba(138, 132, 78, 0.4); border-color:rgba(138, 132, 78, 0.3);}
+      }
+      .btn.ghost{background:transparent;border:1px solid rgba(138, 132, 78, 0.3);color:var(--paper);transition:all 0.3s ease}
+      .btn.ghost:hover{background:linear-gradient(135deg, rgba(138, 132, 78, 0.1), rgba(138, 132, 78, 0.2));transform:translateY(-2px);box-shadow:0 0 20px rgba(138, 132, 78, 0.2);border-color:rgba(138, 132, 78, 0.5);}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;margin-top:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass);padding:18px;border-radius:12px}
+    /* Stats counter */
+      .stats{display:flex;justify-content:space-around;padding:24px 16px;border-radius:20px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);margin-top:40px;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px);position:relative;overflow:hidden}
+      .stats::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 30px 30px, rgba(138, 132, 78, 0.05) 1px, transparent 0);
+        background-size:30px 30px;
+        z-index:0;
+      }
+      .stat-item{text-align:center;position:relative;z-index:1;flex:1;transition:transform 0.3s ease;padding:0 10px}
+      .stat-item:hover{transform:scale(1.05)}
+      .stat-number{font-size:40px;font-weight:900;color:var(--accent1);margin:8px 0;position:relative;animation:fadeInUp 0.6s ease-out}
+      .stat-number::after{content:attr(data-prefix);font-size:16px;position:absolute;top:0;left:-15px;opacity:0.7}
+      .stat-label{color:var(--muted);font-size:14px;transition:color 0.3s ease}
+      .stat-item:hover .stat-label{color:var(--paper)}
+    /* Features section */
+      .features{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px}
+      .feature{background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);padding:20px;border-radius:16px;position:relative;overflow:hidden;box-shadow:0 0 15px rgba(138, 132, 78, 0.05);border:1px solid rgba(138, 132, 78, 0.1);transition:all 0.3s ease}
+      .feature::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:5px;
+        height:100%;
+        background:linear-gradient(180deg, var(--accent1), var(--accent3));
+        border-radius:8px 0 0 8px;
+        opacity:0;
+        transition:opacity 0.3s ease;
+      }
+      .feature:hover{
+        transform:translateY(-5px);
+        box-shadow:0 0 25px rgba(138, 132, 78, 0.15);
+      }
+      .feature:hover::before{opacity:1}
+      .feature h3{font-size:18px;font-weight:600;margin-bottom:8px;color:var(--paper)}
+      .feature p{color:var(--muted);font-size:14px}
+      @keyframes fadeInUp{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+    /* Register card */
+      .register{display:flex;flex-direction:column;gap:12px}
+      .register h2{font-size:24px;font-weight:800;margin-bottom:16px;color:var(--paper);text-shadow:0 0 20px rgba(138, 132, 78, 0.3)}
+      input,select,textarea{padding:12px 16px;border-radius:12px;border:1px solid rgba(138, 132, 78, 0.1);background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);color:var(--paper);font-size:15px;transition:all 0.3s ease;position:relative;z-index:1}
+      input:focus,select:focus,textarea:focus{
+        outline:none;
+        border-color:var(--accent2);
+        box-shadow:0 0 20px rgba(138, 132, 78, 0.2);
+        transform:translateY(-1px);
+      }
+      input::placeholder,textarea::placeholder{color:var(--muted);opacity:0.7}
+      .register-btn{margin-top:20px}
+    /* Footer */
+      footer{margin-top:60px;padding:24px 0 32px 0;color:var(--muted);font-size:14px;text-align:center;position:relative}
+      footer::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:50%;
+        transform:translateX(-50%);
+        width:80%;
+        height:1px;
+        background:linear-gradient(90deg, transparent, rgba(138, 132, 78, 0.2), transparent);
+      }
+      .social-links{display:flex;justify-content:center;gap:16px;margin:16px 0}
+      .social-link{color:var(--muted);font-size:20px;transition:all 0.3s ease;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:1px solid rgba(138, 132, 78, 0.1);background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);}
+      .social-link:hover{color:var(--accent2);transform:translateY(-3px);box-shadow:0 5px 15px rgba(138, 132, 78, 0.2);border-color:var(--accent2);}
+    .hero{height:280px;border-radius:20px;overflow:hidden;display:flex;align-items:center;position:relative}
+      .hero img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.6)}
+      .hero::after{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:linear-gradient(180deg, transparent 0%, var(--bg) 100%);
+        z-index:1;
+      }
+      .hero-overlay{position:relative;margin-top:-180px;padding:24px;z-index:2}
+      .hero-card{background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.9) 100%);border-radius:24px;padding:40px 48px;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px);transition:all 0.3s ease}
+      .hero-card:hover{box-shadow:0 0 50px rgba(138, 132, 78, 0.2);transform:translateY(-5px)}
+      .hero-card::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 20px 20px, rgba(138, 132, 78, 0.05) 1px, transparent 0);
+        background-size:20px 20px;
+        z-index:0;
+      }
+    .ticker{margin-top:12px;padding:10px 16px;border-radius:10px;background:var(--glass);font-size:14px;color:var(--muted);border:1px solid rgba(138, 132, 78, 0.1);backdrop-filter:blur(5px)}
+      .logo-square{width:150px;height:150px;border-radius:16px;background:linear-gradient(135deg, var(--accent1) 0%, var(--accent3) 100%);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:48px;box-shadow:0 0 40px rgba(138, 132, 78, 0.35);animation:glowPulse 3s ease-in-out infinite alternate;position:relative;overflow:hidden;transition:all 0.3s ease}
+      @keyframes glowPulse{0%{box-shadow:0 0 10px rgba(138, 132, 78, 0.2)}100%{box-shadow:0 0 30px rgba(138, 132, 78, 0.4)}}
+    /* Sponsor carousel */
+      .sponsor-carousel {background:var(--card);border-radius:20px;padding:24px;margin-top:40px;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px)}
+      .sponsor-row{display:flex;overflow:hidden;border-radius:12px;padding:12px;gap:24px;align-items:center;background:linear-gradient(90deg, var(--glass), transparent, var(--glass));margin-top:16px}
+      .sponsor-track{display:flex;gap:32px;animation:scroll 25s linear infinite;align-items:center}
+      .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:10px 20px;border-radius:12px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);width:220px;height:110px;border:1px solid rgba(138, 132, 78, 0.1);transition:all 0.3s ease;box-shadow:0 0 15px rgba(138, 132, 78, 0.05)}
+      .sponsor:hover{transform:scale(1.03);box-shadow:0 0 25px rgba(138, 132, 78, 0.2);border-color:rgba(138, 132, 78, 0.3)}
+      @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    /* FAQ accordion */
+      .faq{margin-top:40px}
+      .faq-item{margin-bottom:16px;border-radius:16px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);padding:20px;box-shadow:0 0 15px rgba(138, 132, 78, 0.05);border:1px solid rgba(138, 132, 78, 0.1);transition:all 0.3s ease;position:relative;overflow:hidden}
+      .faq-item::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:5px;
+        height:100%;
+        background:linear-gradient(180deg, var(--accent1), var(--accent3));
+        border-radius:8px 0 0 8px;
+        opacity:0;
+        transition:opacity 0.3s ease;
+      }
+      .faq-item:hover{
+        transform:translateX(5px);
+        box-shadow:0 0 25px rgba(138, 132, 78, 0.15);
+      }
+      .faq-item:hover::before{opacity:1}
+      .faq-q{font-size:18px;font-weight:600;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.3s ease;position:relative;padding-right:24px}
+      .faq-q::after{
+        content:'+';
+        position:absolute;
+        right:0;
+        font-size:24px;
+        font-weight:300;
+        color:var(--accent2);
+        transition:all 0.3s ease;
+      }
+      .faq-q.active::after{
+        content:'-';
+        transform:rotate(0deg);
+      }
+      .faq-a{margin-top:16px;color:var(--muted);display:none;transition:all 0.3s ease;opacity:0}
+      .faq-a.active{display:block;opacity:1;animation:fadeIn 0.5s ease}
+      @keyframes fadeIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+    /* Modal system */
+    .sticky-register-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent3),var(--accent1));color:var(--paper);border-radius:999px;padding:14px 18px;font-weight:800;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:999;transition:all 0.3s ease}
+    .sticky-register-btn:hover{transform:scale(1.05);box-shadow:0 12px 35px rgba(0,0,0,0.7)}
+    
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);}
+    .modal-backdrop.active{opacity:1;pointer-events:auto;}
+    
+    .modal{background:linear-gradient(135deg, var(--bg-900), var(--bg-800));padding:32px;border-radius:16px;width:min(600px,95%);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);transform:scale(0.95) translateY(-20px);transition:transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);position:relative;}
+    .modal::before{content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:1px;background:linear-gradient(90deg, transparent, var(--accent3), transparent);opacity:0;transition:opacity 0.4s ease;}
+    .modal-backdrop.active .modal{transform:scale(1) translateY(0);}
+    .modal-backdrop.active .modal::before{opacity:1;}
+    
+    /* Input styling for modal */
+    .modal input{background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 16px;color:var(--paper);font-size:16px;transition:all 0.3s ease;}
+    .modal input:focus{outline:none;border-color:var(--accent3);background-color:rgba(255,255,255,0.08);box-shadow:0 0 0 2px rgba(120,119,198,0.1);}
+    .modal input::placeholder{color:var(--muted);}
+    
+    .modal h3{margin-top:0;}
+    .discord-cta{display:flex;gap:10px;align-items:center;margin-top:12px}
+    /* Proof of payout template */
+      .proof-payout-template{margin-top:32px;padding:24px;border-radius:20px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);position:relative;overflow:hidden;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px);transition:all 0.3s ease}
+      .proof-payout-template:hover{box-shadow:0 0 40px rgba(138, 132, 78, 0.25);transform:translateY(-2px)}
+      .proof-payout-template::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 30px 30px, rgba(138, 132, 78, 0.05) 1px, transparent 0);
+        background-size:30px 30px;
+        z-index:0;
+      }
+    @media(max-width:880px){.grid{grid-template-columns:1fr}.logo{width:44px;height:44px}.hero{height:140px}.hero-overlay{margin-top:-64px}.brand-title{font-size:22px}}
+    
+    /* Responsive modal adjustments */
+    @media(max-width:768px){
+      .modal{
+        padding:24px;
+        margin:16px;
+        border-radius:12px;
+      }
+      
+      .modal-backdrop{
+        padding:16px;
+        align-items:flex-start;
+        justify-content:center;
+        padding-top:100px;
+      }
+      
+      .sticky-register-btn{
+        padding:12px 16px;
+        font-size:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
+        <div>
+          <div class="brand-title">THE GRID</div>
+          <div class="brand-sub">Teams Event</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="multiplier.html">Multiplier</a>
+        <a class="btn ghost" href="timebound.html">Time Bound</a>
+        <a class="btn ghost" href="teams_rules.html">Rules</a>
+        <a class="btn" href="#register" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Register</a>
+      </div>
+    </div>
+
+    <div class="hero" aria-hidden="true">
+      <img src="assets/banner.png" alt="The Grid banner">
+    </div>
+
+    <div class="hero-overlay">
+      <div class="hero-card">
+          <div style="display:flex;align-items:center;gap:20px;position:relative;z-index:1;">
+            <div class="logo-square" style="background:linear-gradient(135deg,var(--accent1),var(--accent3));animation:glowPulse 2s ease-in-out infinite alternate;"><img src="assets/logo.png" alt="The Grid" style="width:86%;height:86%;object-fit:contain;filter:brightness(1.2)"></div>
+            <div style="flex:1">
+              <h1 style="margin:0 0 8px 0;font-size:32px;font-weight:900;background:linear-gradient(90deg, var(--paper), var(--gradient-lightness));-webkit-background-clip:text;background-clip:text;color:transparent;">Teams Event — Collaborative Challenge</h1>
+              <div style="color:var(--muted);font-size:16px;line-height:1.5;">Join forces with friends for a 1-week development marathon. ₹300 per team entry, 5 limited slots, with a ₹750 cash prize for the best collaborative project.</div>
+              <div class="cta-row" style="margin-top:16px">
+                <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank">Form Your Dream Team</a>
+                <a class="btn ghost" href="teams_rules.html">Team Guidelines</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Team composition visualization -->
+          <div style="margin-top:24px;position:relative;z-index:1;">
+            <div style="font-size:14px;font-weight:700;margin-bottom:8px;color:var(--accent3)">Team Composition</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div style="background:rgba(255,255,255,0.05);padding:8px 12px;border-radius:8px;border:1px solid rgba(138,132,78,0.1);transition:all 0.3s ease;cursor:default;">2-4 Members</div>
+              <div style="background:rgba(255,255,255,0.05);padding:8px 12px;border-radius:8px;border:1px solid rgba(138,132,78,0.1);transition:all 0.3s ease;cursor:default;">All Skills Welcome</div>
+              <div style="background:rgba(255,255,255,0.05);padding:8px 12px;border-radius:8px;border:1px solid rgba(138,132,78,0.1);transition:all 0.3s ease;cursor:default;">1 Captain</div>
+              <div style="background:rgba(255,255,255,0.05);padding:8px 12px;border-radius:8px;border:1px solid rgba(138,132,78,0.1);transition:all 0.3s ease;cursor:default;">Dedicated Channel</div>
+            </div>
+          </div>
+          
+          <!-- Current registered teams -->
+          <div style="margin-top:16px;position:relative;z-index:1;">
+            <div style="font-size:14px;font-weight:700;margin-bottom:6px;color:var(--accent3)">Registered Teams (2/5 slots filled)</div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:8px;border:1px solid rgba(138,132,78,0.1);">
+              <div style="display:flex;gap:12px;">
+                <span>• Alpha Squad</span>
+                <span>• Code Collective</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <!-- Sponsor carousel -->
+      <div class="sponsor-carousel">
+        <h3 style="margin-top:0; margin-bottom:16px; font-size:22px; font-weight:800; color:var(--paper)">Our Sponsors</h3>
+        <div class="sponsor-row" aria-hidden="true">
+          <div class="sponsor-track" id="sponsorTrack">
+            <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+            <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+            <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+            <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+            <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+            <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          </div>
+        </div>
+      </div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div class="stats" style="margin-top:6px">
+            <div class="stat-item"><div class="stat-number" data-prefix="">5</div><div class="stat-label">Available slots</div></div>
+            <div class="stat-item"><div class="stat-number" data-prefix="₹">300</div><div class="stat-label">Team fee</div></div>
+            <div class="stat-item"><div class="stat-number" data-prefix="₹">750</div><div class="stat-label">Cash prize</div></div>
+            <div class="stat-item"><div class="stat-number" data-prefix="">1</div><div class="stat-label">Development week</div></div>
+          </div>
+
+          <div class="features">
+            <div class="feature">
+              <h3>Team Collaboration</h3>
+              <p>Work together with 2-4 teammates to build a project from concept to completion.</p>
+            </div>
+            <div class="feature">
+              <h3>Development Timeline</h3>
+              <p>7-day development sprint with structured milestones and regular check-ins.</p>
+            </div>
+            <div class="feature">
+              <h3>Project Planning</h3>
+              <p>Detailed planning phase with guidance on architecture and feature prioritization.</p>
+            </div>
+            <div class="feature">
+              <h3>Judging Criteria</h3>
+              <p>Comprehensive evaluation based on functionality, innovation, code quality, and presentation.</p>
+            </div>
+          </div>
+
+          <div class="ticker">Current: Round 1 — 3 slots left • Submit your team for approval</div>
+        </div>
+
+        <!-- FAQ accordion -->
+        <div id="faq" class="card faq">
+          <h3>Teams Event FAQ</h3>
+          <div class="faq-item"><div class="faq-q"><span style="margin-right:8px">👥</span> Who can participate?</div><div class="faq-a">Teams of 2-4 developers. All members must have Discord accounts and be added to your team submission.</div></div>
+          <div class="faq-item"><div class="faq-q"><span style="margin-right:8px">📅</span> What is the timeline?</div><div class="faq-a">Once registration closes, teams will have exactly 7 days to develop their project before the submission deadline. Judging will take place over the following 3 days.</div></div>
+          <div class="faq-item"><div class="faq-q"><span style="margin-right:8px">💰</span> How is the prize calculated?</div><div class="faq-a">The cash prize is half of 5 x 300 (the total entry fees from all slots), which equals ₹750 for the winning team.</div></div>
+          <div class="faq-item"><div class="faq-q"><span style="margin-right:8px">📊</span> What are the judging criteria?</div><div class="faq-a">Functionality 40% • Innovation 25% • Code quality 20% • Presentation 15% — detailed feedback will be provided for all teams.</div></div>
+          <div class="faq-item"><div class="faq-q"><span style="margin-right:8px">🏆</span> When will winners be announced?</div><div class="faq-a">Winners will be announced within 3 days after the submission deadline, with payments processed to the team captain within 48 hours.</div></div>
+        </div>
+
+        <!-- Proof of payout template -->
+        <div class="card" style="margin-top:12px">
+          <h3>Proof of Payout (Template)</h3>
+          <div class="proof-payout-template">
+            <strong>Winner:</strong> Team Name<br>
+            <strong>Captain:</strong> Member Name<br>
+            <strong>Prize:</strong> ₹750<br>
+            <strong>Date:</strong> 2025-10-19<br>
+            <strong>Txn (masked):</strong> UPI ****5678<br>
+            <div style="margin-top:8px;color:var(--muted)">We will upload a screenshot of the transaction (sensitive details redacted) to #winners and in the site admin panel.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <aside>
+        <div id="register" class="card register">
+          <h3>Register — Teams Event</h3>
+          <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" style="width: 100%; text-align: center; margin-bottom: 16px;">Register Team</a>
+          <div style="color:var(--muted);font-size:13px">Fill out the Google Form to register your team. Payments will be verified by moderators.</div>
+
+          <div style="margin-top:12px">
+            <div style="font-weight:700">Join our Discord</div>
+            <div class="discord-cta">
+              <a class="btn" href="https://discord.gg/Xy28vhgA" target="_blank">Join Discord</a>
+              <div style="color:var(--muted);font-size:13px">Or search: THE GRID on Discord</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>Quick FAQ</h4>
+          <div style="color:var(--muted);font-size:13px">How to pay: UPI to <strong>UPI_ID_PLACEHOLDER</strong>. Save txn screenshot. Post txn in #register on Discord with team info.</div>
+          <div style="color:var(--muted);font-size:13px;margin-top:8px;">Stay active in Discord: All important announcements will be shared there.</div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>Event Details</h4>
+          <div style="color:var(--muted);font-size:13px">Registration closes when all slots are filled. Development period begins immediately after registration closes. Detailed timeline will be shared with registered teams.</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="social-links">
+        <a href="#" class="social-link" aria-label="Twitter"><i>🐦</i></a>
+        <a href="#" class="social-link" aria-label="Discord"><i>💬</i></a>
+        <a href="#" class="social-link" aria-label="Instagram"><i>📸</i></a>
+        <a href="#" class="social-link" aria-label="GitHub"><i>💻</i></a>
+      </div>
+      © The Grid • Teams Event • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
+    </footer>
+  </div>
+
+
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // FAQ accordion behavior
+      document.querySelectorAll('.faq-q').forEach(function(q) {
+        q.addEventListener('click', function() {
+          q.classList.toggle('active');
+          var a = q.nextElementSibling;
+          if (a.classList.contains('active')) {
+            a.classList.remove('active');
+            setTimeout(function() {
+              a.style.display = 'none';
+            }, 300);
+          } else {
+            a.style.display = 'block';
+            setTimeout(function() {
+              a.classList.add('active');
+            }, 10);
+          }
+        });
+      });
+
+      // Sponsor track speed control on hover
+      var sponsorTrack = document.getElementById('sponsorTrack');
+      if (sponsorTrack) {
+        sponsorTrack.addEventListener('mouseenter', function() {
+          sponsorTrack.style.animationPlayState = 'paused';
+        });
+        sponsorTrack.addEventListener('mouseleave', function() {
+          sponsorTrack.style.animationPlayState = 'running';
+        });
+      }
+
+
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+
+
+      // Scroll animations
+      function checkScroll() {
+        const elements = document.querySelectorAll('.card, .feature, .stat-item, .hero-card');
+        elements.forEach(element => {
+          const elementTop = element.getBoundingClientRect().top;
+          const windowHeight = window.innerHeight;
+          if (elementTop < windowHeight * 0.85 && !element.classList.contains('animate-in')) {
+            element.classList.add('animate-in');
+            setTimeout(() => {
+              element.style.opacity = '1';
+              element.style.transform = 'translateY(0)';
+            }, 10);
+          }
+        });
+      }
+
+      // Initialize scroll animation styles
+      const elements = document.querySelectorAll('.card, .feature, .stat-item, .hero-card');
+      elements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(30px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      });
+
+      // Add event listeners
+      window.addEventListener('scroll', checkScroll);
+      
+      // Initial check
+      checkScroll();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>The Grid — Teams Challenge Rules</title>
+    <style>
+        /* Global variables */
+        :root {
+        --bg: #0b0a09;
+        --card: #151515;
+        --accent1: #8a844e;
+        --accent2: #99718e;
+        --accent3: #d4b858;
+        --paper: #f0eded;
+        --muted: rgba(240, 237, 237, 0.65);
+        --glass: rgba(255, 255, 255, 0.03);
+        --gradient-lightness: rgba(240, 240, 240, 0.85);
+    }
+
+        /* Base styles */
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: Inter, system-ui, Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--paper);
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 20px 20px, rgba(0, 255, 128, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        /* Container */
+        .wrap {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--glass);
+            margin-bottom: 32px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent1) 0%, var(--accent3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 255, 128, 0.2);
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: 800;
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Main content */
+        main {
+            flex: 1;
+        }
+
+        /* Card styling */
+        .card {
+            background: var(--card);
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid var(--glass);
+            box-shadow: 0 0 30px rgba(0, 255, 128, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 40px rgba(0, 255, 128, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20px 20px, rgba(0, 255, 128, 0.05) 1px, transparent 0);
+            background-size: 20px 20px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 32px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-top: 0;
+            margin-bottom: 24px;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: var(--accent1);
+            position: relative;
+            z-index: 1;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            color: var(--paper);
+            position: relative;
+            z-index: 1;
+        }
+
+        p {
+            line-height: 1.7;
+            color: var(--muted);
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Lists */
+        ul {
+            padding-left: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        strong {
+            color: var(--paper);
+            font-weight: 600;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--accent1) 0%, var(--accent3) 100%);
+            color: var(--bg);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.7s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 128, 0.3);
+        }
+
+        .btn.ghost {
+            background: transparent;
+            border: 1px solid var(--accent1);
+            color: var(--accent1);
+        }
+
+        .btn.ghost:hover {
+            background: rgba(0, 255, 128, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--glass);
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--accent1);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent2);
+            text-decoration: underline;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 24px;
+            font-size: 16px;
+            color: var(--accent1);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-link:hover {
+            color: var(--accent2);
+        }
+
+        .back-link::before {
+            content: '←';
+            margin-right: 8px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .wrap {
+                padding: 16px;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+        }
+
+        /* Rules sections */
+        .rules-section {
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: rgba(0, 255, 128, 0.05);
+            border-left: 4px solid var(--accent1);
+            padding: 16px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Key features */
+        .key-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-item {
+            background: rgba(0, 255, 128, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass);
+        }
+
+        .feature-item h3 {
+            color: var(--accent1);
+            margin-top: 0;
+        }
+
+        /* Team structure */
+        .team-structure {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-role {
+            background: rgba(0, 255, 128, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass);
+        }
+
+        .team-role h3 {
+            color: var(--accent1);
+            margin-top: 0;
+        }
+
+        /* Judging criteria */
+        .judging-criteria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .criteria-item {
+            background: rgba(0, 255, 128, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass);
+            text-align: center;
+        }
+
+        .criteria-item .percentage {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent1);
+            font-family: 'Rajdhani', sans-serif;
+            margin-bottom: 8px;
+        }
+
+        .criteria-item .label {
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header class="nav">
+            <div class="brand">
+                <div class="logo"><span style="color: #0b0a09; font-size: 30px; font-weight: 900;">G</span></div>
+                <div class="brand-title">THE GRID</div>
+            </div>
+        </header>
+
+        <main>
+            <div class="card">
+                <h1>Teams Challenge — Rules & Guidelines</h1>
+                <p>Welcome to The Grid's Teams Challenge! This is a collaborative coding competition where teams of developers work together to create innovative projects. Below are the specific rules for this challenge.</p>
+
+                <div class="key-features">
+                    <div class="feature-item">
+                        <h3>Team Collaboration</h3>
+                        <p>Compete in teams of 2-3 members to build innovative applications.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Project-Based</h3>
+                        <p>Build complete applications with UI/UX, backend, and functionality.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Comprehensive Judging</h3>
+                        <p>Projects are evaluated on innovation, functionality, design, and presentation.</p>
+                    </div>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Eligibility</h2>
+                    <ul>
+                        <li><strong>Age Requirement:</strong> Team members must be at most 17 years old and have parental consent to participate.</li>
+                        <li><strong>Experience Level:</strong> Open to all skill levels, from beginners to professionals.</li>
+                        <li><strong>Team Composition:</strong> Teams must consist of 2-3 members.</li>
+                        <li><strong>Single Entry:</strong> Each team is allowed only one entry per round of the challenge.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Team Structure</h2>
+                    <div class="team-structure">
+                        <div class="team-role">
+                            <h3>Team Size</h3>
+                            <p>Teams must have 2-3 members. No solo entries allowed.</p>
+                        </div>
+                        <div class="team-role">
+                            <h3>Role Diversity</h3>
+                            <p>Teams should ideally have members with complementary skills (frontend, backend, design).</p>
+                        </div>
+                        <div class="team-role">
+                            <h3>Team Captain</h3>
+                            <p>Each team must designate one member as the point of contact for communication.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Entry and Payment</h2>
+                    <ul>
+                        <li><strong>Entry Fee:</strong> ₹200 per team (covers all members).</li>
+                        <li><strong>Payment Methods:</strong> UPI/Razorpay as announced in the Discord server.</li>
+                        <li><strong>Payment Proof:</strong> Save payment receipts — required for verification.</li>
+                        <li><strong>Slots & Scaling:</strong> Rounds start with 8 teams. Once a round fills, the next round's slots and prize double.</li>
+                        <li><strong>Refund Policy:</strong> Refunds will only be considered if requested at least 48 hours before the start of the challenge.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Timeline</h2>
+                    <ul>
+                        <li><strong>Preparation Time:</strong> 7 days after registration closes for planning and setup.</li>
+                        <li><strong>Development Period:</strong> 48 hours of intensive coding and collaboration.</li>
+                        <li><strong>Submission Deadline:</strong> All projects must be submitted by the end of the 48-hour development period.</li>
+                        <li><strong>Judging Period:</strong> 2-3 days after submission for evaluation.</li>
+                        <li><strong>Results Announcement:</strong> Winners will be announced within 5 days of submission closing.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Submission Guidelines</h2>
+                    <ul>
+                        <li><strong>GitHub Repository:</strong> Submit a link to your project's GitHub repository.</li>
+                        <li><strong>Demo Video:</strong> Provide a 3-minute video demonstrating your project's features and functionality.</li>
+                        <li><strong>Documentation:</strong> Include a README.md with setup instructions, features list, and team information.</li>
+                        <li><strong>Live Demo:</strong> If applicable, provide a link to a live demo of your application.</li>
+                        <li><strong>Original Work:</strong> All code must be written during the challenge period, though you may use existing libraries and frameworks.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Judging Criteria</h2>
+                    <p>The Teams Challenge is judged based on the following criteria:</p>
+                    <div class="judging-criteria">
+                        <div class="criteria-item">
+                            <div class="percentage">30%</div>
+                            <div class="label">Innovation</div>
+                        </div>
+                        <div class="criteria-item">
+                            <div class="percentage">30%</div>
+                            <div class="label">Functionality</div>
+                        </div>
+                        <div class="criteria-item">
+                            <div class="percentage">20%</div>
+                            <div class="label">Design & UI/UX</div>
+                        </div>
+                        <div class="criteria-item">
+                            <div class="percentage">20%</div>
+                            <div class="label">Presentation</div>
+                        </div>
+                    </div>
+                    <p>Judges will evaluate each project holistically, considering both technical excellence and creative problem-solving.</p>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Prizes and Payouts</h2>
+                    <ul>
+                        <li><strong>Winners Selection:</strong> The top 3 teams with the highest scores will be declared winners.</li>
+                        <li><strong>Prize Distribution:</strong>
+                            <ul>
+                                <li>1st Place: 50% of the prize pool</li>
+                                <li>2nd Place: 30% of the prize pool</li>
+                                <li>3rd Place: 20% of the prize pool</li>
+                            </ul>
+                        </li>
+                        <li><strong>Payout Timeline:</strong> Winners will be paid within 48 hours after the announcement of results.</li>
+                        <li><strong>Payout Methods:</strong> Prizes will be paid via the method specified by the team captain during registration.</li>
+                        <li><strong>Prize Proof:</strong> Wallet transactions will be masked and screenshots posted in the Discord server and on the website.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Code Ownership and Usage</h2>
+                    <ul>
+                        <li><strong>Intellectual Property:</strong> Teams retain ownership of their code, but grant The Grid a non-exclusive, royalty-free license to use, display, and modify their submissions for promotional and educational purposes.</li>
+                        <li><strong>Open Source:</strong> Teams are encouraged to make their code open source after the competition, but it is not required.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h2>Fraud and Disqualification</h2>
+                    <ul>
+                        <li><strong>Plagiarism:</strong> Using or copying code from others without proper attribution will result in immediate disqualification.</li>
+                        <li><strong>Cheating:</strong> Any form of cheating, including but not limited to using pre-written code, will result in disqualification.</li>
+                        <li><strong>Payment Fraud:</strong> Any attempt to manipulate the payment system will result in immediate disqualification and may lead to legal action.</li>
+                        <li><strong>Multiple Teams:</strong> Using multiple teams to gain an unfair advantage is strictly prohibited.</li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <p><strong>Important:</strong> These rules are specific to the Teams Challenge. Please also review our <a href="rules.html" style="color: var(--accent1)">General Rules</a> and <a href="code_of_conduct.html" style="color: var(--accent1)">Code of Conduct</a>, which apply to all our challenges.</p>
+                    <p><strong>Stay Active:</strong> Make sure to stay active in the Discord server as all important announcements will be shared there.</p>
+                </div>
+
+                <a href="teams.html" class="back-link">Back to Teams Challenge</a>
+            </div>
+        </main>
+
+        <footer>
+            © The Grid • Code Challenges & Hackathons • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a> • <a href="https://discord.gg/Xy28vhgA" style="color: var(--accent1)" target="_blank" rel="noopener noreferrer">Join Discord</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
+        </footer>
+    </div>
+</body>
+</html>

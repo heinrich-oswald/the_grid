@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Grid — Multiplier Event</title>
+  <style>
+    :root{--bg:#0b0a09;--card:#1a1716;--accent1:#466d68;--accent2:#7a825b;--paper:#f0eded;--accent3:#4bb47e;--muted:rgba(240,237,237,0.65);--glass:rgba(255,255,255,0.03);}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,sans-serif}
+    body{background:linear-gradient(180deg,var(--bg) 0%, #0d0c0b 60%);color:var(--paper);overflow-x:hidden}
+    .wrap{max-width:1200px;margin:24px auto;padding:18px}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:72px;height:72px;border-radius:8px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--paper);font-size:24px;box-shadow:0 6px 18px rgba(0,0,0,0.6);transition:transform 0.3s ease;}
+    .logo:hover{transform:scale(1.05);}
+    @keyframes glowPulse{0%{box-shadow:0 0 15px rgba(75, 180, 126, 0.4);}50%{box-shadow:0 0 25px rgba(75, 180, 126, 0.7);}100%{box-shadow:0 0 15px rgba(75, 180, 126, 0.4);}}
+    .logo-square{animation:glowPulse 3s ease-in-out infinite;}
+    .brand-title {font-weight:900;font-size:32px;letter-spacing:1px;background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .brand-sub {font-size:13px;color:var(--muted);}
+    .cta-row{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+    .btn{background:linear-gradient(135deg, var(--accent3), var(--accent1));color:#0b0a09;padding:10px 14px;border-radius:10px;border:0;font-weight:700;cursor:pointer;transition:all 0.3s ease;position:relative;overflow:hidden;}
+    .btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);transition:all 0.6s ease;}
+    .btn:hover::before{left:100%;}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(75, 180, 126, 0.4);}
+    .btn.ghost{background:transparent;border:1px solid rgba(75, 180, 126, 0.3);color:var(--paper);transition:all 0.3s ease;}
+    .btn.ghost:hover{background:rgba(75, 180, 126, 0.1);border-color:var(--accent3);transform:translateY(-2px);}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;margin-top:18px;position:relative}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass);padding:18px;border-radius:12px;transition:all 0.3s ease;position:relative;overflow:hidden;}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg, var(--accent3), var(--accent1));}
+    .card:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,0.3);}
+    .stats{display:flex;gap:12px;flex-wrap:wrap}
+    .stat{flex:1;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;text-align:center;transition:all 0.3s ease;min-width:100px}
+    .stat:hover{background:rgba(75, 180, 126, 0.05);transform:scale(1.03);}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    .feature{background:rgba(255,255,255,0.01);padding:10px;border-radius:8px;transition:all 0.3s ease;display:flex;align-items:center;gap:8px}
+    .feature:hover{background:rgba(75, 180, 126, 0.05);transform:translateX(4px);}
+    .register{display:flex;flex-direction:column;gap:8px}
+    input,select,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;transition:all 0.3s ease;}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent3);background:rgba(255,255,255,0.02);}
+    footer{margin-top:20px;color:var(--muted);font-size:13px;padding-top:20px;border-top:1px solid var(--glass);}
+    .hero{height:220px;border-radius:12px;overflow:hidden;display:flex;align-items:center;position:relative;}
+    .hero img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.7);}
+    .hero-overlay{position:relative;margin-top:-100px;padding:14px}
+    .hero-card{background:linear-gradient(180deg, rgba(11,10,9,0.8), rgba(11,10,9,0.6));border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px);position:relative;z-index:1;transition:transform 0.3s ease;}
+    .hero-card:hover{transform:translateY(-2px);}
+    .ticker{margin-top:12px;padding:8px;border-radius:8px;background:rgba(75, 180, 126, 0.05);font-size:14px;color:var(--paper);font-weight:600;border-left:3px solid var(--accent3);}
+    .logo-square{width:140px;height:140px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:40px;box-shadow:0 10px 30px rgba(0,0,0,0.6);transition:transform 0.3s ease;}
+    /* Sponsor carousel */
+    .sponsor-row{display:flex;overflow:hidden;border-radius:10px;padding:8px;gap:18px;align-items:center;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));margin-top:14px;border:1px solid var(--glass);}
+    .sponsor-track{display:flex;gap:28px;animation:scroll 20s linear infinite;align-items:center;}
+    .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,0.02);width:200px;height:100px;transition:all 0.3s ease;}
+    .sponsor:hover{background:rgba(255,255,255,0.05);transform:scale(1.05);}
+    @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    /* FAQ accordion */
+    .faq{margin-top:16px}
+    .faq-item{border-radius:8px;background:rgba(255,255,255,0.015);margin-bottom:8px;padding:10px;transition:all 0.3s ease;}
+    .faq-item:hover{background:rgba(255,255,255,0.025);}
+    .faq-q{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:8px;transition:color 0.3s ease;}
+    .faq-q:hover{color:var(--accent3);}
+    .faq-q::before{content:'▶';font-size:10px;transition:transform 0.3s ease;}
+    .faq-q.active::before{transform:rotate(90deg);}
+    .faq-a{display:none;color:var(--muted);margin-top:8px;padding-left:16px;}
+    /* sticky register modal */
+    .sticky-register-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent3),var(--accent1));color:var(--paper);border-radius:999px;padding:14px 18px;font-weight:800;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:999;transition:all 0.3s ease;animation:float 3s ease-in-out infinite;}
+    @keyframes float{0%{transform:translateY(0px);}50%{transform:translateY(-8px);}100%{transform:translateY(0px);}}
+    .sticky-register-btn:hover{transform:scale(1.05) translateY(-8px);box-shadow:0 15px 35px rgba(75, 180, 126, 0.4);}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:1000;opacity:0;transition:opacity 0.3s ease;}
+    .modal-backdrop.active{display:flex;opacity:1;}
+    .modal{background:var(--card);padding:24px;border-radius:12px;width:min(720px,95%);max-height:90vh;overflow:auto;transform:scale(0.9);opacity:0;transition:transform 0.3s ease, opacity 0.3s ease;position:relative;}
+    .modal.active{transform:scale(1);opacity:1;}
+    .modal h3{margin-top:0}
+    .discord-cta{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+    .proof-template{background:linear-gradient(180deg, rgba(75, 180, 126, 0.05), rgba(75, 180, 126, 0.02));padding:12px;border-radius:8px;color:var(--paper);margin-top:12px;border-left:3px solid var(--accent3);}
+    @media(max-width:880px){.grid{grid-template-columns:1fr}.logo{width:44px;height:44px}.hero{height:140px}.hero-overlay{margin-top:-64px}.brand-title{font-size:22px}}
+    @media(max-width:640px){.nav{flex-direction:column;align-items:flex-start;gap:16px;}.features{grid-template-columns:1fr;}.stats{justify-content:center;}.hero-card{flex-direction:column;text-align:center;}.logo-square{width:100px;height:100px;}.sticky-register-btn{right:10px;bottom:10px;padding:10px 14px;}.modal{padding:16px;}}
+    /* Toast notification */
+    .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);padding:12px 20px;border-radius:999px;background:var(--accent3);color:#0b0a09;font-weight:700;z-index:1001;box-shadow:0 8px 24px rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s ease;backdrop-filter:blur(4px);}
+    
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
+        <div>
+          <div class="brand-title">THE GRID</div>
+          <div class="brand-sub">Multiplier Event</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;margin-left:auto">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="timebound.html">Time Bound</a>
+        <a class="btn ghost" href="teams.html">Teams</a>
+        <a class="btn ghost" href="multiplier_rules.html">Rules</a>
+        <a class="btn" href="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/viewform" target="_blank" rel="noopener noreferrer">Register</a>
+      </div>
+    </div>
+
+    <!-- What makes Multiplier special -->
+    <div class="card" style="margin-bottom:20px;">
+      <h3 style="background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">What Makes Multiplier Unique?</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;">
+        <div style="flex:1;background:rgba(75, 180, 126, 0.05);padding:12px;border-radius:8px;min-width:200px;">
+          <div style="font-weight:700;margin-bottom:4px;">Entry Fee System</div>
+          <div style="color:var(--muted);font-size:14px;">Your ₹100 entry directly contributes to the prize pool, creating a high-stakes competition with real rewards.</div>
+        </div>
+        <div style="flex:1;background:rgba(75, 180, 126, 0.05);padding:12px;border-radius:8px;min-width:200px;">
+          <div style="font-weight:700;margin-bottom:4px;">Scaling Competition</div>
+          <div style="color:var(--muted);font-size:14px;">Bi-weekly rounds with increasing slots and prizes: 10 people/₹500 → 20 people/₹1000 → 40 people/₹2000, etc.</div>
+        </div>
+        <div style="flex:1;background:rgba(75, 180, 126, 0.05);padding:12px;border-radius:8px;min-width:200px;">
+          <div style="font-weight:700;margin-bottom:4px;">Focused Development</div>
+          <div style="color:var(--muted);font-size:14px;">7 days to perfect your solution with no distractions - ideal for creating polished, high-quality projects.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero" aria-hidden="true">
+      <img src="assets/banner.png" alt="The Grid banner">
+      <!-- Decorative elements -->
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg, rgba(70, 109, 104, 0.2), rgba(75, 180, 126, 0.1));"></div>
+    </div>
+
+    <div class="hero-overlay">
+      <div class="hero-card">
+          <div style="display:flex;align-items:center;gap:14px;position:relative;z-index:1;">
+            <!-- Visual enhancement for multiplier concept -->
+            <div class="logo-square" style="position:relative;">
+              <img src="assets/logo.png" alt="The Grid" style="width:86%;height:86%;object-fit:contain;filter:brightness(1.2)">
+              <div style="position:absolute;top:-8px;right:-8px;background:var(--accent3);color:#0b0a09;font-size:14px;font-weight:800;padding:4px 8px;border-radius:12px;box-shadow:0 4px 12px rgba(75, 180, 126, 0.4);">
+                x5 Multiplier
+              </div>
+            </div>
+            <div style="flex:1">
+              <h1 style="margin:0 0 6px 0;font-size:26px;background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">Multiplier Event — Grow Your Prize</h1>
+              <div style="color:var(--paper);font-size:16px;line-height:1.5">
+                <strong style="color:var(--accent3)">Bi-weekly rounds</strong> • <strong style="color:var(--accent3)">₹100 entry</strong> • <strong style="color:var(--accent3)">Scaling prizes</strong><br>
+                First round: 10 people/₹500, second round: 20 people/₹1000, third round: 40 people/₹2000, and so on. Participate in any round you want! Every 3 months, we reset to 10 people to maintain competition quality.
+              </div>
+              <div class="cta-row" style="margin-top:16px;gap:14px;">
+                <a class="btn" href="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/viewform" target="_blank" rel="noopener noreferrer" style="font-size:16px;padding:12px 24px;">Secure Your Slot</a>
+                <a class="btn ghost" href="multiplier_rules.html" style="font-size:16px;padding:12px 24px;">Event Rules</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Enhanced Progress bar -->
+          <div style="margin-top:20px;background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-weight:700;">Registration Progress</span>
+              <span style="background:var(--accent3);color:#0b0a09;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:700;">3/10 slots filled</span>
+            </div>
+            <div style="height:12px;background:rgba(255,255,255,0.05);border-radius:999px;overflow:hidden;border:1px solid rgba(75, 180, 126, 0.2);">
+              <div style="height:100%;width:30%;background:linear-gradient(90deg, var(--accent3), var(--accent1));border-radius:999px;transition:width 0.8s ease;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;">
+              <span style="font-size:12px;color:var(--muted);">Hurry, only 7 spots left!</span>
+              <span style="font-size:12px;color:var(--muted);">Closing soon</span>
+            </div>
+          </div>
+        </div>
+
+      <!-- Sponsor carousel -->
+      <div class="sponsor-row" aria-hidden="true">
+        <div class="sponsor-track" id="sponsorTrack">
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+          <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div class="stats" style="margin-top:6px">
+            <div class="stat">
+              <div style="font-size:18px;font-weight:800;color:var(--accent3);">10</div>
+              <div style="color:var(--muted)">Available slots</div>
+            </div>
+            <div class="stat">
+              <div style="font-size:18px;font-weight:800;color:var(--accent3);">₹100</div>
+              <div style="color:var(--muted)">Entry fee</div>
+            </div>
+            <div class="stat">
+              <div style="font-size:18px;font-weight:800;color:var(--accent3);">₹500</div>
+              <div style="color:var(--muted)">Cash prize</div>
+            </div>
+            <div class="stat">
+              <div style="font-size:18px;font-weight:800;color:var(--accent3);">7 days</div>
+              <div style="color:var(--muted)">Preparation time</div>
+            </div>
+          </div>
+
+          <div class="features">
+            <div class="feature">
+              <span style="color:var(--accent3);font-weight:800;">📅</span> One week to develop your project
+            </div>
+            <div class="feature">
+              <span style="color:var(--accent3);font-weight:800;">👤</span> Individual participation only
+            </div>
+            <div class="feature">
+              <span style="color:var(--accent3);font-weight:800;">📁</span> Submit GitHub repo & 2-minute demo
+            </div>
+            <div class="feature">
+              <span style="color:var(--accent3);font-weight:800;">🏆</span> Winners announced after judging period
+            </div>
+          </div>
+
+          <div class="ticker">
+            <span style="color:var(--accent3);">🔥</span> Current: Round 1 — 7 slots left • Next round: 20 people/₹1000 • Quarterly reset to maintain quality
+          </div>
+        </div>
+
+        <!-- FAQ accordion -->
+        <div id="faq" class="card faq">
+          <h3 style="background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">Multiplier Event FAQ</h3>
+          <div class="faq-item"><div class="faq-q"><span style="color:var(--accent3);margin-right:8px;">👤</span> Who can participate?</div><div class="faq-a">Individual participants aged 17 and under with parental consent. You can join any round, even if you participated in previous rounds.</div></div>
+          <div class="faq-item"><div class="faq-q"><span style="color:var(--accent3);margin-right:8px;">📅</span> What is the timeline?</div><div class="faq-a">Bi-weekly rounds with one week development time each. Every 3 months, the competition resets to 10 participants to prevent overcrowding.</div></div>
+          <div class="faq-item"><div class="faq-q"><span style="color:var(--accent3);margin-right:8px;">📤</span> How to submit?</div><div class="faq-a">Submit a GitHub repo link and a 2-minute demo video before the deadline. Follow the submission template in the Discord #submissions channel.</div></div>
+          <div class="faq-item"><div class="faq-q"><span style="color:var(--accent3);margin-right:8px;">📊</span> How are projects judged?</div><div class="faq-a">Innovation 30% • Functionality 30% • Design 20% • Presentation 20% — judges will post scores and short notes.</div></div>
+          <div class="faq-item"><div class="faq-q"><span style="color:var(--accent3);margin-right:8px;">🏆</span> When will winners be announced?</div><div class="faq-a">Winners will be announced within 48 hours after the judging period concludes, with payments processed immediately.</div></div>
+          <div class="faq-item"><div class="faq-q"><span style="color:var(--accent3);margin-right:8px;">💰</span> How does the entry fee work?</div><div class="faq-a">The ₹100 entry fee from each participant contributes to the total prize pool. This creates a high-stakes environment where everyone has skin in the game.</div></div>
+        </div>
+
+        <!-- Proof of payout template -->
+        <div class="card" style="margin-top:12px;">
+          <h3 style="background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">Proof of Payout (Template)</h3>
+          <div class="proof-template">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="color:var(--accent3);font-size:32px;">🏆</div>
+              <div>
+                <strong style="color:var(--accent3);">Winner:</strong> Participant Name<br>
+                <strong style="color:var(--accent3);">Prize:</strong> ₹500<br>
+                <strong style="color:var(--accent3);">Date:</strong> 2025-10-12<br>
+                <strong style="color:var(--accent3);">Txn (masked):</strong> UPI ****1234<br>
+              </div>
+            </div>
+            <div style="margin-top:8px;color:var(--muted);border-top:1px solid var(--glass);padding-top:8px;">We will upload a screenshot of the transaction (sensitive details redacted) to #winners and in the site admin panel.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <aside>
+        <div class="card register">
+          <h3 style="background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">Register — Multiplier Event</h3>
+          <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">Secure your spot in our most exclusive challenge</div>
+          
+          <a class="btn" href="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/viewform" target="_blank" rel="noopener noreferrer" style="margin-top:16px;padding:14px 0px;width:100%;font-size:16px;text-align:center;display:block;">Register Through Form</a>
+          
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--glass);">
+            <div style="font-weight:700;">Join our Discord</div>
+            <div class="discord-cta" style="margin-top:8px;">
+              <a class="btn" href="https://discord.gg/Xy28vhgA" target="_blank" style="padding:10px 16px;">Join Discord</a>
+              <div style="color:var(--muted);font-size:13px;">Or search: THE GRID on Discord</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px;background:linear-gradient(180deg, rgba(75, 180, 126, 0.05), rgba(75, 180, 126, 0.02));">
+          <h4 style="color:var(--accent3);">Quick FAQ</h4>
+          <div style="color:var(--paper);font-size:13px;line-height:1.4;">How to pay: UPI to <strong>UPI_ID_PLACEHOLDER</strong>. Save txn screenshot. Post txn in #register on Discord.</div>
+          <div style="color:var(--paper);font-size:13px;line-height:1.4;margin-top:8px;">Stay active in Discord: All important announcements, including project prompts, will be shared there.</div>
+        </div>
+
+        <div class="card" style="margin-top:12px;background:linear-gradient(180deg, rgba(75, 180, 126, 0.05), rgba(75, 180, 126, 0.02));">
+          <h4 style="color:var(--accent3);">Event Details</h4>
+          <div style="color:var(--paper);font-size:13px;line-height:1.4;">Registration closes when all slots are filled. You'll receive a confirmation message with all necessary details once payment is verified.</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      © The Grid • Multiplier Event • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
+    </footer>
+  </div>
+
+  <!-- Sticky register button -->
+  <a class="sticky-register-btn" href="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/viewform" target="_blank" rel="noopener noreferrer">CLAIM SLOT</a>
+
+  <script>
+    // FAQ accordion behavior with smooth animations
+    document.querySelectorAll('.faq-q').forEach(function(q){
+      q.addEventListener('click', function(){
+        q.classList.toggle('active');
+        var a = q.nextElementSibling;
+        if(a.style.maxHeight) {
+          a.style.maxHeight = null;
+          a.style.marginTop = '0';
+          setTimeout(function() {
+            a.style.display = 'none';
+          }, 300);
+        } else {
+          a.style.display = 'block';
+          a.style.maxHeight = a.scrollHeight + 'px';
+          a.style.marginTop = '8px';
+        }
+      });
+    });
+
+    // Sponsor track speed control on hover
+    var sponsorTrack = document.getElementById('sponsorTrack');
+    if(sponsorTrack){
+      sponsorTrack.addEventListener('mouseenter', function(){
+        sponsorTrack.style.animationPlayState = 'paused';
+      }); 
+      sponsorTrack.addEventListener('mouseleave', function(){
+        sponsorTrack.style.animationPlayState = 'running';
+      });
+    }
+
+    // Enhanced Sticky modal controls with animations
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modal = modalBackdrop.querySelector('.modal');
+    
+    function openRegister(){
+      document.body.style.overflow = 'hidden'; // Prevent body scrolling
+      modalBackdrop.classList.add('active');
+      // Add a small delay before adding the modal active class for smooth animation
+      setTimeout(() => {
+        modal.classList.add('active');
+      }, 50);
+    }
+    
+    function closeRegister(){
+      modal.classList.remove('active');
+      // Wait for modal animation to complete before hiding backdrop
+      setTimeout(() => {
+        modalBackdrop.classList.remove('active');
+        document.body.style.overflow = ''; // Re-enable body scrolling
+      }, 300);
+    }
+
+    // Close modal when clicking outside
+    modalBackdrop.addEventListener('click', function(e){
+      if(e.target === modalBackdrop){
+        closeRegister();
+      }
+    });
+
+    // Toast notification function
+    function showToast(message, type = 'success') {
+      // Remove existing toast if any
+      const existingToast = document.querySelector('.toast');
+      if (existingToast) {
+        existingToast.remove();
+      }
+
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      
+      // Set background color based on type
+      if (type === 'error') {
+        toast.style.background = '#ff4d4f';
+      } else {
+        toast.style.background = 'var(--accent3)';
+      }
+
+      // Positioning
+      toast.style.position = 'fixed';
+      toast.style.top = '80px';
+      toast.style.left = '50%';
+      toast.style.transform = 'translateX(-50%)';
+      toast.style.padding = '12px 20px';
+      toast.style.borderRadius = '999px';
+      toast.style.color = '#0b0a09';
+      toast.style.fontWeight = '700';
+      toast.style.zIndex = '1001';
+      toast.style.boxShadow = '0 8px 24px rgba(0,0,0,0.4)';
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      toast.style.backdropFilter = 'blur(4px)';
+      toast.style.textAlign = 'center';
+      toast.style.minWidth = '250px';
+
+      document.body.appendChild(toast);
+
+      // Show toast with animation
+      setTimeout(() => {
+        toast.style.opacity = '1';
+      }, 10);
+
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+          toast.remove();
+        }, 300);
+      }, 3000);
+    }
+
+    // Registration is now handled through the Google Form - no local submission needed
+
+    // Add animation to stats on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const stats = document.querySelectorAll('.stat');
+      stats.forEach((stat, index) => {
+        setTimeout(() => {
+          stat.style.transform = 'translateY(0)';
+          stat.style.opacity = '1';
+        }, 100 * index);
+      });
+    });
+
+
+  </script>
+</body>
+</html>
