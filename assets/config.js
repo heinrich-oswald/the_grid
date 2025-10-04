@@ -14,4 +14,8 @@ window.__GRID_CONFIG__ = {
   // Set to your server's LAN IP if other devices connect via that IP
   FLASK_API_HOST: '', // e.g. '192.168.1.5'
   FLASK_API_PORT: 5000
+  ,
+  // Admin API token for protected endpoints (optional; can also be set via localStorage)
+  // e.g. localStorage.setItem('admin_api_token', 'your-secret')
+  ADMIN_API_TOKEN: ''
 };

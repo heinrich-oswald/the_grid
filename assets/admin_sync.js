@@ -8,15 +8,21 @@
   const API_BASE = `${location.protocol}//${API_HOST}:${API_PORT}/api/admin`;
 
   async function getSettings() {
-    const res = await fetch(`${API_BASE}/settings`, { cache: 'no-store' });
+    const headers = {};
+    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const res = await fetch(`${API_BASE}/settings`, { cache: 'no-store', headers });
     if (!res.ok) throw new Error(`GET settings failed: ${res.status}`);
     return res.json();
   }
 
   async function putSettings(payload) {
+    const headers = { 'Content-Type': 'application/json' };
+    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    if (token) headers['Authorization'] = `Bearer ${token}`;
     const res = await fetch(`${API_BASE}/settings`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(payload)
     });
     if (!res.ok) throw new Error(`PUT settings failed: ${res.status}`);
@@ -24,21 +30,30 @@
   }
 
   async function deleteSettings() {
-    const res = await fetch(`${API_BASE}/settings`, { method: 'DELETE' });
+    const headers = {};
+    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const res = await fetch(`${API_BASE}/settings`, { method: 'DELETE', headers });
     if (!res.ok) throw new Error(`DELETE settings failed: ${res.status}`);
     return res.json();
   }
 
   async function getEvent(type) {
-    const res = await fetch(`${API_BASE}/events/${encodeURIComponent(type)}`, { cache: 'no-store' });
+    const headers = {};
+    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const res = await fetch(`${API_BASE}/events/${encodeURIComponent(type)}`, { cache: 'no-store', headers });
     if (!res.ok) throw new Error(`GET event ${type} failed: ${res.status}`);
     return res.json();
   }
 
   async function putEvent(type, payload) {
+    const headers = { 'Content-Type': 'application/json' };
+    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    if (token) headers['Authorization'] = `Bearer ${token}`;
     const res = await fetch(`${API_BASE}/events/${encodeURIComponent(type)}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(payload)
     });
     if (!res.ok) throw new Error(`PUT event ${type} failed: ${res.status}`);
@@ -211,7 +226,9 @@
 
     // Flask SSE realtime
     try {
-      const sseUrl = `${location.protocol}//${API_HOST}:${API_PORT}/api/admin/stream`;
+      const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+      const baseUrl = `${location.protocol}//${API_HOST}:${API_PORT}/api/admin/stream`;
+      const sseUrl = token ? `${baseUrl}?token=${encodeURIComponent(token)}` : baseUrl;
       const es = new EventSource(sseUrl);
       es.onopen = () => {
         // Connected: reduce polling to 60s fallback
