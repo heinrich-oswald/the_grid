@@ -15,6 +15,19 @@ app = Flask(__name__)
 if CORS:
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
+# Fallback CORS headers when flask_cors isn't available
+ALLOWED_ORIGIN = os.getenv('GRID_ALLOWED_ORIGIN', '*')
+
+@app.after_request
+def add_cors_headers(resp):
+    try:
+        resp.headers['Access-Control-Allow-Origin'] = ALLOWED_ORIGIN
+        resp.headers['Access-Control-Allow-Methods'] = 'GET,PUT,DELETE,OPTIONS'
+        resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    except Exception:
+        pass
+    return resp
+
 
 def get_conn():
     conn = sqlite3.connect(DB_PATH)
@@ -178,7 +191,17 @@ def stream():
                 payload = json.dumps({"type": "error", "message": "serialization_error"})
             yield f"data: {payload}\n\n"
 
-    return Response(stream_with_context(event_stream()), mimetype='text/event-stream')
+    return Response(
+        stream_with_context(event_stream()),
+        mimetype='text/event-stream',
+        headers={'Cache-Control': 'no-cache'}
+    )
+
+
+# Generic OPTIONS handler to satisfy preflight requests
+@app.route('/api/<path:subpath>', methods=['OPTIONS'])
+def options_any(subpath):
+    return ('', 204)
 
 
 if __name__ == '__main__':

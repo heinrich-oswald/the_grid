@@ -2,8 +2,10 @@
 (function(){
   const CFG = window.__GRID_CONFIG__ || {};
   const provider = (CFG.BACKEND_PROVIDER || 'flask').toLowerCase();
-  // Use the same host as the page so it works across devices
-  const API_BASE = `${location.protocol}//${location.hostname}:5000/api/admin`;
+  // Cross-device host override support
+  const API_HOST = CFG.FLASK_API_HOST || location.hostname;
+  const API_PORT = CFG.FLASK_API_PORT || 5000;
+  const API_BASE = `${location.protocol}//${API_HOST}:${API_PORT}/api/admin`;
 
   async function getSettings() {
     const res = await fetch(`${API_BASE}/settings`, { cache: 'no-store' });
@@ -209,7 +211,7 @@
 
     // Flask SSE realtime
     try {
-      const sseUrl = `${location.protocol}//${location.hostname}:5000/api/admin/stream`;
+      const sseUrl = `${location.protocol}//${API_HOST}:${API_PORT}/api/admin/stream`;
       const es = new EventSource(sseUrl);
       es.onopen = () => {
         // Connected: reduce polling to 60s fallback
