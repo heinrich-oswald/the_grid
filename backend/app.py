@@ -1,7 +1,9 @@
 import os
 import json
 import sqlite3
-from flask import Flask, jsonify, request
+import queue
+from flask import Flask, jsonify, request, Response
+from flask import stream_with_context
 try:
     from flask_cors import CORS
 except Exception:
@@ -62,6 +64,29 @@ def save_settings(data: dict):
     conn.close()
 
 
+# === Simple Server-Sent Events broadcaster ===
+subscribers = []  # list of queue.Queue()
+
+
+def broadcast_settings():
+    """Push the latest settings to all connected subscribers."""
+    data = load_settings()
+    msg = {"type": "settings", "settings": data}
+    dead = []
+    for q in subscribers:
+        try:
+            q.put_nowait(msg)
+        except Exception:
+            dead.append(q)
+    # clean up any dead queues
+    if dead:
+        for q in dead:
+            try:
+                subscribers.remove(q)
+            except Exception:
+                pass
+
+
 @app.route('/api/admin/health', methods=['GET'])
 def health():
     return jsonify({"status": "ok"})
@@ -94,6 +119,8 @@ def put_settings():
             events[ev_type] = cur
     settings["events"] = events
     save_settings(settings)
+    # notify listeners
+    broadcast_settings()
     return jsonify(settings)
 
 
@@ -120,13 +147,38 @@ def put_event(event_type):
     events[event_type] = cur
     settings["events"] = events
     save_settings(settings)
+    # notify listeners
+    broadcast_settings()
     return jsonify(cur)
 
 
 @app.route('/api/admin/settings', methods=['DELETE'])
 def delete_settings():
     save_settings({})
+    # notify listeners
+    broadcast_settings()
     return jsonify({"ok": True})
+
+
+@app.route('/api/admin/stream', methods=['GET'])
+def stream():
+    """Server-Sent Events endpoint providing live settings updates."""
+    q = queue.Queue()
+    subscribers.append(q)
+
+    def event_stream():
+        # Send initial snapshot
+        init_msg = {"type": "init", "settings": load_settings()}
+        yield f"data: {json.dumps(init_msg)}\n\n"
+        while True:
+            msg = q.get()  # blocks until a new message is available
+            try:
+                payload = json.dumps(msg)
+            except Exception:
+                payload = json.dumps({"type": "error", "message": "serialization_error"})
+            yield f"data: {payload}\n\n"
+
+    return Response(stream_with_context(event_stream()), mimetype='text/event-stream')
 
 
 if __name__ == '__main__':
