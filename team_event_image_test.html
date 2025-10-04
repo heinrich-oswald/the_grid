@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Event Image Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .image-container {
+            margin-bottom: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            margin-top: 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+        .file-path {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <h1>Team Event Image Test</h1>
+    
+    <!-- Test with URL encoded spaces and cache busting -->
+    <div class="image-container">
+        <h2>Team Event Logo with URL Encoding and Cache Busting</h2>
+        <img src="assets/team%20event%20logo.png?v=final" alt="Team Event Logo">
+        <div class="file-path">File: assets/team%20event%20logo.png?v=final</div>
+    </div>
+    
+    <div class="image-container">
+        <h2>Team Event Banner with URL Encoding and Cache Busting</h2>
+        <img src="assets/team%20event%20banner.png?v=final" alt="Team Event Banner">
+        <div class="file-path">File: assets/team%20event%20banner.png?v=final</div>
+    </div>
+    
+    <!-- Test without URL encoding (for comparison) -->
+    <div class="image-container">
+        <h2>Team Event Logo without URL Encoding</h2>
+        <img src="assets/team event logo.png" alt="Team Event Logo (unencoded)">
+        <div class="file-path">File: assets/team event logo.png</div>
+    </div>
+    
+    <div class="image-container">
+        <h2>Team Event Banner without URL Encoding</h2>
+        <img src="assets/team event banner.png" alt="Team Event Banner (unencoded)">
+        <div class="file-path">File: assets/team event banner.png</div>
+    </div>
+</body>
+</html>

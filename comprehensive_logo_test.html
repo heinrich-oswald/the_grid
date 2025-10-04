@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Logo Comparison Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .image-comparison {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .logo-container {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+            vertical-align: top;
+            max-width: 300px;
+        }
+        h1 { color: #333; }
+        h2 { color: #555; margin-top: 0; }
+        h3 { color: #777; margin-top: 10px; }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .file-path {
+            background-color: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            margin-top: 10px;
+        }
+        .status {
+            padding: 5px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        .status-loaded { color: green; background-color: #e8f5e9; }
+        .status-error { color: red; background-color: #ffebee; }
+        .debug-info {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive Logo Comparison Test</h1>
+    <p>This page shows all logo types side by side for comparison. Check your browser's developer console for additional debugging information.</p>
+    
+    <!-- Logo Comparison -->
+    <div class="image-comparison">
+        <h2>Logo Comparison</h2>
+        
+        <!-- Normal Logo -->
+        <div class="logo-container">
+            <h3>Normal Logo</h3>
+            <img id="normalLogo" src="assets/logo.png" alt="Normal Logo" onload="markAsLoaded('normalLogoStatus')" onerror="markAsError('normalLogoStatus')">
+            <div class="file-path">File: assets/logo.png</div>
+            <div id="normalLogoStatus" class="status">Loading...</div>
+        </div>
+        
+        <!-- Multiplier Logo -->
+        <div class="logo-container">
+            <h3>Multiplier Logo</h3>
+            <img id="multiplierLogo" src="assets/multiplier%20logo.png?v=final" alt="Multiplier Logo" onload="markAsLoaded('multiplierLogoStatus')" onerror="markAsError('multiplierLogoStatus')">
+            <div class="file-path">File: assets/multiplier%20logo.png?v=final</div>
+            <div id="multiplierLogoStatus" class="status">Loading...</div>
+        </div>
+        
+        <!-- Team Event Logo -->
+        <div class="logo-container">
+            <h3>Team Event Logo</h3>
+            <img id="teamEventLogo" src="assets/team%20event%20logo.png?v=final" alt="Team Event Logo" onload="markAsLoaded('teamEventLogoStatus')" onerror="markAsError('teamEventLogoStatus')">
+            <div class="file-path">File: assets/team%20event%20logo.png?v=final</div>
+            <div id="teamEventLogoStatus" class="status">Loading...</div>
+        </div>
+    </div>
+    
+    <!-- Banner Comparison -->
+    <div class="image-comparison">
+        <h2>Banner Comparison</h2>
+        
+        <!-- Normal Banner -->
+        <div class="logo-container">
+            <h3>Normal Banner</h3>
+            <img id="normalBanner" src="assets/banner.png" alt="Normal Banner" onload="markAsLoaded('normalBannerStatus')" onerror="markAsError('normalBannerStatus')">
+            <div class="file-path">File: assets/banner.png</div>
+            <div id="normalBannerStatus" class="status">Loading...</div>
+        </div>
+        
+        <!-- Multiplier Banner -->
+        <div class="logo-container">
+            <h3>Multiplier Banner</h3>
+            <img id="multiplierBanner" src="assets/multiplier%20banner.png?v=final" alt="Multiplier Banner" onload="markAsLoaded('multiplierBannerStatus')" onerror="markAsError('multiplierBannerStatus')">
+            <div class="file-path">File: assets/multiplier%20banner.png?v=final</div>
+            <div id="multiplierBannerStatus" class="status">Loading...</div>
+        </div>
+        
+        <!-- Team Event Banner -->
+        <div class="logo-container">
+            <h3>Team Event Banner</h3>
+            <img id="teamEventBanner" src="assets/team%20event%20banner.png?v=final" alt="Team Event Banner" onload="markAsLoaded('teamEventBannerStatus')" onerror="markAsError('teamEventBannerStatus')">
+            <div class="file-path">File: assets/team%20event%20banner.png?v=final</div>
+            <div id="teamEventBannerStatus" class="status">Loading...</div>
+        </div>
+    </div>
+    
+    <!-- Debug Information -->
+    <div class="debug-info">
+        <h3>Debug Information</h3>
+        <div>Page URL: <span id="pageUrl"></span></div>
+        <div>Timestamp: <span id="timestamp"></span></div>
+        <div>Browser: <span id="browser"></span></div>
+    </div>
+    
+    <script>
+        // Image loading status functions
+        function markAsLoaded(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = 'Loaded';
+                element.className = 'status status-loaded';
+                console.log(`Successfully loaded: ${elementId}`);
+            }
+        }
+        
+        function markAsError(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = 'Error';
+                element.className = 'status status-error';
+                console.error(`Failed to load: ${elementId}`);
+            }
+        }
+        
+        // Display debug information
+        document.getElementById('pageUrl').textContent = window.location.href;
+        document.getElementById('timestamp').textContent = new Date().toISOString();
+        
+        // Simple browser detection
+        const userAgent = navigator.userAgent;
+        let browser = 'Unknown';
+        if (userAgent.indexOf('Firefox') > -1) browser = 'Firefox';
+        else if (userAgent.indexOf('Chrome') > -1) browser = 'Chrome';
+        else if (userAgent.indexOf('Safari') > -1) browser = 'Safari';
+        else if (userAgent.indexOf('Edge') > -1) browser = 'Edge';
+        document.getElementById('browser').textContent = browser + ' (' + userAgent + ')';
+        
+        // Log image details to console for debugging
+        console.log('=== Image Debugging Information ===');
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            console.log(`Image: ${img.alt}`);
+            console.log(`- src: ${img.src}`);
+            console.log(`- naturalWidth: ${img.naturalWidth}`);
+            console.log(`- naturalHeight: ${img.naturalHeight}`);
+        });
+        console.log('==================================');
+    </script>
+</body>
+</html>

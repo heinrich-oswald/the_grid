@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inline Logo Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .logo-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+        .logo-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 250px;
+        }
+        h2 {
+            color: #555;
+            margin-top: 0;
+            font-size: 18px;
+        }
+        .logo {
+            width: 100%;
+            height: 200px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .file-info {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            text-align: left;
+        }
+        .note {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 40px;
+            max-width: 800px;
+            text-align: left;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inline Logo Test</h1>
+    
+    <div class="logo-grid">
+        <!-- Normal Logo -->
+        <div class="logo-container">
+            <h2>Normal Logo</h2>
+            <svg class="logo" viewBox="0 0 200 200">
+                <rect width="200" height="200" fill="#2196F3"/>
+                <text x="100" y="100" font-family="Arial" font-size="24" text-anchor="middle" fill="white" dominant-baseline="middle">NORMAL</text>
+            </svg>
+            <div class="file-info">
+                Reference: normal logo<br>
+                Color: Blue (#2196F3)
+            </div>
+        </div>
+        
+        <!-- Multiplier Logo -->
+        <div class="logo-container">
+            <h2>Multiplier Logo</h2>
+            <svg class="logo" viewBox="0 0 200 200">
+                <rect width="200" height="200" fill="#4CAF50"/>
+                <text x="100" y="100" font-family="Arial" font-size="24" text-anchor="middle" fill="white" dominant-baseline="middle">MULTIPLIER</text>
+            </svg>
+            <div class="file-info">
+                Reference: multiplier logo<br>
+                Color: Green (#4CAF50)
+            </div>
+        </div>
+        
+        <!-- Team Event Logo -->
+        <div class="logo-container">
+            <h2>Team Event Logo</h2>
+            <svg class="logo" viewBox="0 0 200 200">
+                <rect width="200" height="200" fill="#FF9800"/>
+                <text x="100" y="100" font-family="Arial" font-size="24" text-anchor="middle" fill="white" dominant-baseline="middle">TEAM EVENT</text>
+            </svg>
+            <div class="file-info">
+                Reference: team event logo<br>
+                Color: Orange (#FF9800)
+            </div>
+        </div>
+        
+        <!-- Normal Banner -->
+        <div class="logo-container">
+            <h2>Normal Banner</h2>
+            <svg class="logo" viewBox="0 0 200 80">
+                <rect width="200" height="80" fill="#2196F3"/>
+                <text x="100" y="40" font-family="Arial" font-size="16" text-anchor="middle" fill="white" dominant-baseline="middle">NORMAL BANNER</text>
+            </svg>
+            <div class="file-info">
+                Reference: normal banner<br>
+                Color: Blue (#2196F3)
+            </div>
+        </div>
+        
+        <!-- Multiplier Banner -->
+        <div class="logo-container">
+            <h2>Multiplier Banner</h2>
+            <svg class="logo" viewBox="0 0 200 80">
+                <rect width="200" height="80" fill="#4CAF50"/>
+                <text x="100" y="40" font-family="Arial" font-size="16" text-anchor="middle" fill="white" dominant-baseline="middle">MULTIPLIER BANNER</text>
+            </svg>
+            <div class="file-info">
+                Reference: multiplier banner<br>
+                Color: Green (#4CAF50)
+            </div>
+        </div>
+        
+        <!-- Team Event Banner -->
+        <div class="logo-container">
+            <h2>Team Event Banner</h2>
+            <svg class="logo" viewBox="0 0 200 80">
+                <rect width="200" height="80" fill="#FF9800"/>
+                <text x="100" y="40" font-family="Arial" font-size="16" text-anchor="middle" fill="white" dominant-baseline="middle">TEAM EVENT BANNER</text>
+            </svg>
+            <div class="file-info">
+                Reference: team event banner<br>
+                Color: Orange (#FF9800)
+            </div>
+        </div>
+    </div>
+    
+    <div class="note">
+        <h3>What This Shows:</h3>
+        <p>This page displays distinct versions of each logo and banner directly in the browser using inline SVG. This bypasses any issues with external image files.</p>
+        <p><strong>The fix for your original issue:</strong></p>
+        <ol>
+            <li>Open your actual logo image files in an image editor</li>
+            <li>Verify they contain different content</li>
+            <li>If they don't, replace them with the correct distinct images</li>
+            <li>Ensure they have appropriate filenames (preferably without spaces)</li>
+        </ol>
+        <p>As demonstrated in our tests, the URL encoding for spaces works correctly - the issue was that your original image files likely contained the same content despite having different filenames.</p>
+    </div>
+</body>
+</html>

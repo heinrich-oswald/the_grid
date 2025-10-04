@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache Bust Logo Diagnostic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0a09;
+            color: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+        .test-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(75, 180, 126, 0.2);
+        }
+        .test-item img {
+            max-width: 200px;
+            max-height: 100px;
+            border: 2px solid #4bb47e;
+            border-radius: 6px;
+            background: white;
+            margin: 10px;
+        }
+        .status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .success { color: #4bb47e; }
+        .error { color: #ff6b6b; }
+        .info { color: #ffd700; }
+    </style>
+</head>
+<body>
+    <h1>Cache Bust Logo Diagnostic</h1>
+    
+    <div class="test-item">
+        <h3>Logo with Cache Bust</h3>
+        <img id="logo-cb" src="assets/logo.png?v=cachebust123" alt="Logo Cache Bust">
+        <div id="logo-cb-status" class="status info">Loading...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>Banner with Cache Bust</h3>
+        <img id="banner-cb" src="assets/banner.png?v=cachebust123" alt="Banner Cache Bust">
+        <div id="banner-cb-status" class="status info">Loading...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>Team Event Logo (Known Working)</h3>
+        <img id="team-logo" src="assets/team event logo.png?v=cachebust123" alt="Team Event Logo">
+        <div id="team-logo-status" class="status info">Loading...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>Team Event Banner (Known Working)</h3>
+        <img id="team-banner" src="assets/team event banner.png?v=cachebust123" alt="Team Event Banner">
+        <div id="team-banner-status" class="status info">Loading...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>File Info</h3>
+        <div id="file-info" class="status info">Checking files...</div>
+    </div>
+
+    <script>
+        function setupImageTest(imgId, statusId) {
+            const img = document.getElementById(imgId);
+            const status = document.getElementById(statusId);
+            
+            img.onload = function() {
+                status.textContent = `✓ Image loaded successfully (${img.naturalWidth}x${img.naturalHeight})`;
+                status.className = 'status success';
+                console.log(`${imgId} loaded:`, img.naturalWidth, 'x', img.naturalHeight);
+            };
+            
+            img.onerror = function() {
+                status.textContent = '✗ Failed to load image';
+                status.className = 'status error';
+                console.error(`${imgId} failed to load`);
+            };
+        }
+
+        setupImageTest('logo-cb', 'logo-cb-status');
+        setupImageTest('banner-cb', 'banner-cb-status');
+        setupImageTest('team-logo', 'team-logo-status');
+        setupImageTest('team-banner', 'team-banner-status');
+
+        // Check file info
+        const fileInfo = document.getElementById('file-info');
+        
+        Promise.all([
+            fetch('assets/logo.png?v=info').then(r => ({
+                file: 'logo.png',
+                status: r.status,
+                contentType: r.headers.get('content-type'),
+                size: r.headers.get('content-length')
+            })),
+            fetch('assets/banner.png?v=info').then(r => ({
+                file: 'banner.png',
+                status: r.status,
+                contentType: r.headers.get('content-type'),
+                size: r.headers.get('content-length')
+            })),
+            fetch('assets/team event logo.png?v=info').then(r => ({
+                file: 'team event logo.png',
+                status: r.status,
+                contentType: r.headers.get('content-type'),
+                size: r.headers.get('content-length')
+            }))
+        ]).then(results => {
+            fileInfo.innerHTML = results.map(r => 
+                `${r.file}: Status ${r.status}, Type: ${r.contentType}, Size: ${r.size || 'unknown'}`
+            ).join('<br>');
+            fileInfo.className = 'status info';
+        }).catch(err => {
+            fileInfo.textContent = 'Error checking files: ' + err.message;
+            fileInfo.className = 'status error';
+        });
+    </script>
+</body>
+</html>

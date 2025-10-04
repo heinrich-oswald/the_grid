@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Diagnostic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0a09;
+            color: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+        .test-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(75, 180, 126, 0.2);
+        }
+        .test-item img {
+            max-width: 200px;
+            max-height: 100px;
+            border: 2px solid #4bb47e;
+            border-radius: 6px;
+            background: white;
+        }
+        .status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .success { color: #4bb47e; }
+        .error { color: #ff6b6b; }
+        .info { color: #ffd700; }
+    </style>
+</head>
+<body>
+    <h1>Logo Loading Diagnostic</h1>
+    
+    <div class="test-item">
+        <h3>Original Logo (logo.png)</h3>
+        <img id="logo1" src="assets/logo.png" alt="Original Logo">
+        <div id="logo1-status" class="status info">Loading...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>Original Banner (banner.png)</h3>
+        <img id="banner1" src="assets/banner.png" alt="Original Banner">
+        <div id="banner1-status" class="status info">Loading...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>Team Event Logo (multiplier logo.png)</h3>
+        <img id="logo2" src="assets/multiplier logo.png" alt="Team Event Logo">
+        <div id="logo2-status" class="status info">Loading...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>Team Event Banner (multiplier banner.png)</h3>
+        <img id="banner2" src="assets/multiplier banner.png" alt="Team Event Banner">
+        <div id="banner2-status" class="status info">Loading...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>Direct SVG Test</h3>
+        <svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="100" fill="#4bb47e" rx="10"/>
+            <text x="100" y="55" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">SVG TEST</text>
+        </svg>
+        <div class="status success">SVG should be visible above</div>
+    </div>
+
+    <script>
+        function setupImageTest(imgId, statusId) {
+            const img = document.getElementById(imgId);
+            const status = document.getElementById(statusId);
+            
+            img.onload = function() {
+                status.textContent = '✓ Image loaded successfully';
+                status.className = 'status success';
+                console.log(`${imgId} loaded:`, img.naturalWidth, 'x', img.naturalHeight);
+            };
+            
+            img.onerror = function() {
+                status.textContent = '✗ Failed to load image';
+                status.className = 'status error';
+                console.error(`${imgId} failed to load`);
+            };
+        }
+
+        setupImageTest('logo1', 'logo1-status');
+        setupImageTest('banner1', 'banner1-status');
+        setupImageTest('logo2', 'logo2-status');
+        setupImageTest('banner2', 'banner2-status');
+
+        // Test fetch to see what content type is returned
+        fetch('assets/logo.png')
+            .then(response => {
+                console.log('logo.png Content-Type:', response.headers.get('content-type'));
+                console.log('logo.png Status:', response.status);
+                return response.text();
+            })
+            .then(text => {
+                console.log('logo.png content preview:', text.substring(0, 100));
+            })
+            .catch(err => console.error('Fetch error:', err));
+    </script>
+</body>
+</html>

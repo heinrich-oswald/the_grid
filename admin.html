@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Grid — Admin Panel</title>
+  <link rel="stylesheet" href="spectacular.css" />
+  <style>
+    :root {
+      --bg: #050505;
+      --bg-gradient-2: #030704;
+      --bg-gradient-3: #070f09;
+      --card-glass: rgba(18, 18, 18, 0.75);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --border-glass-hover: rgba(255, 255, 255, 0.12);
+      --paper: #f5f5f5;
+      --muted: rgba(245, 245, 245, 0.7);
+      --accent1: #e84c5e;
+      --accent2: #b23a48;
+      --accent3: #ff9aa2;
+      --glass: rgba(232, 76, 94, 0.07);
+    }
+    html, body { height: 100%; margin: 0; font-family: Inter, system-ui, sans-serif; }
+    body {
+      background: linear-gradient(135deg, var(--bg) 0%, var(--bg-gradient-2) 40%, var(--bg-gradient-3) 80%);
+      color: var(--paper);
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 30px 30px, rgba(232, 76, 94, 0.04) 1px, transparent 0),
+        linear-gradient(to right, transparent 99.5%, rgba(232, 76, 94, 0.05) 99.5%, rgba(232, 76, 94, 0.05) 100%),
+        linear-gradient(to bottom, transparent 99.5%, rgba(232, 76, 94, 0.05) 99.5%, rgba(232, 76, 94, 0.05) 100%);
+      background-size: 60px 60px, 60px 60px, 60px 60px;
+      z-index: -1;
+    }
+    .wrap { max-width: 1200px; margin: 24px auto; padding: 18px; }
+    .nav {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 16px 24px; border-radius: 16px;
+      background: linear-gradient(135deg, var(--card-glass), rgba(18, 18, 18, 0.5));
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      position: sticky; top: 24px; z-index: 100; transition: all 0.3s ease;
+    }
+    .brand { display:flex; align-items:center; gap:16px; }
+    .logo { width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, var(--accent1), var(--accent3)); display:flex; align-items:center; justify-content:center; font-weight:900; }
+    .brand-title { font-size: 24px; font-weight: 800; }
+    .card {
+      background: linear-gradient(135deg, var(--card-glass), rgba(18, 18, 18, 0.6));
+      border: 1px solid var(--border-glass);
+      padding: 24px; border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      position: relative; overflow: hidden; transition: all 0.3s ease;
+    }
+    .card:hover { box-shadow: 0 12px 36px rgba(0,0,0,0.4); border-color: var(--border-glass-hover); }
+    .hero { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+    .hero h1 { margin:0; font-size: 28px; }
+    .hero p { margin:0; color: var(--muted); }
+    .controls { display:flex; flex-direction:column; gap:14px; margin-top: 8px; }
+    .row { display:flex; gap:12px; align-items:center; flex-wrap: wrap; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; border:1px solid var(--border-glass); background: rgba(255,255,255,0.06); }
+    .pill.on { background:#ffe082; color:#1a1a1a; border-color: rgba(0,0,0,0.2); }
+    .pill.off { background:#eee; color:#555; border-color: rgba(0,0,0,0.2); }
+    .btn { font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.5px; }
+    .btn.ghost { border-color: var(--accent2); color: var(--accent3); }
+    .grid { display:grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 860px) { .grid { grid-template-columns: 2fr 1fr; } }
+    .quick-links { display:flex; flex-wrap:wrap; gap:8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav">
+      <div class="brand">
+        <div class="logo">G</div>
+        <div>
+          <div class="brand-title">THE GRID</div>
+          <div class="brand-sub" style="font-size:12px; color: var(--muted)">Admin Controls</div>
+        </div>
+      </div>
+      <div class="row">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="teams.html">Teams</a>
+        <a class="btn ghost" href="timebound.html">Time Bound</a>
+        <a class="btn ghost" href="multiplier.html">Multiplier</a>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <div class="hero">
+          <h1>Admin Panel</h1>
+          <p>Override site behavior. Settings persist via localStorage.</p>
+        </div>
+        <div class="controls" id="controls">
+          <div class="row">
+            <label class="row" style="gap:6px;">
+              <input type="checkbox" id="disableTimers" />
+              <span>Disable all timers across pages</span>
+            </label>
+            <span id="timerStatus" class="pill off">Timers: Enabled</span>
+          </div>
+          <div class="row" style="margin-top:12px;">
+            <div style="font-weight:700;">Per-Event Controls</div>
+          </div>
+          <div class="row" style="display:grid;gap:10px">
+            <div class="card" style="padding:10px;">
+              <div style="font-weight:700;margin-bottom:6px;">Multiplier</div>
+              <label class="row" style="gap:6px; margin-bottom:6px;">
+                <input type="checkbox" id="multiplierDisabled" />
+                <span>Disable Multiplier timer</span>
+              </label>
+              <label class="row" style="gap:6px; margin-bottom:6px;">
+                <input type="checkbox" id="multiplierEventOver" />
+                <span>Mark event over (freeze/show overlay)</span>
+              </label>
+              <div class="row" style="gap:6px;margin-bottom:6px;align-items:center;">
+                <label style="width:160px;color:var(--muted)">Override start (IST)</label>
+                <input type="datetime-local" id="multiplierStart" />
+                <button class="btn ghost" id="multiplierClearStart">Clear</button>
+              </div>
+              <div class="row" style="gap:6px;align-items:center;">
+                <label style="width:160px;color:var(--muted)">Display mode</label>
+                <select id="multiplierMode">
+                  <option value="auto">Auto</option>
+                  <option value="start">Start</option>
+                  <option value="submission">Submission</option>
+                </select>
+                <input type="text" id="multiplierLabel" placeholder="Custom label (optional)" style="flex:1" />
+              </div>
+            </div>
+            <div class="card" style="padding:10px;">
+              <div style="font-weight:700;margin-bottom:6px;">Time Bound</div>
+              <label class="row" style="gap:6px; margin-bottom:6px;">
+                <input type="checkbox" id="timeboundDisabled" />
+                <span>Disable Time Bound timer</span>
+              </label>
+              <label class="row" style="gap:6px; margin-bottom:6px;">
+                <input type="checkbox" id="timeboundEventOver" />
+                <span>Mark event over (freeze/show overlay)</span>
+              </label>
+              <div class="row" style="gap:6px;margin-bottom:6px;align-items:center;">
+                <label style="width:160px;color:var(--muted)">Override start (IST)</label>
+                <input type="datetime-local" id="timeboundStart" />
+                <button class="btn ghost" id="timeboundClearStart">Clear</button>
+              </div>
+              <div class="row" style="gap:6px;align-items:center;">
+                <label style="width:160px;color:var(--muted)">Display mode</label>
+                <select id="timeboundMode">
+                  <option value="auto">Auto</option>
+                  <option value="start">Start</option>
+                  <option value="submission">Submission</option>
+                </select>
+                <input type="text" id="timeboundLabel" placeholder="Custom label (optional)" style="flex:1" />
+              </div>
+            </div>
+            <div class="card" style="padding:10px;">
+              <div style="font-weight:700;margin-bottom:6px;">Teams</div>
+              <label class="row" style="gap:6px; margin-bottom:6px;">
+                <input type="checkbox" id="teamsDisabled" />
+                <span>Disable Teams timer</span>
+              </label>
+              <label class="row" style="gap:6px; margin-bottom:6px;">
+                <input type="checkbox" id="teamsEventOver" />
+                <span>Mark event over (freeze/show overlay)</span>
+              </label>
+              <div class="row" style="gap:6px;margin-bottom:6px;align-items:center;">
+                <label style="width:160px;color:var(--muted)">Override start (IST)</label>
+                <input type="datetime-local" id="teamsStart" />
+                <button class="btn ghost" id="teamsClearStart">Clear</button>
+              </div>
+              <div class="row" style="gap:6px;align-items:center;">
+                <label style="width:160px;color:var(--muted)">Display mode</label>
+                <select id="teamsMode">
+                  <option value="auto">Auto</option>
+                  <option value="start">Start</option>
+                  <option value="submission">Submission</option>
+                </select>
+                <input type="text" id="teamsLabel" placeholder="Custom label (optional)" style="flex:1" />
+              </div>
+            </div>
+            <div style="color:var(--muted);font-size:12px;">Note: Times are interpreted as IST and persist until the next Saturday 3 PM IST.</div>
+          </div>
+          <div class="row">
+            <button class="btn" id="resetOverrides">Reset Overrides</button>
+            <button class="btn ghost" id="logout">Logout</button>
+          </div>
+          <div class="row" style="margin-top:4px; color: var(--muted); font-size: 12px;">Client-side only; avoid using for sensitive controls.</div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="hero">
+          <h2 style="margin:0; font-size: 18px;">Quick Links</h2>
+        </div>
+        <div class="quick-links">
+          <a class="btn ghost" href="index.html">Home</a>
+          <a class="btn ghost" href="multiplier.html">Multiplier</a>
+          <a class="btn ghost" href="timebound.html">Time Bound</a>
+          <a class="btn ghost" href="teams.html">Teams</a>
+          <a class="btn ghost" href="timer_preview.html">Timer Preview</a>
+        </div>
+      </aside>
+    </main>
+
+    <footer style="margin-top: 16px;">
+      <div style="text-align: center; padding: 16px; color: var(--muted); font-size: 14px;">
+         The Grid  Admin  <a href="mailto:heinrich.oswald24@gmail.com" style="color: var(--accent3); text-decoration: none;">heinrich.oswald24@gmail.com</a>
+         <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none;">Code of Conduct</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="assets/admin_sync.js"></script>
+  <script>
+    (function(){
+      // Auth gate
+      const authed = localStorage.getItem('admin_auth') === 'true';
+      if (!authed) { location.href = 'admin_login.html'; return; }
+
+      // IST-anchored next update calculator (next Saturday 3 PM IST)
+      function getNextSaturday3pmIST(forceNextWeek = false) {
+        const IST_OFFSET_MINUTES = 330; // UTC+5:30
+        const nowLocal = new Date();
+        const nowUTCms = nowLocal.getTime() + nowLocal.getTimezoneOffset() * 60000;
+        const nowISTms = nowUTCms + IST_OFFSET_MINUTES * 60000;
+        const nowIST = new Date(nowISTms);
+        const targetDay = 6; // Saturday
+        const targetHour = 15; // 3 PM IST
+        const eventIST = new Date(nowIST);
+        eventIST.setHours(targetHour, 0, 0, 0);
+        let dayDiff = targetDay - nowIST.getDay();
+        if ((dayDiff === 0 && nowIST.getHours() >= targetHour) || dayDiff < 0 || forceNextWeek) {
+          dayDiff += 7;
+        }
+        eventIST.setDate(nowIST.getDate() + dayDiff);
+        const eventUTCms = eventIST.getTime() - IST_OFFSET_MINUTES * 60000;
+        return new Date(eventUTCms);
+      }
+
+      // Admin settings helpers
+      function getAdminSettings() {
+        try {
+          const raw = localStorage.getItem('admin_settings');
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) { return null; }
+      }
+      function saveAdminSettings(settings) {
+        try {
+          localStorage.setItem('admin_settings', JSON.stringify(settings));
+          if (window.AdminAPI && AdminAPI.putSettings) {
+            AdminAPI.putSettings(settings).catch(() => {});
+          }
+        } catch (e) {}
+      }
+      function isAdminTimerDisabled() {
+        const s = getAdminSettings();
+        const now = Date.now();
+        if (s && typeof s.persist_until === 'number') {
+          if (now > s.persist_until) {
+            localStorage.removeItem('admin_settings');
+            localStorage.removeItem('admin_timer_disabled'); // legacy cleanup
+            return false;
+          }
+          return s.timer_disabled === true;
+        }
+        // Fallback to legacy key
+        return localStorage.getItem('admin_timer_disabled') === 'true';
+      }
+
+      const disableTimersChk = document.getElementById('disableTimers');
+      const timerStatus = document.getElementById('timerStatus');
+      const resetBtn = document.getElementById('resetOverrides');
+      const logoutBtn = document.getElementById('logout');
+
+      // Per-event controls
+      const els = {
+        multiplier: {
+          disabled: document.getElementById('multiplierDisabled'),
+          eventOver: document.getElementById('multiplierEventOver'),
+          start: document.getElementById('multiplierStart'),
+          clear: document.getElementById('multiplierClearStart'),
+          mode: document.getElementById('multiplierMode'),
+          label: document.getElementById('multiplierLabel')
+        },
+        timebound: {
+          disabled: document.getElementById('timeboundDisabled'),
+          eventOver: document.getElementById('timeboundEventOver'),
+          start: document.getElementById('timeboundStart'),
+          clear: document.getElementById('timeboundClearStart'),
+          mode: document.getElementById('timeboundMode'),
+          label: document.getElementById('timeboundLabel')
+        },
+        teams: {
+          disabled: document.getElementById('teamsDisabled'),
+          eventOver: document.getElementById('teamsEventOver'),
+          start: document.getElementById('teamsStart'),
+          clear: document.getElementById('teamsClearStart'),
+          mode: document.getElementById('teamsMode'),
+          label: document.getElementById('teamsLabel')
+        }
+      };
+
+      const syncUI = () => {
+        const disabled = isAdminTimerDisabled();
+        disableTimersChk.checked = disabled;
+        timerStatus.textContent = disabled ? 'Timers: Disabled' : 'Timers: Enabled';
+        timerStatus.className = 'pill ' + (disabled ? 'on' : 'off');
+
+        const s = getAdminSettings() || {};
+        const ev = s.events || {};
+        ['multiplier','timebound','teams'].forEach((key) => {
+          const cfg = ev[key] || {};
+          if (els[key].disabled) els[key].disabled.checked = !!cfg.disabled;
+          if (els[key].eventOver) els[key].eventOver.checked = !!cfg.event_over;
+          if (els[key].mode) els[key].mode.value = cfg.display_mode || 'auto';
+          if (els[key].label) els[key].label.value = cfg.custom_label || '';
+          if (els[key].start) {
+            if (cfg.override_start_ms) {
+              els[key].start.value = msToDatetimeLocalIST(cfg.override_start_ms);
+            } else {
+              els[key].start.value = '';
+            }
+          }
+        });
+      };
+
+      disableTimersChk.addEventListener('change', () => {
+        const nextUpdate = getNextSaturday3pmIST(false);
+        const settings = getAdminSettings() || {};
+        settings.timer_disabled = !!disableTimersChk.checked;
+        settings.updated_at = Date.now();
+        settings.persist_until = nextUpdate.getTime();
+        settings.version = 1;
+        saveAdminSettings(settings);
+        syncUI();
+      });
+
+      // Save helpers
+      function saveEventConfig(key, updates) {
+        const nextUpdate = getNextSaturday3pmIST(false);
+        const settings = getAdminSettings() || {};
+        settings.updated_at = Date.now();
+        settings.persist_until = nextUpdate.getTime();
+        settings.version = 1;
+        settings.events = settings.events || {};
+        const prev = settings.events[key] || {};
+        settings.events[key] = { ...prev, ...updates };
+        saveAdminSettings(settings);
+        if (window.AdminAPI && AdminAPI.putEvent) {
+          AdminAPI.putEvent(key, settings.events[key]).catch(() => {});
+        }
+      }
+
+      // Datetime helpers: parse and format IST-anchored datetime-local
+      function datetimeLocalISTToMs(val) {
+        if (!val) return null;
+        // val format: YYYY-MM-DDTHH:MM
+        const [datePart, timePart] = val.split('T');
+        if (!datePart || !timePart) return null;
+        const [y, m, d] = datePart.split('-').map(Number);
+        const [hh, mm] = timePart.split(':').map(Number);
+        const IST_OFFSET_MINUTES = 330;
+        const utcMs = Date.UTC(y, (m - 1), d, hh, mm) - IST_OFFSET_MINUTES * 60000;
+        return utcMs;
+      }
+      function msToDatetimeLocalIST(ms) {
+        const IST_OFFSET_MINUTES = 330;
+        const istMs = ms + IST_OFFSET_MINUTES * 60000;
+        const d = new Date(istMs);
+        const pad = (n) => (n < 10 ? '0' + n : '' + n);
+        const y = d.getUTCFullYear();
+        const m = pad(d.getUTCMonth() + 1);
+        const da = pad(d.getUTCDate());
+        const hh = pad(d.getUTCHours());
+        const mm = pad(d.getUTCMinutes());
+        return `${y}-${m}-${da}T${hh}:${mm}`;
+      }
+
+      // Wire event handlers for per-event controls
+      ['multiplier','timebound','teams'].forEach((key) => {
+        const e = els[key];
+        if (!e) return;
+        if (e.disabled) e.disabled.addEventListener('change', () => {
+          saveEventConfig(key, { disabled: !!e.disabled.checked });
+          syncUI();
+        });
+        if (e.eventOver) e.eventOver.addEventListener('change', () => {
+          saveEventConfig(key, { event_over: !!e.eventOver.checked });
+        });
+        if (e.mode) e.mode.addEventListener('change', () => {
+          saveEventConfig(key, { display_mode: e.mode.value });
+          syncUI();
+        });
+        if (e.label) e.label.addEventListener('change', () => {
+          saveEventConfig(key, { custom_label: (e.label.value || '').trim() });
+        });
+        if (e.start) e.start.addEventListener('change', () => {
+          const ms = datetimeLocalISTToMs(e.start.value);
+          saveEventConfig(key, { override_start_ms: ms });
+        });
+        if (e.clear) e.clear.addEventListener('click', () => {
+          saveEventConfig(key, { override_start_ms: null });
+          e.start.value = '';
+        });
+      });
+
+      resetBtn.addEventListener('click', () => {
+        localStorage.removeItem('admin_settings');
+        localStorage.removeItem('admin_timer_disabled');
+        if (window.AdminAPI && AdminAPI.deleteSettings) {
+          AdminAPI.deleteSettings().catch(() => {});
+        }
+        syncUI();
+        alert('Overrides reset.');
+      });
+
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('admin_auth');
+        location.href = 'admin_login.html';
+      });
+
+      if (window.AdminAPI && AdminAPI.syncNow) {
+        AdminAPI.syncNow().then(syncUI).catch(syncUI);
+      } else {
+        syncUI();
+      }
+    })();
+  </script>
+</body>
+</html>

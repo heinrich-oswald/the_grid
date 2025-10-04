@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login · The Grid</title>
+  <link rel="stylesheet" href="spectacular.css" />
+  <style>
+    .admin-wrap { max-width: 520px; margin: 40px auto; padding: 20px; }
+    .admin-card { background: var(--paper2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+    .admin-title { font-weight: 800; font-size: 18px; margin-bottom: 8px; }
+    .admin-sub { color: var(--muted); font-size: 12px; margin-bottom: 18px; }
+    .row { display:flex; gap:10px; align-items:center; }
+    .field { width:100%; }
+    .tiny-note { color: var(--muted); font-size: 11px; margin-top: 8px; }
+    .center { display:flex; justify-content:center; }
+  </style>
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-card">
+      <div class="admin-title">Admin Login</div>
+      <div class="admin-sub">Enter the admin password to access overrides.</div>
+      <form id="loginForm" class="row">
+        <input id="password" class="field" type="password" placeholder="Password" autocomplete="current-password" />
+        <button class="btn" type="submit">Login</button>
+      </form>
+      <div class="tiny-note">Note: This is a client-side check for convenience only.</div>
+    </div>
+    <div class="center" style="margin-top:12px;">
+      <a class="btn ghost" href="index.html">Back to site</a>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const ADMIN_PASSWORD = 'gridadmin'; // Change as needed
+      const form = document.getElementById('loginForm');
+      const pwd = document.getElementById('password');
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const val = (pwd.value || '').trim();
+        if (!val) { alert('Please enter a password.'); return; }
+        if (val === ADMIN_PASSWORD) {
+          localStorage.setItem('admin_auth', 'true');
+          location.href = 'admin.html';
+        } else {
+          alert('Incorrect password.');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

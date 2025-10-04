@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head><title>Distinct Original Logo Test</title></head>
+<body style="background: #0b0a09; color: white; padding: 20px;">
+    <h1>New Distinct Original Logos</h1>
+    
+    <div style="display: flex; gap: 30px; margin: 20px 0; flex-wrap: wrap;">
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; text-align: center;">
+            <h3 style="color: #00d4ff;">New Original Logo (Blue Theme)</h3>
+            <div style="background: white; padding: 10px; border-radius: 10px; display: inline-block;">
+                <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="originalLogoGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0099cc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#003366;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="url(#originalLogoGrad)" stroke="#00d4ff" stroke-width="2"/>
+  
+  <!-- Grid pattern -->
+  <g stroke="#ffffff" stroke-width="2" opacity="0.8">
+    <line x1="60" y1="60" x2="140" y2="60"/>
+    <line x1="60" y1="100" x2="140" y2="100"/>
+    <line x1="60" y1="140" x2="140" y2="140"/>
+    <line x1="60" y1="60" x2="60" y2="140"/>
+    <line x1="100" y1="60" x2="100" y2="140"/>
+    <line x1="140" y1="60" x2="140" y2="140"/>
+  </g>
+  
+  <!-- Central diamond -->
+  <polygon points="100,70 120,100 100,130 80,100" fill="#00d4ff" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+  
+  <!-- Text -->
+  <text x="100" y="165" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff" filter="url(#glow)">THE GRID</text>
+  
+  <!-- Corner accents -->
+  <circle cx="30" cy="30" r="8" fill="#00d4ff" opacity="0.7"/>
+  <circle cx="170" cy="30" r="8" fill="#00d4ff" opacity="0.7"/>
+  <circle cx="30" cy="170" r="8" fill="#00d4ff" opacity="0.7"/>
+  <circle cx="170" cy="170" r="8" fill="#00d4ff" opacity="0.7"/>
+</svg>
+            </div>
+            <p style="font-size: 12px; margin-top: 10px;">Completely different from team event logos</p>
+        </div>
+        
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; text-align: center;">
+            <h3 style="color: #00d4ff;">New Original Banner (Blue Theme)</h3>
+            <div style="background: white; padding: 10px; border-radius: 10px; display: inline-block;">
+                <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="originalBannerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#003366;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#0099cc;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#003366;stop-opacity:1" />
+    </linearGradient>
+    <filter id="bannerGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="200" fill="url(#originalBannerGrad)"/>
+  
+  <!-- Grid pattern background -->
+  <g stroke="#ffffff" stroke-width="1" opacity="0.2">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="800" height="200" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Central logo area -->
+  <circle cx="400" cy="100" r="60" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.8"/>
+  
+  <!-- Grid inside circle -->
+  <g stroke="#ffffff" stroke-width="2" opacity="0.9">
+    <line x1="370" y1="70" x2="430" y2="70"/>
+    <line x1="370" y1="100" x2="430" y2="100"/>
+    <line x1="370" y1="130" x2="430" y2="130"/>
+    <line x1="370" y1="70" x2="370" y2="130"/>
+    <line x1="400" y1="70" x2="400" y2="130"/>
+    <line x1="430" y1="70" x2="430" y2="130"/>
+  </g>
+  
+  <!-- Central diamond -->
+  <polygon points="400,80 415,100 400,120 385,100" fill="#00d4ff" stroke="#ffffff" stroke-width="2" filter="url(#bannerGlow)"/>
+  
+  <!-- Main text -->
+  <text x="400" y="45" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#ffffff" filter="url(#bannerGlow)">THE GRID</text>
+  <text x="400" y="175" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#ffffff" opacity="0.9">COMPETITIVE GAMING PLATFORM</text>
+  
+  <!-- Side decorations -->
+  <g transform="translate(100, 100)">
+    <circle cx="0" cy="0" r="6" fill="#00d4ff" opacity="0.8"/>
+    <circle cx="-30" cy="0" r="4" fill="#00d4ff" opacity="0.6"/>
+    <circle cx="-50" cy="0" r="3" fill="#00d4ff" opacity="0.4"/>
+  </g>
+  
+  <g transform="translate(700, 100)">
+    <circle cx="0" cy="0" r="6" fill="#00d4ff" opacity="0.8"/>
+    <circle cx="30" cy="0" r="4" fill="#00d4ff" opacity="0.6"/>
+    <circle cx="50" cy="0" r="3" fill="#00d4ff" opacity="0.4"/>
+  </g>
+  
+  <!-- Tech lines -->
+  <line x1="0" y1="50" x2="200" y2="50" stroke="#00d4ff" stroke-width="2" opacity="0.5"/>
+  <line x1="600" y1="150" x2="800" y2="150" stroke="#00d4ff" stroke-width="2" opacity="0.5"/>
+</svg>
+            </div>
+            <p style="font-size: 12px; margin-top: 10px;">Tech-inspired grid design</p>
+        </div>
+    </div>
+    
+    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin: 20px 0;">
+        <h3>Design Differences from Team Event Logos:</h3>
+        <ul style="line-height: 1.6;">
+            <li><strong>Color Scheme:</strong> Blue/Cyan theme instead of Green/Orange</li>
+            <li><strong>Design Pattern:</strong> Grid-based tech design instead of organic shapes</li>
+            <li><strong>Style:</strong> Clean geometric patterns instead of flowing elements</li>
+            <li><strong>Accent Elements:</strong> Diamond shapes and tech lines instead of circles</li>
+        </ul>
+    </div>
+    
+    <div style="background: rgba(0, 212, 255, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #00d4ff;">
+        <h4>Next Steps:</h4>
+        <p>These designs will be converted to proper PNG format and replace the current logo.png and banner.png files.</p>
+    </div>
+</body>
+</html>

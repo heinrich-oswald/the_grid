@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Fresh Image Diagnostic Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background-color: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #444;
+        }
+        .image-box {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #333;
+            border-radius: 4px;
+        }
+        h1 { color: #00ffcc; }
+        h2 { color: #00ccff; }
+        h3 { color: #ffcc00; }
+        p { color: #cccccc; }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 15px 0;
+            border: 2px solid #444;
+            border-radius: 4px;
+            background-color: #000;
+        }
+        .file-info {
+            background-color: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            margin-top: 10px;
+            color: #99ff99;
+        }
+        .status {
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .status-loading { color: #ffcc00; background-color: rgba(255, 204, 0, 0.1); }
+        .status-loaded { color: #00ff00; background-color: rgba(0, 255, 0, 0.1); }
+        .status-error { color: #ff3333; background-color: rgba(255, 51, 51, 0.1); }
+        .debug-panel {
+            background-color: #0a0a0a;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #00ffcc;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .highlight {
+            color: #ff66ff;
+            font-weight: bold;
+        }
+        button {
+            background-color: #00ccff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover {
+            background-color: #00ffff;
+        }
+        .instruction {
+            background-color: rgba(255, 255, 0, 0.1);
+            border-left: 4px solid #ffff00;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Fresh Image Diagnostic Test</h1>
+    
+    <div class="instruction">
+        <h3>📋 Instructions</h3>
+        <p>1. Check if you can see different logos below</p>
+        <p>2. If you're still seeing the same logo everywhere, it might mean:</p>
+        <p>- The image files themselves contain the same content</p>
+        <p>- There's a caching issue (try the "Hard Refresh" button)</p>
+        <p>3. Open your browser's developer console (F12) for detailed logs</p>
+    </div>
+
+    <!-- Current Timestamp for Cache Busting -->
+    <div class="test-section">
+        <h2>📅 Current Timestamp: <span id="currentTimestamp" class="highlight"></span></h2>
+        <p>This test uses a unique timestamp to force fresh image loading.</p>
+    </div>
+
+    <!-- Normal Logo -->
+    <div class="test-section">
+        <h2>🟢 Normal Logo</h2>
+        <div class="image-box">
+            <h3>Image Path: assets/logo.png</h3>
+            <img id="normalLogo" src="assets/logo.png" alt="Normal Logo" 
+                 onload="logImageLoad('normalLogo', this)" 
+                 onerror="logImageError('normalLogo', this)">
+            <div class="file-info">
+                Path: assets/logo.png<br>
+                Status: <span id="normalLogoStatus" class="status status-loading">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multiplier Logo -->
+    <div class="test-section">
+        <h2>🔵 Multiplier Logo</h2>
+        <div class="image-box">
+            <h3>Image Path: assets/multiplier%20logo.png</h3>
+            <img id="multiplierLogo" src="assets/multiplier%20logo.png" alt="Multiplier Logo" 
+                 onload="logImageLoad('multiplierLogo', this)" 
+                 onerror="logImageError('multiplierLogo', this)">
+            <div class="file-info">
+                Path: assets/multiplier%20logo.png<br>
+                Status: <span id="multiplierLogoStatus" class="status status-loading">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Event Logo -->
+    <div class="test-section">
+        <h2>🟠 Team Event Logo</h2>
+        <div class="image-box">
+            <h3>Image Path: assets/team%20event%20logo.png</h3>
+            <img id="teamEventLogo" src="assets/team%20event%20logo.png" alt="Team Event Logo" 
+                 onload="logImageLoad('teamEventLogo', this)" 
+                 onerror="logImageError('teamEventLogo', this)">
+            <div class="file-info">
+                Path: assets/team%20event%20logo.png<br>
+                Status: <span id="teamEventLogoStatus" class="status status-loading">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="test-section">
+        <h2>⚙️ Actions</h2>
+        <button onclick="performHardRefresh()">🔄 Perform Hard Refresh</button>
+        <button onclick="checkImageContent()">🔍 Check Image Content</button>
+        <button onclick="showImageSizes()">📏 Show Image Sizes</button>
+    </div>
+
+    <!-- Debug Panel -->
+    <div class="test-section">
+        <h2>🛠️ Debug Information</h2>
+        <div class="debug-panel" id="debugPanel">
+            <div id="debugLog">Loading debug information...</div>
+        </div>
+    </div>
+
+    <script>
+        // Generate unique timestamp for cache busting
+        const timestamp = new Date().getTime();
+        document.getElementById('currentTimestamp').textContent = timestamp;
+        
+        // Debug logging function
+        function logDebug(message) {
+            console.log('[IMAGE DEBUG]', message);
+            const logElement = document.getElementById('debugLog');
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logElement.appendChild(logEntry);
+            logElement.scrollTop = logElement.scrollHeight; // Auto-scroll
+        }
+        
+        // Image loading status functions
+        function logImageLoad(imageId, imageElement) {
+            const statusElement = document.getElementById(`${imageId}Status`);
+            if (statusElement) {
+                statusElement.textContent = 'Loaded';
+                statusElement.className = 'status status-loaded';
+            }
+            
+            const imageInfo = {
+                id: imageId,
+                src: imageElement.src,
+                width: imageElement.naturalWidth,
+                height: imageElement.naturalHeight,
+                type: imageElement.alt
+            };
+            
+            logDebug(`${imageId} loaded successfully - Size: ${imageInfo.width}x${imageInfo.height}px`);
+        }
+        
+        function logImageError(imageId, imageElement) {
+            const statusElement = document.getElementById(`${imageId}Status`);
+            if (statusElement) {
+                statusElement.textContent = 'Error';
+                statusElement.className = 'status status-error';
+            }
+            logDebug(`${imageId} failed to load: ${imageElement.src}`);
+        }
+        
+        // Perform hard refresh to clear cache
+        function performHardRefresh() {
+            logDebug('Performing hard refresh to clear browser cache...');
+            // This will reload the page with cache cleared
+            window.location.reload(true);
+        }
+        
+        // Check image content by comparing natural dimensions
+        function checkImageContent() {
+            logDebug('Checking image content by comparing dimensions...');
+            
+            const normalLogo = document.getElementById('normalLogo');
+            const multiplierLogo = document.getElementById('multiplierLogo');
+            const teamEventLogo = document.getElementById('teamEventLogo');
+            
+            if (normalLogo.complete && multiplierLogo.complete && teamEventLogo.complete) {
+                const images = [
+                    { name: 'Normal', img: normalLogo },
+                    { name: 'Multiplier', img: multiplierLogo },
+                    { name: 'Team Event', img: teamEventLogo }
+                ];
+                
+                logDebug('=== Image Dimensions ===');
+                images.forEach(img => {
+                    logDebug(`${img.name}: ${img.img.naturalWidth}x${img.img.naturalHeight}px`);
+                });
+                logDebug('=====================');
+                
+                // Check for identical dimensions (doesn't prove content is same, but can indicate)
+                const allSame = images.every(img => 
+                    img.img.naturalWidth === images[0].img.naturalWidth && 
+                    img.img.naturalHeight === images[0].img.naturalHeight
+                );
+                
+                if (allSame) {
+                    logDebug('⚠️ All images have the same dimensions. They might contain the same content.');
+                } else {
+                    logDebug('✅ Images have different dimensions. They likely contain different content.');
+                }
+            } else {
+                logDebug('❌ Not all images have loaded yet. Please wait and try again.');
+            }
+        }
+        
+        // Show image sizes in a popup
+        function showImageSizes() {
+            checkImageContent();
+            alert('Check the developer console (F12) for image size information.');
+        }
+        
+        // Initial debug information
+        window.addEventListener('load', function() {
+            logDebug('Page loaded with timestamp: ' + timestamp);
+            logDebug('Browser: ' + navigator.userAgent);
+            logDebug('Current URL: ' + window.location.href);
+            logDebug('=== All Image Elements ===');
+            
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                logDebug(`Image: ${img.id} - ${img.src}`);
+            });
+            
+            logDebug('======================');
+            logDebug('Instructions:');
+            logDebug('1. Check if all logos display correctly');
+            logDebug('2. If you see the same logo everywhere, try the "Hard Refresh" button');
+            logDebug('3. Use "Check Image Content" to analyze differences');
+        });
+    </script>
+</body>
+</html>

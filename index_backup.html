@@ -1,0 +1,1187 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Grid — Code Race</title>
+  <style>
+    /* Modern variables inspired by synthax.tech */
+    :root{
+      --bg:#050505;
+      --bg-gradient-1:#0a0a0a;
+      --bg-gradient-2:#030704;
+      --bg-gradient-3:#070f09;
+      --card:#121212;
+      --card-glass: rgba(18, 18, 18, 0.75);
+      --accent1:#00ff9d;
+      --accent1-glow: rgba(0, 255, 157, 0.5);
+      --accent2:#0b5345;
+      --accent3:#00ffcc;
+      --accent3-glow: rgba(0, 255, 204, 0.7);
+      --paper:#f5f5f5;
+      --muted:rgba(245, 245, 245, 0.7);
+      --glass:rgba(0, 255, 157, 0.07);
+      --glass-hover:rgba(0, 255, 157, 0.1);
+      --glass-active:rgba(0, 255, 157, 0.15);
+      --border-glass:rgba(255, 255, 255, 0.08);
+      --border-glass-hover:rgba(255, 255, 255, 0.12);
+      --gradient-lightness:100%;
+      --animation-duration: 12s;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
+      /* Base styling */
+      html,body{height:100%;margin:0;font-family:Inter,system-ui,sans-serif}
+      body{
+        background:linear-gradient(135deg, var(--bg) 0%, var(--bg-gradient-2) 40%, var(--bg-gradient-3) 80%);
+        color:var(--paper);
+        position:relative;
+        overflow-x:hidden;
+        min-height:100vh;
+        font-size:16px;
+        line-height:1.5;
+      }
+      
+      /* Dynamic grid background inspired by synthax.tech */
+      body::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:
+          radial-gradient(circle at 30px 30px, rgba(0, 255, 157, 0.04) 1px, transparent 0),
+          linear-gradient(to right, transparent 99.5%, rgba(0, 255, 157, 0.05) 99.5%, rgba(0, 255, 157, 0.05) 100%),
+          linear-gradient(to bottom, transparent 99.5%, rgba(0, 255, 157, 0.05) 99.5%, rgba(0, 255, 157, 0.05) 100%);
+        background-size:60px 60px, 60px 60px, 60px 60px;
+        z-index:-1;
+        animation: gridFlow 15s linear infinite;
+      }
+      
+      /* Animated grid flow */
+      @keyframes gridFlow {
+        0% {
+          background-position: 0 0;
+        }
+        100% {
+          background-position: 60px 60px;
+        }
+      }
+      
+      /* Glowing particles effect */
+      .particles-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -2;
+        overflow: hidden;
+      }
+      
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--accent1-glow), transparent 70%);
+        animation: float calc(var(--animation-duration) * var(--duration-factor)) ease-in-out infinite;
+        opacity: 0;
+      }
+      /* Main container */
+      .wrap{max-width:1200px;margin:24px auto;padding:18px}
+      
+      /* Modern navigation inspired by synthax.tech */
+      .nav{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        padding:16px 24px;
+        border-radius:16px;
+        background: linear-gradient(135deg, var(--card-glass), rgba(18, 18, 18, 0.5));
+        backdrop-filter:blur(20px);
+        border:1px solid var(--border-glass);
+        box-shadow:0 8px 32px rgba(0, 0, 0, 0.3);
+        position:sticky;
+        top:24px;
+        z-index:100;
+        transition:all 0.3s ease;
+      }
+      
+      /* Nav hover effect */
+      .nav:hover{
+        box-shadow:0 12px 40px rgba(0, 0, 0, 0.4);
+        border-color:var(--border-glass-hover);
+      }
+      .brand{display:flex;align-items:center;gap:16px}
+      /* Modern logo styling */
+        .logo{
+          width:76px;
+          height:76px;
+          border-radius:16px;
+          background:linear-gradient(135deg,var(--accent1) 0%, var(--accent3) 100%);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-weight:900;
+          color:var(--paper);
+          font-size:28px;
+          box-shadow:0 0 30px var(--accent1-glow);
+          transition:all 0.4s ease;
+          position:relative;
+          overflow:hidden;
+          z-index:2;
+        }
+        
+        /* Logo shine effect */
+        .logo::before{
+          content:'';
+          position:absolute;
+          top:-50%;
+          left:-50%;
+          width:200%;
+          height:200%;
+          background:linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+          transform:rotate(30deg);
+          animation: logoShine 2s infinite;
+        }
+        
+        @keyframes logoShine {
+          0% { transform: translateX(-100%) rotate(30deg); }
+          100% { transform: translateX(100%) rotate(30deg); }
+        }
+        
+        /* Logo hover effect */
+        .logo:hover{
+          transform:scale(1.08) translateY(-2px);
+          box-shadow:0 0 40px var(--accent1-glow), 0 0 60px rgba(0, 255, 157, 0.3);
+        }
+        
+        /* Brand title with neon effect */
+        .brand-title {
+          font-weight:900;
+          font-size:38px;
+          letter-spacing:2px;
+          font-family:'Space Grotesk', sans-serif;
+          position:relative;
+          text-shadow:
+            0 0 5px var(--accent1-glow),
+            0 0 10px var(--accent1-glow),
+            0 0 20px rgba(0, 255, 157, 0.3);
+          background: linear-gradient(90deg, var(--paper), rgba(245, 245, 245, 0.8));
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-size: 200% auto;
+          animation: textGlow 5s ease-in-out infinite;
+        }
+        
+        @keyframes textGlow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      .brand-sub {font-size:14px;color:var(--muted);font-family:'Rajdhani', sans-serif;letter-spacing:0.5px;}
+    .cta-row{display:flex;gap:12px;margin-top:8px}
+    /* Modern button styling inspired by synthax.tech */
+        .btn{
+          background:linear-gradient(135deg, var(--accent2), var(--accent3));
+          color:var(--bg);
+          padding:14px 24px;
+          border-radius:14px;
+          border:1px solid transparent;
+          font-weight:700;
+          cursor:pointer;
+          transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position:relative;
+          overflow:hidden;
+          box-shadow:0 0 20px var(--accent1-glow);
+          text-shadow:0 1px 2px rgba(0,0,0,0.3);
+          text-decoration:none;
+          display:inline-block;
+          font-size:16px;
+          letter-spacing:0.8px;
+          font-family:'Space Grotesk', sans-serif;
+          z-index:1;
+        }
+      /* Button glow effects */
+        .btn::before{
+          content:'';
+          position:absolute;
+          top:0;
+          left:-100%;
+          width:100%;
+          height:100%;
+          background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+          transition:all 0.5s ease;
+          z-index:-1;
+        }
+        
+        /* Button bottom gradient accent */
+        .btn::after{
+          content:'';
+          position:absolute;
+          bottom:0;
+          left:0;
+          right:0;
+          height:3px;
+          background:linear-gradient(90deg, transparent, var(--accent1), transparent);
+          transform:scaleX(0);
+          transform-origin:left;
+          transition:transform 0.3s ease;
+          z-index:-1;
+        }
+        
+        /* Button hover effects */
+        .btn:hover::before{
+          left:100%;
+        }
+        
+        .btn:hover::after{
+          transform:scaleX(1);
+        }
+        
+        .btn:hover{
+          background:linear-gradient(135deg, var(--accent1), var(--accent2));
+          transform:translateY(-3px) scale(1.04);
+          box-shadow:0 0 25px var(--accent1-glow), 0 0 40px rgba(0, 255, 157, 0.3);
+          border-color:var(--accent1);
+          animation:glowBorder 2s infinite;
+        }
+        
+        /* Button active state */
+        .btn:active{
+          transform:translateY(0) scale(1.02);
+          box-shadow:0 0 15px var(--accent1-glow);
+        }
+        
+        /* Enhanced glow border animation */
+        @keyframes glowBorder{
+          0%{box-shadow:0 0 20px var(--accent1-glow), 0 0 35px rgba(0, 255, 157, 0.2); border-color:var(--accent1);}
+          50%{box-shadow:0 0 35px var(--accent1-glow), 0 0 50px rgba(0, 255, 157, 0.4); border-color:var(--accent1);}
+          100%{box-shadow:0 0 20px var(--accent1-glow), 0 0 35px rgba(0, 255, 157, 0.2); border-color:var(--accent1);}
+        }
+        
+        /* Ghost button styling */
+        .btn.ghost{
+          background:transparent;
+          border:1px solid var(--border-glass);
+          color:var(--paper);
+          box-shadow:0 0 15px rgba(0, 255, 157, 0.1);
+        }
+        
+        .btn.ghost:hover{
+          background:rgba(0, 255, 157, 0.1);
+          border-color:var(--accent1);
+          box-shadow:0 0 25px rgba(0, 255, 157, 0.2);
+          animation:none;
+        }
+    /* Grid layout for main content */
+      .grid{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:start;margin-top:24px}
+      
+      /* Modern card styling inspired by synthax.tech */
+      .card{
+        background:linear-gradient(135deg, var(--card-glass), rgba(18, 18, 18, 0.6));
+        border:1px solid var(--border-glass);
+        padding:24px;
+        border-radius:16px;
+        position:relative;
+        overflow:hidden;
+        transition:all 0.4s ease;
+        backdrop-filter:blur(10px);
+        box-shadow:0 8px 32px rgba(0, 0, 0, 0.25);
+      }
+      
+      /* Card hover effects */
+      .card:hover{
+        box-shadow:0 12px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--accent1-glow);
+        transform:translateY(-4px);
+        border-color:var(--border-glass-hover);
+      }
+      
+      /* Card grid pattern background */
+      .card::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 20px 20px, rgba(0, 255, 157, 0.03) 1px, transparent 0);
+        background-size:40px 40px;
+        z-index:0;
+        pointer-events:none;
+      }
+    .stats{display:flex;gap:12px}
+    .stat{flex:1;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;text-align:center}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    .feature{background:rgba(255,255,255,0.01);padding:10px;border-radius:8px}
+    .register{display:flex;flex-direction:column;gap:8px}
+    input,select,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    footer{margin-top:20px;color:var(--muted);font-size:13px}
+    .hero{height:280px;border-radius:12px;overflow:hidden;display:flex;align-items:center;position:relative}
+      .hero img{width:100%;height:100%;object-fit:cover;display:block}
+      /* Hero overlay effects */
+      .hero::after{
+        content:'';
+        position:absolute;
+        bottom:0;
+        left:0;
+        right:0;
+        height:120px;
+        background:linear-gradient(to top, rgba(10,10,10,0.9), transparent);
+        z-index:1;
+      }
+      /* Card styling */
+      .feature-card{
+        position:relative;
+        border:1px solid rgba(255,255,255,0.1);
+        border-radius:12px;
+        padding:24px;
+        background:var(--card);
+        margin-top:20px;
+      }
+      /* Enhanced hero card inspired by synthax.tech */
+      .hero-card{
+        background:linear-gradient(135deg, var(--hero-card-glass-1), var(--hero-card-glass-2));
+        border-radius:24px;
+        padding:48px 64px;
+        position:relative;
+        overflow:hidden;
+        box-shadow:0 12px 50px rgba(0, 0, 0, 0.3), 0 0 40px var(--accent1-glow);
+        border:1px solid var(--border-glass);
+        backdrop-filter:blur(15px);
+        transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      /* Enhanced hero card hover effects */
+      .hero-card:hover{
+        box-shadow:0 16px 60px rgba(0, 0, 0, 0.4), 0 0 60px var(--accent1-glow);
+        transform:translateY(-5px) scale(1.01);
+        border-color:var(--border-glass-hover);
+      }
+      
+      /* Hero card grid pattern background */
+      .hero-card::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 20px 20px, rgba(0, 255, 157, 0.08) 1px, transparent 0);
+        background-size:20px 20px;
+        z-index:0;
+        pointer-events:none;
+      }
+      
+      /* Hero card accent gradient overlay */
+      .hero-card::after{
+        content:'';
+        position:absolute;
+        top:0;
+        right:0;
+        width:30%;
+        height:100%;
+        background:linear-gradient(to left, rgba(0, 255, 157, 0.05), transparent);
+        z-index:0;
+        pointer-events:none;
+      }
+    .ticker{margin-top:12px;padding:10px 16px;border-radius:10px;background:var(--glass);font-size:14px;color:var(--muted);border:1px solid rgba(0,255,128,0.1);backdrop-filter:blur(5px)}
+    .logo-square{width:150px;height:150px;border-radius:16px;background:linear-gradient(135deg, var(--accent1) 0%, var(--accent3) 100%);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:48px;box-shadow:0 0 40px rgba(0,255,128,0.35);animation:glowPulse 3s ease-in-out infinite alternate;position:relative;overflow:hidden;transition:all 0.3s ease}
+      .logo-square::after{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+        animation:shine 2s infinite;
+      }
+    /* Sponsor carousel */
+    .sponsor-carousel {background:var(--card);border-radius:20px;padding:24px;margin-top:40px;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(0,255,128,0.15);border:1px solid var(--glass);backdrop-filter:blur(10px)}
+    .sponsor-row{display:flex;overflow:hidden;border-radius:12px;padding:12px;gap:24px;align-items:center;background:linear-gradient(90deg, var(--glass), transparent, var(--glass));margin-top:16px}
+    .sponsor-track{display:flex;gap:32px;animation:scroll 25s linear infinite;align-items:center}
+    .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:10px 20px;border-radius:12px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);width:220px;height:110px;border:1px solid rgba(0,255,128,0.1);transition:all 0.3s ease;box-shadow:0 0 15px rgba(0,255,128,0.05)}
+    .sponsor:hover{transform:scale(1.03);box-shadow:0 0 25px rgba(0,255,128,0.2);border-color:rgba(0,255,128,0.3)}
+    @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+      @keyframes glowPulse{0%{box-shadow:0 0 10px rgba(0,255,128,0.2)}100%{box-shadow:0 0 30px rgba(0,255,128,0.4)}}
+      @keyframes shine{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(200%) rotate(45deg)}}
+    /* FAQ accordion */
+    .faq{margin-top:40px}
+    .faq-item{border-radius:12px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);margin-bottom:12px;padding:16px 20px;border:1px solid rgba(0,255,128,0.1);box-shadow:0 0 15px rgba(0,255,128,0.05);transition:all 0.3s ease}
+    .faq-item:hover{box-shadow:0 0 20px rgba(0,255,128,0.1);border-color:rgba(0,255,128,0.2)}
+    .faq-q{cursor:pointer;font-weight:700;font-size:18px;transition:all 0.3s ease;position:relative;display:flex;justify-content:space-between;align-items:center}
+    .faq-q::after{
+      content:'+';
+      color:var(--accent2);
+      font-size:20px;
+      font-weight:900;
+      transition:transform 0.3s ease;
+    }
+    .faq-q.active::after{
+      transform:rotate(45deg);
+    }
+    .faq-a{display:none;color:var(--muted);margin-top:12px;line-height:1.6;font-size:16px}
+    /* sticky register modal */
+
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(4px);background-image:radial-gradient(circle at 20px 20px, rgba(0,255,128,0.03) 2px, transparent 0);background-size:40px 40px}
+      .modal{background:var(--card);padding:18px;border-radius:12px;width:min(720px,95%);max-height:90vh;overflow:auto;border:1px solid var(--glass);position:relative;overflow:hidden}
+      .modal::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 20px 20px, rgba(0,255,128,0.05) 1px, transparent 0);
+        background-size:20px 20px;
+        z-index:0;
+        pointer-events:none;
+      }
+    .modal h3{margin-top:0}
+    .discord-cta{display:flex;gap:10px;align-items:center;margin-top:12px}
+    .proof-template{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;color:var(--muted);margin-top:12px}
+    @media(max-width:880px){.grid{grid-template-columns:1fr}.logo{width:44px;height:44px}.hero{height:180px}.brand-title{font-size:22px}}
+      /* Matrix code rain styles */
+      .matrix-bg{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:radial-gradient(circle at 20px 20px, rgba(0,255,128,0.05) 1px, transparent 0);
+        background-size:20px 20px;
+        z-index:0;
+        pointer-events:none;
+      }
+      /* Feature icons */
+      .feature-icon{
+        color:var(--accent1);
+        margin-right:8px;
+        display:inline-block;
+        width:24px;
+        text-align:center;
+      }
+      /* Event ticker */
+      .event-ticker{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-top:12px;
+        padding:8px;
+        border-radius:8px;
+        background:rgba(0,255,128,0.03);
+        font-size:14px;
+        color:var(--muted);
+        position:relative;
+        z-index:1;
+      }
+      /* Circuit board background */
+      .circuit-bg{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-image:
+          linear-gradient(to right, transparent 90%, rgba(0,255,128,0.1) 95%, transparent 100%),
+          linear-gradient(to bottom, transparent 90%, rgba(0,255,128,0.1) 95%, transparent 100%);
+        background-size:20px 20px;
+        z-index:0;
+        pointer-events:none;
+      }
+      /* About section styling */
+      .about-grid p{
+        position:relative;
+        z-index:1;
+        line-height:1.7;
+        margin-bottom:16px;
+      }
+      .about-grid h3{
+        position:relative;
+        z-index:1;
+        font-family:'Rajdhani', sans-serif;
+        font-size:24px;
+        margin-bottom:20px;
+        color:var(--accent1);
+        text-shadow:0 0 10px rgba(0,255,128,0.3);
+      }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
+        <div>
+          <div class="brand-title">THE GRID</div>
+          <div class="brand-sub">Code Challenges & Hackathons</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <a class="btn" href="multiplier.html" target="_self">Multiplier</a>
+        <a class="btn" href="teams.html" target="_self">Teams</a>
+        <a class="btn" href="timebound.html" target="_self">TimeBound</a>
+        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer">Register</a>
+      </div>
+    </div>
+
+    <!-- Banner section -->
+    <div class="hero" aria-hidden="true">
+      <img src="assets/banner.png" alt="The Grid banner" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.7);">
+      <!-- Banner caption -->
+      <div style="position:absolute;bottom:20px;left:20px;right:20px;z-index:2;">
+        <div style="font-size:18px;font-weight:800;color:var(--paper);text-shadow:0 2px 10px rgba(0,0,0,0.8);">THE GRID • CODE CHALLENGES & HACKATHONS</div>
+      </div>
+    </div>
+
+    <!-- Hero content - moved below the banner -->
+    <div class="feature-card">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="logo-square"><img src="assets/logo.png" alt="The Grid" style="width:86%;height:86%;object-fit:contain"></div>
+        <div style="flex:1">
+          <h1 style="margin:0 0 6px 0;font-size:26px;font-family:'Rajdhani', sans-serif;color:var(--accent1)">Code Challenges & Hackathons</h1>
+          <div style="color:var(--muted)">Join THE GRID, an online hackathon platform where developers compete in various coding challenges, collaborate in teams, and win exciting prizes.</div>
+          <div class="cta-row" style="margin-top:10px">
+            <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer">
+              Register Now
+            </a>
+            <a class="btn ghost" href="rules.html" target="_self">
+              <span class="feature-icon">ℹ️</span>
+              Learn More
+            </a>
+          </div>
+        </div>
+
+        <style>
+          @keyframes multiplierGlow {
+            0% { box-shadow: 0 0 15px rgba(75, 180, 126, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(75, 180, 126, 0.6), 0 0 40px rgba(70, 109, 104, 0.4); }
+            100% { box-shadow: 0 0 15px rgba(75, 180, 126, 0.3); }
+          }
+          .event-btn.multiplier:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(75, 180, 126, 0.8), 0 0 50px rgba(70, 109, 104, 0.6) !important;
+          }
+        </style>
+      </div>
+    </div>
+
+    <!-- Sponsor carousel -->
+    <div class="sponsor-row" aria-hidden="true" style="margin-top:20px">
+      <div class="sponsor-track" id="sponsorTrack">
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+        <div class="sponsor"><img src="assets/banner.png" alt="sponsor" style="width:200px;height:100px;object-fit:cover"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <!-- Matrix code rain effect -->
+          <div class="matrix-bg" aria-hidden="true"></div>
+          
+          <div class="stats" style="margin-top:6px;position:relative;z-index:1;">
+            <div class="stat"><div style="font-size:18px;font-weight:800">3</div><div style="color:var(--muted)">Event Types</div></div>
+            <div class="stat"><div style="font-size:18px;font-weight:800">50+</div><div style="color:var(--muted)">Active Coders</div></div>
+            <div class="stat"><div style="font-size:18px;font-weight:800">₹500</div><div style="color:var(--muted)">Top Prize</div></div>
+          </div>
+
+          <div class="features" style="position:relative;z-index:1;">
+            <div class="feature"><span class="feature-icon">✅</span> Multiple coding challenges & formats</div>
+            <div class="feature"><span class="feature-icon">👥</span> Team collaboration opportunities</div>
+            <div class="feature"><span class="feature-icon">👪</span> Supportive developer community</div>
+            <div class="feature"><span class="feature-icon">📊</span> Transparent judging & fair competition</div>
+          </div>
+
+          <div class="ticker event-ticker" style="animation:pulse 2s infinite alternate;">
+            <span>Event calendar: Multiplier Challenge starts in 3 days • Time Bound Challenge in 1 week • Teams Competition in 2 weeks</span>
+          </div>
+        </div>
+        
+        <!-- Event selection buttons -->
+        <div style="margin-top:24px;display:flex;flex-direction:column;gap:16px">
+          <h3 style="text-align:center">Choose Your Challenge</h3>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <a href="multiplier.html" class="event-btn multiplier" style="position: relative; overflow: visible; background: linear-gradient(135deg, rgba(75, 180, 126, 0.1), rgba(70, 109, 104, 0.1)); border: 1px solid rgba(75, 180, 126, 0.3); transition: all 0.3s ease; animation: multiplierGlow 2s ease-in-out infinite;">
+              <div class="event-btn-content">
+                <h4 style="color: #4bb47e;">Multiplier Event</h4>
+                <p>10 slots • ₹100 entry • ₹500 prize • 7 days prep</p>
+              </div>
+              <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #466d68, #4bb47e); color: var(--paper); padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 700; z-index: 1;">HIGHLY ANTICIPATED</div>
+            </a>
+            <a href="timebound.html" class="event-btn timebound">
+              <div class="event-btn-content">
+                <h4>Time Bound Challenge</h4>
+                <p>10 slots • ₹100 entry • ₹500 prize • 2-hour coding</p>
+              </div>
+            </a>
+            <a href="teams.html" class="event-btn teams">
+              <div class="event-btn-content">
+                <h4>Teams Competition</h4>
+                <p>5 team slots • ₹300/team • ₹750 prize • 1-week dev</p>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <style>
+          .event-btn {
+            display: block;
+            padding: 20px;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+          }
+          .event-btn {
+            border: 1px solid rgba(0, 255, 128, 0.3);
+            position: relative;
+            overflow: hidden;
+          }
+          .event-btn.multiplier {
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.15), rgba(11, 83, 69, 0.05));
+          }
+          .event-btn.timebound {
+            background: linear-gradient(135deg, rgba(0, 255, 128, 0.15), rgba(11, 83, 69, 0.05));
+          }
+          .event-btn.teams {
+            background: linear-gradient(135deg, rgba(0, 200, 100, 0.15), rgba(11, 83, 69, 0.05));
+          }
+          .event-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 128, 0.1), transparent);
+            transition: all 0.7s ease;
+          }
+          .event-btn:hover::before {
+            left: 100%;
+          }
+          .event-btn:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 128, 0.3);
+            border-color: var(--accent1);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+          }
+          .event-btn.multiplier:hover {
+            border-color: #ff6b6b;
+            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.2);
+          }
+          .event-btn.timebound:hover {
+            border-color: #4ecdc4;
+            box-shadow: 0 12px 30px rgba(78, 205, 196, 0.2);
+          }
+          .event-btn.teams:hover {
+            border-color: #9d65c9;
+            box-shadow: 0 12px 30px rgba(157, 101, 201, 0.2);
+          }
+          .event-btn-content h4 {
+            margin: 0 0 6px 0;
+            color: var(--paper);
+            font-size: 20px;
+          }
+          .event-btn-content p {
+            margin: 0;
+            color: var(--muted);
+          }
+          .event-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+              to right, 
+              rgba(255, 255, 255, 0) 0%,
+              rgba(255, 255, 255, 0.1) 50%,
+              rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            transition: all 0.6s ease;
+          }
+          .event-btn:hover::after {
+            transform: translateX(200%) rotate(30deg);
+          }
+          
+
+        </style>
+
+        <!-- FAQ Section -->
+        <div id="faq" class="card faq">
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-item"><div class="faq-q">Who can join THE GRID?</div><div class="faq-a">Anyone with a Discord account and an interest in coding! We welcome developers of all skill levels to join our coding competitions and challenge themselves on THE GRID.</div></div>
+          <div class="faq-item"><div class="faq-q">What event formats are available?</div><div class="faq-a">THE GRID features three different event types: Multiplier Challenges (strategic long-term challenges), Time Bound Competitions (short, intensive coding sessions), and Teams Competitions (collaborative team projects).</div></div>
+          <div class="faq-item"><div class="faq-q">How do I register for an event?</div><div class="faq-a">Register through our Google Form to create your profile. Then, check the event calendar, pick your challenge, and complete the registration process for that specific event.</div></div>
+          <div class="faq-item"><div class="faq-q">How are event winners determined?</div><div class="faq-a">Our panel of expert developers judges projects on innovation, code quality, and overall performance. Detailed scoring rubrics are available for each event.</div></div>
+          <div class="faq-item"><div class="faq-q">How do winners claim prizes?</div><div class="faq-a">Winners are celebrated on our Discord server and receive their prizes within 48 hours of results being announced. We ensure full transparency in all prize distributions.</div></div>
+        </div>
+
+        <!-- Event Overview -->
+        <div class="card about-grid" style="margin-top:12px">
+          <!-- Circuit board pattern background -->
+          <div class="circuit-bg" aria-hidden="true"></div>
+          
+          <h3>About THE GRID</h3>
+          
+          <p>THE GRID is your platform for coding challenges and hackathons. This is where developers come together to test their skills, collaborate, and create amazing projects.</p>
+          
+          <p>Born from a passion for coding competitions, THE GRID was created to provide developers of all skill levels with a place to learn, grow, and showcase their talents. Whether you're a seasoned programmer looking for a challenge or a newcomer eager to develop your skills, our community welcomes you.</p>
+          
+          <p>Our platform offers multiple event formats designed to test different aspects of your coding abilities. The Multiplier Challenge is a long-term project that rewards consistent progress. The Time Bound Competition challenges you to create something amazing in a limited time. And our Teams Competition lets you collaborate with other developers to tackle complex problems together.</p>
+          
+          <p>At THE GRID, we believe in fair play and transparency. All our events are judged by experienced developers who provide detailed feedback to help you improve. We also prioritize community building, offering a supportive environment where you can connect with fellow coders, share knowledge, and grow together.</p>
+          
+          <p>Each challenge on THE GRID is an opportunity to enhance your coding skills. You'll learn to optimize your code, master new technologies, and develop problem-solving skills that will benefit you in your coding journey.</p>
+          
+          <p>Our journey began with a simple idea: to create a space where coding enthusiasts could come together, compete, and learn. As we grow, we remain committed to our core values of inclusivity, learning, and community. We're constantly evolving, adding new features and challenges to keep the experience fresh and exciting.</p>
+          
+          <p>Join us on THE GRID and become part of a community that celebrates the art and science of coding. Push your limits, learn new skills, and connect with fellow developers from around the world. The grid awaits—are you ready to join?</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <h3 style="color:var(--accent1);text-align:center">Register Now</h3>
+          <p style="text-align:center;margin-bottom:20px;">Click below to register through our Google Form:</p>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer" class="btn">
+            Register via Google Form
+          </a>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>Why Join THE GRID?</h4>
+          <ul style="margin:0;padding-left:18px;color:var(--muted);font-size:13px">
+            <li>Compete in diverse coding challenges</li>
+            <li>Win exciting prizes and recognition</li>
+            <li>Learn new skills and technologies</li>
+            <li>Connect with fellow developers</li>
+            <li>Build your portfolio with real projects</li>
+          </ul>
+        </div>
+
+        <!-- Event Timers -->
+        <div class="card" style="margin-top:12px; background:linear-gradient(135deg, rgba(0,255,128,0.05), rgba(0,0,0,0))">
+          <h3 style="color:var(--accent1);text-align:center;margin-top:0">Event Timers</h3>
+          
+          <!-- Multiplier Timer -->
+          <div id="multiplier-timer" style="margin-bottom:16px;">
+            <div class="timer-container">
+              <div class="timer-label" style="color: #4bb47e; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; text-align: center;">MULTIPLIER EVENT STARTS IN</div>
+              <div class="timer" style="display: flex; gap: 6px; justify-content: center;">
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 180, 126, 0.15), rgba(70, 109, 104, 0.05)); border: 1px solid rgba(75, 180, 126, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="multiplier-days" style="color: #4bb47e; font-size: 24px; font-weight: 800; line-height: 1;">03</div>
+                  <div style="color: #466d68; font-size: 11px; margin-top: 2px;">Days</div>
+                </div>
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 180, 126, 0.15), rgba(70, 109, 104, 0.05)); border: 1px solid rgba(75, 180, 126, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="multiplier-hours" style="color: #4bb47e; font-size: 24px; font-weight: 800; line-height: 1;">12</div>
+                  <div style="color: #466d68; font-size: 11px; margin-top: 2px;">Hours</div>
+                </div>
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 180, 126, 0.15), rgba(70, 109, 104, 0.05)); border: 1px solid rgba(75, 180, 126, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="multiplier-minutes" style="color: #4bb47e; font-size: 24px; font-weight: 800; line-height: 1;">45</div>
+                  <div style="color: #466d68; font-size: 11px; margin-top: 2px;">Mins</div>
+                </div>
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 180, 126, 0.15), rgba(70, 109, 104, 0.05)); border: 1px solid rgba(75, 180, 126, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="multiplier-seconds" style="color: #4bb47e; font-size: 24px; font-weight: 800; line-height: 1;">00</div>
+                  <div style="color: #466d68; font-size: 11px; margin-top: 2px;">Secs</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- TimeBound Timer -->
+          <div id="timebound-timer" style="margin-bottom:16px;">
+            <div class="timer-container">
+              <div class="timer-label" style="color: #4b76b4; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; text-align: center;">TIMEBOUND CHALLENGE STARTS IN</div>
+              <div class="timer" style="display: flex; gap: 6px; justify-content: center;">
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 118, 180, 0.15), rgba(75, 118, 180, 0.05)); border: 1px solid rgba(75, 118, 180, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="timebound-days" style="color: #4b76b4; font-size: 24px; font-weight: 800; line-height: 1;">07</div>
+                  <div style="color: #5b7a82; font-size: 11px; margin-top: 2px;">Days</div>
+                </div>
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 118, 180, 0.15), rgba(75, 118, 180, 0.05)); border: 1px solid rgba(75, 118, 180, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="timebound-hours" style="color: #4b76b4; font-size: 24px; font-weight: 800; line-height: 1;">23</div>
+                  <div style="color: #5b7a82; font-size: 11px; margin-top: 2px;">Hours</div>
+                </div>
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 118, 180, 0.15), rgba(75, 118, 180, 0.05)); border: 1px solid rgba(75, 118, 180, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="timebound-minutes" style="color: #4b76b4; font-size: 24px; font-weight: 800; line-height: 1;">59</div>
+                  <div style="color: #5b7a82; font-size: 11px; margin-top: 2px;">Mins</div>
+                </div>
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 118, 180, 0.15), rgba(75, 118, 180, 0.05)); border: 1px solid rgba(75, 118, 180, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="timebound-seconds" style="color: #4b76b4; font-size: 24px; font-weight: 800; line-height: 1;">59</div>
+                  <div style="color: #5b7a82; font-size: 11px; margin-top: 2px;">Secs</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Teams Timer -->
+          <div id="teams-timer">
+            <div class="timer-container">
+              <div class="timer-label" style="color: #d4b858; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; text-align: center;">TEAMS COMPETITION STARTS IN</div>
+              <div class="timer" style="display: flex; gap: 6px; justify-content: center;">
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(212, 184, 88, 0.15), rgba(212, 184, 88, 0.05)); border: 1px solid rgba(212, 184, 88, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="teams-days" style="color: #d4b858; font-size: 24px; font-weight: 800; line-height: 1;">14</div>
+                  <div style="color: #99718e; font-size: 11px; margin-top: 2px;">Days</div>
+                </div>
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(212, 184, 88, 0.15), rgba(212, 184, 88, 0.05)); border: 1px solid rgba(212, 184, 88, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="teams-hours" style="color: #d4b858; font-size: 24px; font-weight: 800; line-height: 1;">23</div>
+                  <div style="color: #99718e; font-size: 11px; margin-top: 2px;">Hours</div>
+                </div>
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(212, 184, 88, 0.15), rgba(212, 184, 88, 0.05)); border: 1px solid rgba(212, 184, 88, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="teams-minutes" style="color: #d4b858; font-size: 24px; font-weight: 800; line-height: 1;">59</div>
+                  <div style="color: #99718e; font-size: 11px; margin-top: 2px;">Mins</div>
+                </div>
+                <div class="timer-item" style="background: linear-gradient(135deg, rgba(212, 184, 88, 0.15), rgba(212, 184, 88, 0.05)); border: 1px solid rgba(212, 184, 88, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                  <div id="teams-seconds" style="color: #d4b858; font-size: 24px; font-weight: 800; line-height: 1;">59</div>
+                  <div style="color: #99718e; font-size: 11px; margin-top: 2px;">Secs</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <style>
+            /* Animation for timer pulse */
+            @keyframes pulse {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0.9; }
+            }
+            
+            .timer-item {
+              animation: pulse 3s infinite;
+            }
+          </style>
+        </div>
+        
+        <!-- Event Rules Section -->
+        <div class="card" style="margin-top:12px; background: linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100)">
+          <h3 style="color:var(--accent1);text-align:center;margin-top:0">Event Rules</h3>
+          
+          <div style="display:flex; flex-direction:column; gap:10px; padding:12px">
+            <!-- Multiplier Rules Button -->
+              <a href="multiplier_rules.html" style="display:block; padding:16px; background:linear-gradient(135deg, #4bb47e, #466d68); border-radius:10px; border:0; text-decoration:none; transition:all 0.3s ease; position:relative; overflow:hidden; font-weight:700; cursor:pointer;">
+                <div style="position:relative; z-index:1; text-align:center">
+                  <div style="font-size:12px; margin-bottom:6px; color:#ffffff; font-weight:600; text-transform:uppercase; letter-spacing:1px">MULTIPLIER EVENT</div>
+                  <h4 style="margin:0 0 8px 0; color:#ffffff">Rules & Guidelines</h4>
+                  <p style="margin:0; font-size:13px; color:rgba(240,237,237,0.8)">10 slots available | ₹100 entry fee | 7-day preparation | ₹500 grand prize</p>
+                </div>
+                <div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition:all 0.6s ease;"></div>
+              </a>
+            
+            <!-- TimeBound Rules Button -->
+              <a href="timebound_rules.html" style="display:block; padding:16px; background:linear-gradient(135deg, #5b7a82, #4b76b4); border-radius:10px; border:0; text-decoration:none; transition:all 0.3s ease; position:relative; overflow:hidden; font-weight:700; cursor:pointer;">
+                <div style="position:relative; z-index:1; text-align:center">
+                  <div style="font-size:12px; margin-bottom:6px; color:#ffffff; font-weight:600; text-transform:uppercase; letter-spacing:1px">TIME BOUND CHALLENGE</div>
+                  <h4 style="margin:0 0 8px 0; color:#ffffff">Rules & Guidelines</h4>
+                  <p style="margin:0; font-size:13px; color:rgba(240,237,237,0.8)">10 slots available | ₹100 entry fee | 2-hour coding | ₹500 grand prize</p>
+                </div>
+                <div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition:all 0.5s ease;"></div>
+              </a>
+            
+            <!-- Teams Rules Button -->
+              <a href="teams_rules.html" style="display:block; padding:16px; background:linear-gradient(135deg, #99718e, #d4b858); border-radius:10px; border:1px solid transparent; text-decoration:none; transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position:relative; overflow:hidden; font-weight:700; cursor:pointer; box-shadow:0 0 15px rgba(138, 132, 78, 0.25); text-shadow:0 1px 2px rgba(0,0,0,0.3);">
+                <div style="position:relative; z-index:1; text-align:center">
+                  <div style="font-size:12px; margin-bottom:6px; color:#ffffff; font-weight:600; text-transform:uppercase; letter-spacing:1px">TEAMS COMPETITION</div>
+                  <h4 style="margin:0 0 8px 0; color:#ffffff">Rules & Guidelines</h4>
+                  <p style="margin:0; font-size:13px; color:rgba(240,237,237,0.8)">5 team slots | ₹300 team entry | 1-week development | ₹750 grand prize</p>
+                </div>
+                <div style="position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition:all 0.6s ease;"></div>
+                <div style="position:absolute; bottom:0; left:0; right:0; height:3px; background:linear-gradient(90deg, transparent, #8a844e, transparent); transform:scaleX(0); transform-origin:left; transition:transform 0.3s ease;"></div>
+              </a>
+          </div>
+          
+          <style>
+              /* Event buttons styling */
+              a[href="multiplier_rules.html"] {
+                position: relative;
+                overflow: hidden;
+              }
+              a[href="multiplier_rules.html"]:hover > div:nth-of-type(2) {
+                left: 100%;
+              }
+              a[href="multiplier_rules.html"]:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(75, 180, 126, 0.4);
+              }
+              
+              a[href="timebound_rules.html"] {
+                position: relative;
+                overflow: hidden;
+              }
+              a[href="timebound_rules.html"]:hover > div:nth-of-type(2) {
+                left: 100%;
+              }
+              a[href="timebound_rules.html"]:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(75, 118, 180, 0.3);
+              }
+              
+              a[href="teams_rules.html"] {
+                position: relative;
+                overflow: hidden;
+              }
+              a[href="teams_rules.html"]:hover > div:nth-of-type(2) {
+                left: 100%;
+              }
+              a[href="teams_rules.html"]:hover > div:nth-of-type(3) {
+                transform: scaleX(1);
+              }
+              a[href="teams_rules.html"]:hover {
+                background: linear-gradient(135deg, #8a844e, #99718e);
+                transform: translateY(-2px) scale(1.02);
+                box-shadow: 0 0 25px rgba(138, 132, 78, 0.5);
+                border-color: rgba(138, 132, 78, 0.5);
+              }
+              
+              /* Timer animations */
+              #multiplier-timer, #timebound-timer, #teams-timer {
+                transition: all 0.4s ease;
+              }
+              
+              #multiplier-timer:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 30px rgba(75, 180, 126, 0.25);
+                border-color: rgba(75, 180, 126, 0.5);
+              }
+              
+              #timebound-timer:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 30px rgba(75, 118, 180, 0.25);
+                border-color: rgba(91, 122, 130, 0.5);
+              }
+              
+              #teams-timer:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 30px rgba(212, 184, 88, 0.25);
+                border-color: rgba(212, 184, 88, 0.5);
+              }
+              
+              /* Timer digit animations */
+              #multiplier-days, #multiplier-hours, #multiplier-minutes, #multiplier-seconds,
+              #timebound-days, #timebound-hours, #timebound-minutes, #timebound-seconds,
+              #teams-days, #teams-hours, #teams-minutes, #teams-seconds {
+                transition: all 0.3s ease;
+                display: inline-block;
+                min-width: 60px;
+                text-align: center;
+              }
+              
+              /* Glow animations */
+              @keyframes glowPulse {
+                0% { box-shadow: 0 0 5px rgba(75, 180, 126, 0.3); }
+                50% { box-shadow: 0 0 20px rgba(75, 180, 126, 0.6); }
+                100% { box-shadow: 0 0 5px rgba(75, 180, 126, 0.3); }
+              }
+              
+              @keyframes glowPulseTimebound {
+                0% { box-shadow: 0 0 5px rgba(75, 118, 180, 0.3); }
+                50% { box-shadow: 0 0 20px rgba(75, 118, 180, 0.6); }
+                100% { box-shadow: 0 0 5px rgba(75, 118, 180, 0.3); }
+              }
+              
+              @keyframes glowPulseTeams {
+                0% { box-shadow: 0 0 5px rgba(212, 184, 88, 0.3); }
+                50% { box-shadow: 0 0 20px rgba(212, 184, 88, 0.6); }
+                100% { box-shadow: 0 0 5px rgba(212, 184, 88, 0.3); }
+              }
+              
+              @keyframes shimmer {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+              }
+              
+              /* Apply animations */
+              a[href="multiplier_rules.html"] {
+                animation: glowPulse 4s infinite ease-in-out;
+              }
+              
+              a[href="timebound_rules.html"] {
+                animation: glowPulseTimebound 4s infinite ease-in-out 0.5s;
+              }
+              
+              a[href="teams_rules.html"] {
+                animation: glowPulseTeams 4s infinite ease-in-out 1s;
+              }
+              
+              /* Hover effects for timer digits */
+              #multiplier-timer:hover [id^="multiplier-"] {
+                text-shadow: 0 0 15px rgba(75, 180, 126, 0.8);
+                transform: scale(1.05);
+              }
+              
+              #timebound-timer:hover [id^="timebound-"] {
+                text-shadow: 0 0 15px rgba(75, 118, 180, 0.8);
+                transform: scale(1.05);
+              }
+              
+              #teams-timer:hover [id^="teams-"] {
+                text-shadow: 0 0 15px rgba(212, 184, 88, 0.8);
+                transform: scale(1.05);
+              }
+            </style>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px;background:linear-gradient(135deg, rgba(0,255,128,0.1), rgba(0,0,0,0))">
+          <h4 style="font-weight:700">Join our Discord</h4>
+          <div class="discord-cta">
+            <a class="btn" href="https://discord.gg/XfbahWtPMg" target="_blank">Join Discord</a>
+            <div style="color:var(--muted);font-size:13px">Or search: THE GRID on Discord</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+© The Grid • Code Challenges & Hackathons • Contact: <a href="mailto:heinrich.oswald24@gmail.com">heinrich.oswald24@gmail.com</a> • <a href="https://discord.gg/XfbahWtPMg" style="color: var(--accent1)" target="_blank" rel="noopener noreferrer">Join Discord</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
+    </footer>
+  </div>
+
+
+  <script>
+    // FAQ accordion behavior - make all answers visible by default and enhance the interaction
+    document.querySelectorAll('.faq-q').forEach(function(q){
+      q.addEventListener('click', function(){
+        var a = q.nextElementSibling;
+        if(a.style.display === 'block' || !a.style.display) {
+          a.style.display = 'none';
+          q.style.color = '';
+        } else {
+          a.style.display = 'block';
+          q.style.color = 'var(--accent1)';
+        }
+      });
+      // Initially show all answers
+      q.nextElementSibling.style.display = 'block';
+      q.style.cursor = 'pointer';
+      q.style.transition = 'color 0.3s ease';
+    });
+
+    // Sponsor track speed control on hover
+    var sponsorTrack = document.getElementById('sponsorTrack');
+    if(sponsorTrack){{ sponsorTrack.addEventListener('mouseenter', function(){{ sponsorTrack.style.animationPlayState = 'paused'; }}); sponsorTrack.addEventListener('mouseleave', function(){{ sponsorTrack.style.animationPlayState = 'running'; }}); }}
+    
+    // Initialize all event timers
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeAllEventTimers();
+    });
+    
+    // Function to initialize all three event timers
+    function initializeAllEventTimers() {
+      // Initialize each event timer with different timings
+      initializeEventTimer('multiplier', getMultiplierEventDate());
+      initializeEventTimer('timebound', getTimeBoundEventDate());
+      initializeEventTimer('teams', getTeamsEventDate());
+    }
+    
+    // Function to initialize a single event timer
+    function initializeEventTimer(eventType, eventDate) {
+      // Get DOM elements for this timer
+      const daysEl = document.getElementById(`${eventType}-days`);
+      const hoursEl = document.getElementById(`${eventType}-hours`);
+      const minutesEl = document.getElementById(`${eventType}-minutes`);
+      const secondsEl = document.getElementById(`${eventType}-seconds`);
+      
+      // Validate that DOM elements exist
+      if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+        console.error(`Timer DOM elements not found for ${eventType} event.`);
+        return;
+      }
+      
+      // Function to update the countdown
+        function updateCountdown() {
+          const now = new Date();
+          const nowTime = now.getTime();
+          let distance = eventDate - nowTime;
+          
+          // Pad with leading zero if less than 10
+          const pad = (num) => num < 10 ? '0' + num : num;
+          
+          if (distance < 0) {
+            // If event time has passed, set to next occurrence
+            if (eventType === 'multiplier') {
+              eventDate = getMultiplierEventDate(true);
+            } else if (eventType === 'timebound') {
+              eventDate = getTimeBoundEventDate(true);
+            } else if (eventType === 'teams') {
+              eventDate = getTeamsEventDate(true);
+            }
+            // Recalculate distance with new date
+            distance = eventDate - nowTime;
+          }
+          
+          // Time calculations for days, hours, minutes and seconds
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Update DOM elements with calculated values
+        daysEl.textContent = pad(days);
+        hoursEl.textContent = pad(hours);
+        minutesEl.textContent = pad(minutes);
+        secondsEl.textContent = pad(seconds);
+      }
+      
+      // Update the countdown immediately and then every 1 second
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+    
+    // Function to calculate the next Saturday at 3 PM IST for all events
+    function getNextSaturday3pmIST(forceNextWeek = false) {
+      const now = new Date();
+      const targetDay = 6; // 6 = Saturday
+      const targetHour = 15; // 3 PM
+      const targetMinute = 0;
+      const targetSecond = 0;
+      
+      // Create a new date for the target day this week
+      const eventDate = new Date(now);
+      eventDate.setHours(targetHour, targetMinute, targetSecond, 0);
+      
+      // Calculate the difference in days
+      let dayDiff = targetDay - now.getDay();
+      
+      // If today is the target day but time has passed, or if forceNextWeek is true, add 7 days
+      if ((dayDiff === 0 && now.getHours() >= targetHour) || dayDiff < 0 || forceNextWeek) {
+        dayDiff += 7;
+      }
+      
+      // Set the date to the target day
+      eventDate.setDate(now.getDate() + dayDiff);
+      
+      return eventDate;
+    }
+    
+    // Function to calculate the next Multiplier event date
+    function getMultiplierEventDate(forceNextWeek = false) {
+      return getNextSaturday3pmIST(forceNextWeek);
+    }
+    
+    // Function to calculate the next TimeBound event date
+    function getTimeBoundEventDate(forceNextWeek = false) {
+      return getNextSaturday3pmIST(forceNextWeek);
+    }
+    
+    // Function to calculate the next Teams event date
+    function getTeamsEventDate(forceNextWeek = false) {
+      return getNextSaturday3pmIST(forceNextWeek);
+    }
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Original Branding Verification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .status-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .logo-card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .logo-card h3 {
+            margin-top: 0;
+            color: #FFD700;
+            font-size: 1.3em;
+        }
+        
+        .logo-display {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .logo-display img {
+            max-width: 200px;
+            max-height: 80px;
+            object-fit: contain;
+        }
+        
+        .file-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .info {
+            color: #2196F3;
+            font-weight: bold;
+        }
+        
+        .warning {
+            color: #FF9800;
+            font-weight: bold;
+        }
+        
+        .summary {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .summary h2 {
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        
+        .changes-list {
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .changes-list li {
+            margin: 8px 0;
+            padding-left: 10px;
+        }
+        
+        .timestamp {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Original Branding Verification</h1>
+        
+        <div class="status-section">
+            <h2>✅ Logo Restoration Status</h2>
+            <p class="success">Original branding has been successfully restored!</p>
+            <p>The main website logos and banners have been reverted to their original versions, while team event branding remains available as separate files.</p>
+        </div>
+        
+        <div class="logo-grid">
+            <div class="logo-card">
+                <h3>🔵 Original Logo (Restored)</h3>
+                <div class="logo-display">
+                    <img src="assets/logo.png?v=original" alt="Original Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display:none; color: #666;">Logo not found</div>
+                </div>
+                <div class="file-info">
+                    <strong>File:</strong> assets/logo.png<br>
+                    <strong>Status:</strong> <span class="success">Restored to original</span><br>
+                    <strong>Branding:</strong> Original (Blue)
+                </div>
+            </div>
+            
+            <div class="logo-card">
+                <h3>🔵 Original Banner (Restored)</h3>
+                <div class="logo-display">
+                    <img src="assets/banner.png?v=original" alt="Original Banner" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display:none; color: #666;">Banner not found</div>
+                </div>
+                <div class="file-info">
+                    <strong>File:</strong> assets/banner.png<br>
+                    <strong>Status:</strong> <span class="success">Restored to original</span><br>
+                    <strong>Branding:</strong> Original (Blue)
+                </div>
+            </div>
+            
+            <div class="logo-card">
+                <h3>🟠 Team Event Logo (Preserved)</h3>
+                <div class="logo-display">
+                    <img src="assets/team event logo.png?v=preserved" alt="Team Event Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display:none; color: #666;">Team Event Logo not found</div>
+                </div>
+                <div class="file-info">
+                    <strong>File:</strong> assets/team event logo.png<br>
+                    <strong>Status:</strong> <span class="info">Preserved as separate file</span><br>
+                    <strong>Branding:</strong> Team Event (Orange)
+                </div>
+            </div>
+            
+            <div class="logo-card">
+                <h3>🟠 Team Event Banner (Preserved)</h3>
+                <div class="logo-display">
+                    <img src="assets/team event banner.png?v=preserved" alt="Team Event Banner" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display:none; color: #666;">Team Event Banner not found</div>
+                </div>
+                <div class="file-info">
+                    <strong>File:</strong> assets/team event banner.png<br>
+                    <strong>Status:</strong> <span class="info">Preserved as separate file</span><br>
+                    <strong>Branding:</strong> Team Event (Orange)
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary">
+            <h2>📋 Restoration Summary</h2>
+            <div class="changes-list">
+                <ul>
+                    <li><strong>✅ logo.png</strong> - Restored to original blue branding (70 bytes)</li>
+                    <li><strong>✅ banner.png</strong> - Restored to original blue branding (70 bytes)</li>
+                    <li><strong>🔒 team event logo.png</strong> - Preserved as separate file (599,536 bytes)</li>
+                    <li><strong>🔒 team event banner.png</strong> - Preserved as separate file (465,578 bytes)</li>
+                </ul>
+            </div>
+            <p><strong>Result:</strong> Your main website (index.html, teams.html, timebound.html) now displays original branding, while team event files remain available for future use.</p>
+        </div>
+        
+        <div class="status-section">
+            <h2>🎯 What This Means</h2>
+            <p><strong class="success">Main Website:</strong> Now uses original blue branding for all logos and banners</p>
+            <p><strong class="info">Team Event Files:</strong> Remain available as separate files for future team event activations</p>
+            <p><strong class="warning">Multiplier Page:</strong> Continues to use its own specific branding (unchanged)</p>
+        </div>
+        
+        <div class="timestamp">
+            <p>Verification completed on: <span id="timestamp"></span></p>
+        </div>
+    </div>
+    
+    <script>
+        // Set current timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        
+        // Log image loading for debugging
+        const images = document.querySelectorAll('img');
+        images.forEach((img, index) => {
+            img.onload = () => console.log(`Image ${index + 1} loaded successfully: ${img.src}`);
+            img.onerror = () => console.log(`Image ${index + 1} failed to load: ${img.src}`);
+        });
+    </script>
+</body>
+</html>

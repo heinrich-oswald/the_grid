@@ -4,28 +4,321 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>The Grid — Time Bound Event</title>
+  <!-- Spectacular Enhancements -->
+  <link rel="stylesheet" href="spectacular.css">
+  <script src="spectacular_optimized.js" defer></script>
+  <!-- Common Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;700;900&family=Space+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0b0a09;--card:#1a1716;--accent1:#4a466d;--accent2:#5b7a82;--paper:#f0eded;--accent3:#4b76b4;--muted:rgba(240,237,237,0.65);--glass:rgba(255,255,255,0.03);}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,sans-serif;overflow-x:hidden}
-    body{background:linear-gradient(180deg,var(--bg) 0%, #0d0c0b 60%);color:var(--paper)}
-    .wrap{max-width:1200px;margin:24px auto;padding:18px}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:14px}
-    .logo{width:72px;height:72px;border-radius:8px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--paper);font-size:24px;box-shadow:0 6px 18px rgba(0,0,0,0.6);transition: transform 0.3s ease, box-shadow 0.3s ease}
-    .logo:hover{transform: translateY(-4px);box-shadow:0 12px 24px rgba(75, 118, 180, 0.4)}
-    .brand-title {font-weight:900;font-size:32px;letter-spacing:1px;background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .brand-sub {font-size:13px;color:var(--muted);}
-    .cta-row{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
-    .btn{background:linear-gradient(135deg,var(--accent2),var(--accent3));color:#0b0a09;padding:10px 14px;border-radius:10px;border:0;font-weight:700;cursor:pointer;transition: transform 0.3s ease, box-shadow 0.3s ease;position:relative;overflow:hidden}
-    .btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);transition: left 0.5s ease}
-    .btn:hover::before{left:100%}
-    .btn:hover{transform: translateY(-2px);box-shadow:0 8px 24px rgba(75, 118, 180, 0.3)}
-    .btn.ghost{background:transparent;border:1px solid rgba(75, 118, 180, 0.3);color:var(--paper);transition: all 0.3s ease}
-    .btn.ghost:hover{background:linear-gradient(135deg, rgba(75, 118, 180, 0.2), rgba(74, 70, 109, 0.2));border-color:var(--accent3);transform: translateY(-2px);box-shadow:0 6px 18px rgba(75, 118, 180, 0.2)}
-    .grid{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;margin-top:18px;position:relative}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass);padding:18px;border-radius:12px;position:relative;overflow:hidden;transition: transform 0.3s ease, box-shadow 0.3s ease}
-    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg, var(--accent1), var(--accent3), var(--accent1));opacity:0.7}
-    .card:hover{transform: translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,0.4)}
+    /* Base CSS Variables */
+    :root {
+      --bg: #050505;
+      --paper: #f5f5f5;
+      --muted: rgba(245, 245, 245, 0.7);
+      --glass: rgba(0, 255, 127, 0.07);
+      --card-glass: rgba(18, 18, 18, 0.75);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --border-glass-hover: rgba(255, 255, 255, 0.12);
+      --accent1:#4b76b4;
+      --accent2:#2a4a78;
+      --accent3:#73a9ff;
+      --glass:rgba(75,118,180,0.05);
+      --border-glass:rgba(75,118,180,0.1);
+      --border-glass-hover:rgba(75,118,180,0.2);
+      --accent1-glow:rgba(75,118,180,0.3);
+      /* Override shared glow vars so nav/buttons highlight blue, not red */
+      --primary-glow: rgba(75,118,180,0.6);
+      --secondary-glow: rgba(115,169,255,0.5);
+    }
+    
+    /* Base Styling */
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--paper);
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    
+    /* Dynamic Grid Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 30px 30px, rgba(75,118,180,0.04) 1px, transparent 0),
+        linear-gradient(to right, transparent 99.5%, rgba(75,118,180,0.05) 99.5%, rgba(75,118,180,0.05) 100%),
+        linear-gradient(to bottom, transparent 99.5%, rgba(75,118,180,0.05) 99.5%, rgba(75,118,180,0.05) 100%);
+      background-size: 60px 60px, 60px 60px, 60px 60px;
+      z-index: -1;
+    }
+    
+    /* Main Container */
+    .wrap {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 18px;
+    }
+    
+    /* Common Navigation */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 30px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 40, 20, 0.7));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border-glass);
+      position: sticky;
+      top: 24px;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    
+    .logo {
+      width: 45px;
+      height: 45px;
+      margin-right: 12px;
+      transition: transform 0.3s ease;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: var(--paper);
+      font-size: 24px;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px var(--accent1-glow);
+    }
+    
+    .brand-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+      margin: 0;
+      padding: 0;
+      line-height: 1.2;
+    }
+    
+    .brand-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Scanline Effect */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.05) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.3;
+    }
+    
+    /* Responsive Navigation */
+    @media (max-width: 880px) {
+      .nav {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px 20px;
+      }
+      
+      .brand {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+      }
+      
+      .logo {
+        width: 40px;
+        height: 40px;
+        margin-right: 0;
+        font-size: 20px;
+      }
+      
+      .brand-title {
+        font-size: 20px;
+      }
+      
+      .nav > div:last-child {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .btn {
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+      /* Particle styles */
+      .particles-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+      }
+      
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(138, 132, 78, 0.2) 0%, rgba(138, 132, 78, 0) 70%);
+        animation: float var(--duration-factor, 3s) ease-in-out infinite;
+        pointer-events: none;
+      }
+      
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0) translateX(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) translateX(10px) rotate(10deg);
+        }
+      }
+      /* Main container */
+      .wrap{max-width:1200px;margin:24px auto;padding:18px}
+      
+      .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 30px;border-radius:12px;background:var(--glass);border:1px solid var(--border-glass);position:sticky;top:24px;z-index:100}
+      .brand{display:flex;align-items:center;gap:16px}
+      .logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg, var(--accent1), var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:24px;transition:all 0.3s ease}
+      .logo:hover{transform:scale(1.05);box-shadow:0 0 25px var(--accent1-glow);}
+      .brand-title{font-size:24px;font-weight:700;color:#fff;text-shadow:0 0 10px rgba(0, 245, 255, 0.5);margin:0;padding:0;line-height:1.2;}
+      .brand-sub {font-size:12px;color:var(--muted);font-family:'Rajdhani', sans-serif;letter-spacing:0.5px;}
+      .cta-row{display:flex;gap:12px;margin-top:8px}
+      .btn{background:linear-gradient(135deg, var(--accent2), var(--accent3));color:var(--bg);padding:12px 24px;border-radius:8px;border:0;font-weight:700;cursor:pointer;transition:all 0.3s ease;position:relative;box-shadow:0 0 15px var(--accent1-glow);text-decoration:none;display:inline-block}
+      .btn:hover{transform:translateY(-2px);box-shadow:0 0 25px var(--accent1-glow);}
+      .btn.ghost{background:transparent;border:1px solid var(--accent2);color:var(--accent3);}
+      .btn.ghost:hover{background:var(--glass);}
+      
+      /* Grid layout for main content */
+      .grid{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:start;margin-top:24px;position:relative}
+      
+      /* Scanline effect */
+      .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 2px); }
+      
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        
+        .nav {
+          padding: 16px 20px;
+          flex-wrap: wrap;
+        }
+        
+        .logo {
+          width: 40px;
+          height: 40px;
+          font-size: 20px;
+        }
+        
+        .brand-title {
+          font-size: 22px;
+        }
+      }
+      @media(max-width:880px){
+        .grid{grid-template-columns:1fr}
+        .logo{width:44px;height:44px}
+        .hero{height:140px}
+        .brand-title{font-size:22px}
+      }
+      
+      /* Modern card styling */
+      .card{
+        background:linear-gradient(135deg, var(--card-glass), rgba(18, 18, 18, 0.6));
+        border:1px solid var(--border-glass);
+        padding:24px;
+        border-radius:16px;
+        transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        position:relative;
+        overflow:hidden;
+      }
+      
+      /* Card glow element */
+      .card-glow {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, var(--accent1-glow) 0%, transparent 70%);
+        opacity: 0;
+        border-radius: 50%;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        mix-blend-mode: screen;
+        filter: blur(25px);
+        z-index: 0;
+      }
+      
+      /* Grid pattern on cards */
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.03) 1px, transparent 0);
+        background-size: 40px 40px;
+        opacity: 0.3;
+        z-index: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+
+      
+      .card:hover::before {
+        opacity: 0.5;
+      }
+      
+      .card:hover{
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 25px var(--accent1-glow);
+        border-color: var(--border-glass-hover);
+      }
     .stats{display:flex;gap:12px;flex-wrap:wrap}
     .stat{flex:1;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;text-align:center;transition: all 0.3s ease;transform: translateY(20px);opacity:0}
     .stat:hover{background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));transform: translateY(-2px)}
@@ -52,6 +345,8 @@
     .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,0.02);width:200px;height:100px;transition: all 0.3s ease}
     .sponsor:hover{background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));transform: scale(1.05)}
     @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    
+
     /* FAQ accordion */
     .faq{margin-top:16px}
     .faq-item{border-radius:8px;background:rgba(255,255,255,0.015);margin-bottom:8px;padding:10px;transition: all 0.3s ease}
@@ -60,7 +355,7 @@
     .faq-q:hover{color:var(--accent3)}
     .faq-q::after{content:'→';position:absolute;right:8px;transition: transform 0.3s ease}
     .faq-q.active::after{transform: rotate(90deg)}
-    .faq-a{display:none;color:var(--muted);margin-top:8px;max-height:0;overflow:hidden;transition: max-height 0.3s ease, margin-top 0.3s ease}
+    .faq-a{display:block;color:var(--muted);margin-top:8px;max-height:0;overflow:hidden;transition: max-height 0.3s ease, margin-top 0.3s ease}
     /* sticky register modal */
     .sticky-register-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent3),var(--accent1));color:var(--paper);border-radius:999px;padding:14px 18px;font-weight:800;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:999;transition: all 0.3s ease;animation: float 3s ease-in-out infinite}
     .sticky-register-btn:hover{transform: translateY(-4px);box-shadow:0 15px 35px rgba(75, 118, 180, 0.4)}
@@ -90,10 +385,20 @@
       .modal{padding:14px}
     }
   </style>
+  <script src="assets/admin_sync.js"></script>
 </head>
 <body>
-  <div class="wrap">
-    <div class="nav">
+    <!-- Animated background elements -->
+    <div class="animated-bg">
+      <div class="grid-pattern"></div>
+      <div class="particles-container"></div>
+
+    </div>
+    <!-- Scanlines effect -->
+    <div class="scanlines"></div>
+    
+    <div class="wrap">
+    <div class="nav sticky">
       <div class="brand">
         <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
         <div>
@@ -102,20 +407,20 @@
         </div>
       </div>
       <div style="display:flex;gap:12px;align-items:center">
-        <a class="btn ghost" href="index.html">Home</a>
-        <a class="btn ghost" href="multiplier.html">Multiplier</a>
-        <a class="btn ghost" href="teams.html">Teams</a>
+        <a class="btn" href="index.html">Home</a>
+        <a class="btn" href="multiplier.html">Multiplier</a>
+        <a class="btn" href="teams.html">Teams</a>
         <a class="btn ghost" href="timebound_rules.html">Rules</a>
         <a class="btn" href="#register" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Register</a>
       </div>
     </div>
 
     <div class="hero" aria-hidden="true">
-      <img src="assets/banner.png" alt="The Grid banner">
+      <img src="assets/banner.png" alt="The Grid banner" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.7);">
     </div>
 
     <div class="hero-overlay">
-      <div class="hero-card">
+      <div class="hero-card fade-in delay-100">
           <div style="display:flex;align-items:center;gap:14px;">
             <!-- Decorative elements -->
             <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:var(--accent3);opacity:0.1;border-radius:50%;filter:blur(20px);z-index:0;"></div>
@@ -123,18 +428,18 @@
             
             <!-- Logo -->
             <div class="logo-square" style="animation: pulse 2s infinite;">
-              <img src="assets/logo.png" alt="T" style="width:86%;height:86%;object-fit:contain;filter:brightness(1.2)">
+              <img src="assets/logo.png" alt="The Grid" style="width:86%;height:86%;object-fit:contain;filter:brightness(1.2)">
             </div>
             
             <!-- Hero content -->
             <div style="flex:1">
               <div style="position:relative;z-index:1;">
                 <!-- Event badge -->
-                <div style="display:inline-block;background:linear-gradient(135deg,var(--accent3),var(--accent1));padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-bottom:6px;">🚀 Time Bound</div>
+                <div style="display:inline-block;background:linear-gradient(135deg,var(--accent3),var(--accent1));padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-bottom:6px;">🚀 THE GRID Time Bound</div>
                 
                 <!-- Title with gradient -->
                 <h1 style="margin:0 0 6px 0;font-size:26px;background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.8));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
-                  Race Against the Clock
+                  Time Bound Event — Race Against the Clock
                 </h1>
                 
                 <!-- Description -->
@@ -149,7 +454,7 @@
                 </div>
                 
                 <!-- CTA buttons -->
-                <div class="cta-row" style="margin-top:10px;">
+                <div class="cta-row" style="margin-top:24px;">
                   <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank">Ready for the Challenge?</a>
                   <a class="btn ghost" href="timebound_rules.html">Competition Rules</a>
                 </div>
@@ -157,25 +462,40 @@
             </div>
           </div>
           
-          <!-- Countdown timer with improved styling -->
-          <div style="margin-top:14px;text-align:center;">
-            <div style="font-size:12px;margin-bottom:6px;color:var(--accent3);font-weight:600;">NEXT CHALLENGE STARTS IN</div>
-            <div style="display:flex;justify-content:center;gap:6px;">
-              <div style="background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:6px 10px;border-radius:6px;border:1px solid rgba(75, 118, 180, 0.2);">
-                <span style="font-weight:700;">03</span><span style="font-size:10px;">d</span>
+          <!-- Event Timer -->
+          <div class="timer-container" style="margin-top: 24px;">
+            <div class="timer-label" style="color: var(--accent3); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; text-align: center;">TIMEBOUND CHALLENGE STARTS IN</div>
+            <div class="timer" style="display: flex; gap: 6px; justify-content: center;">
+              <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 118, 180, 0.15), rgba(75, 118, 180, 0.05)); border: 1px solid rgba(75, 118, 180, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                <div id="days" style="color: var(--accent3); font-size: 24px; font-weight: 800; line-height: 1;">00</div>
+                <div style="color: var(--muted); font-size: 11px; margin-top: 2px;">Days</div>
               </div>
-              <div style="background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:6px 10px;border-radius:6px;border:1px solid rgba(75, 118, 180, 0.2);">
-                <span style="font-weight:700;">12</span><span style="font-size:10px;">h</span>
+              <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 118, 180, 0.15), rgba(75, 118, 180, 0.05)); border: 1px solid rgba(75, 118, 180, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                <div id="hours" style="color: var(--accent3); font-size: 24px; font-weight: 800; line-height: 1;">00</div>
+                <div style="color: var(--muted); font-size: 11px; margin-top: 2px;">Hours</div>
               </div>
-              <div style="background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:6px 10px;border-radius:6px;border:1px solid rgba(75, 118, 180, 0.2);">
-                <span style="font-weight:700;">45</span><span style="font-size:10px;">m</span>
+              <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 118, 180, 0.15), rgba(75, 118, 180, 0.05)); border: 1px solid rgba(75, 118, 180, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                <div id="minutes" style="color: var(--accent3); font-size: 24px; font-weight: 800; line-height: 1;">00</div>
+                <div style="color: var(--muted); font-size: 11px; margin-top: 2px;">Mins</div>
+              </div>
+              <div class="timer-item" style="background: linear-gradient(135deg, rgba(75, 118, 180, 0.15), rgba(75, 118, 180, 0.05)); border: 1px solid rgba(75, 118, 180, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                <div id="seconds" style="color: var(--accent3); font-size: 24px; font-weight: 800; line-height: 1;">00</div>
+                <div style="color: var(--muted); font-size: 11px; margin-top: 2px;">Secs</div>
               </div>
             </div>
           </div>
+          <style>
+            /* Animation for timer pulse */
+            @keyframes pulse {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0.9; }
+            }
+            
+            .timer-item {
+              animation: pulse 3s infinite;
+            }
+          </style>
         </div>
-        <style>
-          @keyframes pulse {0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);}}
-        </style>
 
       <!-- Sponsor carousel -->
       <div class="sponsor-row" aria-hidden="true">
@@ -190,7 +510,7 @@
       </div>
     </div>
 
-    <div class="grid">
+    <div class="grid fade-in delay-200">
       <div>
         <!-- Stats Card -->
         <div class="card">
@@ -212,12 +532,14 @@
           </div>
 
           <!-- Ticker with flame emoji -->
-          <div class="ticker">🔥 Current: Round 1 • Prepare for a weekly 2-hour coding sprint based on Discord prompts</div>
+          <div class="ticker">🔥 Current: THE GRID Time Bound Round 1 • Prepare for a weekly 2-hour coding sprint based on Discord prompts</div>
         </div>
 
         <!-- What Makes Time Bound Unique? -->
-        <div class="card" style="margin-top:18px">
-          <h3 style="margin-top:0;margin-bottom:12px;background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+        <div class="card fade-in delay-300" style="margin-top:18px">
+          <!-- Circuit board pattern background -->
+          <div class="circuit-bg" aria-hidden="true"></div>
+          <h3 style="margin-top:0;margin-bottom:12px;background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
             What Makes Time Bound Unique?
           </h3>
           
@@ -243,8 +565,9 @@
         </div>
 
         <!-- FAQ accordion with improved styling -->
-        <div id="faq" class="card faq" style="margin-top:18px;">
-          <h3 style="background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:0;">Time Bound Event FAQ</h3>
+        <div id="faq" class="card faq fade-in delay-400" style="margin-top:18px;">
+          <div class="card-glow"></div>
+          <h3 style="background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:0;">THE GRID Time Bound Event FAQ</h3>
           <div class="faq-item"><div class="faq-q">👤 Who can participate?</div><div class="faq-a">Anyone with a Discord account and the drive to code under pressure. Individual participation only.</div></div>
           <div class="faq-item"><div class="faq-q">⏱️ What is the timeline?</div><div class="faq-a">Weekly 2-hour sessions. Each week, participants will be given 2 hours to make something based on the prompt provided in the Discord server. No limited slots.</div></div>
           <div class="faq-item"><div class="faq-q">🎯 Will there be a theme?</div><div class="faq-a">Yes, the challenge theme will be revealed at the start of the event. All participants must build around this theme.</div></div>
@@ -254,8 +577,9 @@
         </div>
 
         <!-- Proof of payout template with improved styling -->
-        <div class="card" style="margin-top:18px;">
-          <h3 style="background:linear-gradient(90deg, var(--accent3), rgba(75, 118, 180, 0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Proof of Payout (Template)</h3>
+        <div class="card fade-in delay-500" style="margin-top:18px;">
+          <div class="card-glow"></div>
+          <h3 style="background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">THE GRID Time Bound Event — Proof of Payout (Template)</h3>
           <div class="proof-template">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
               <div style="font-size:20px;">🏆</div>
@@ -273,8 +597,9 @@
       <aside>
         <!-- Registration section with improved styling -->
         <div id="register" class="card register">
+          <div class="card-glow"></div>
           <h3 style="background:linear-gradient(90deg, var(--accent3), rgba(75, 118, 180, 0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
-            Register — Time Bound Event
+            Register — THE GRID Time Bound Event
           </h3>
           <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">
             Limited to 10 slots • ₹100 entry fee • ₹500 grand prize
@@ -296,7 +621,7 @@
           <div style="margin-top:18px;">
             <div style="font-weight:700">Join our Discord</div>
             <div class="discord-cta">
-              <a class="btn" href="https://discord.gg/Xy28vhgA" target="_blank">Join Discord</a>
+        <a class="btn" href="https://discord.gg/XfbahWtPMg" target="_blank">Join Discord</a>
               <div style="color:var(--muted);font-size:13px">Or search: THE GRID on Discord</div>
             </div>
           </div>
@@ -304,6 +629,7 @@
 
         <!-- Quick FAQ with improved styling -->
         <div class="card" style="margin-top:18px;">
+          <div class="card-glow"></div>
           <h4 style="background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Quick FAQ</h4>
           <div style="color:var(--paper);font-size:13px;background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:10px;border-radius:6px;">
             How to pay: UPI to <strong style="color:var(--accent3);">UPI_ID_PLACEHOLDER</strong>. Save txn screenshot. Post txn in #register on Discord.
@@ -315,6 +641,7 @@
 
         <!-- Event Details with improved styling -->
         <div class="card" style="margin-top:18px;">
+          <div class="card-glow"></div>
           <h4 style="background:linear-gradient(90deg, var(--paper), rgba(240,237,237,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Event Details</h4>
           <div style="color:var(--paper);font-size:13px;background:linear-gradient(180deg, rgba(75, 118, 180, 0.1), rgba(75, 118, 180, 0.05));padding:10px;border-radius:6px;">
             Registration closes when all slots are filled. Event start time will be announced in Discord and via direct message to registered participants.
@@ -323,6 +650,7 @@
 
         <!-- Important note -->
         <div class="card" style="margin-top:18px;">
+          <div class="card-glow"></div>
           <div style="display:flex;align-items:flex-start;gap:8px;">
             <div style="font-size:18px;">⚠️</div>
             <div style="color:var(--accent3);font-size:13px;">
@@ -334,7 +662,7 @@
     </div>
 
     <footer>
-      © The Grid • Time Bound Event • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
+      © The Grid • Time Bound Event • Contact: <a href="mailto:heinrich.oswald24@gmail.com">heinrich.oswald24@gmail.com</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
     </footer>
   </div>
 
@@ -385,7 +713,382 @@
             stat.style.transform = 'translateY(0)';
           }, 100 * index);
         });
+        
+        // Initialize countdown timer
+        initializeCountdown();
       });
+      
+      // Fallback: if DOM already loaded before listener added, initialize immediately
+      if (document.readyState !== 'loading') {
+        initializeCountdown();
+      }
+      
+      // Countdown timer function
+      function initializeCountdown() {
+        // State variables
+        let isSubmissionPeriod = false;
+        let countDownDate;
+        let submissionEndDate;
+        // Freeze state after submission ends until next day
+        let isTimerFrozen = false;
+        let unfreezeAt = null;
+        
+        // DOM elements - retrieve once for better performance
+        const timerLabel = document.querySelector('.timer-label');
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        const timerContainer = document.querySelector('.timer-container');
+
+        // Under-Construction banner helpers (caution tape style)
+        const ensureBannerEl = () => {
+          if (!timerContainer) return null;
+          const timerEl = timerContainer.querySelector('.timer');
+          if (!timerEl) return null;
+          timerEl.style.position = 'relative';
+          let banner = timerEl.querySelector('.under-construction-banner');
+          if (!banner) {
+            banner = document.createElement('div');
+            banner.className = 'under-construction-banner';
+            banner.style.position = 'absolute';
+            banner.style.top = '50%';
+            banner.style.left = '50%';
+            banner.style.transform = 'translate(-50%, -50%)';
+            banner.style.zIndex = '6';
+            banner.style.pointerEvents = 'none';
+            banner.style.padding = '8px 12px';
+            banner.style.borderRadius = '6px';
+            banner.style.color = '#fff';
+            banner.style.fontWeight = '800';
+            banner.style.fontSize = '12px';
+            banner.style.textAlign = 'center';
+            banner.style.textTransform = 'uppercase';
+            banner.style.letterSpacing = '1px';
+            banner.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            banner.style.border = '1px solid rgba(0,0,0,0.25)';
+            banner.style.backgroundImage = 'repeating-linear-gradient(45deg, #ffd54f 0 12px, #111 12px 24px)';
+            banner.style.display = 'none';
+            banner.style.textShadow = '0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.6)';
+            banner.innerHTML = '🚧 UNDER CONSTRUCTION — EVENT OVER, SEE YOU NEXT WEEK';
+            timerEl.appendChild(banner);
+          }
+          return banner;
+        };
+        // Tape X overlay helpers (fits directly over the timer)
+        const ensureTapeOverlayEl = () => {
+          if (!timerContainer) return null;
+          const timerEl = timerContainer.querySelector('.timer');
+          if (!timerEl) return null;
+          timerEl.style.position = 'relative';
+          let overlay = timerEl.querySelector('.tape-x-overlay');
+          if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'tape-x-overlay';
+            overlay.style.position = 'absolute';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.right = '0';
+            overlay.style.bottom = '0';
+          overlay.style.pointerEvents = 'none';
+          overlay.style.display = 'none';
+          overlay.style.zIndex = '5';
+          overlay.style.overflow = 'hidden';
+          const makeStrip = (rotation) => {
+            const strip = document.createElement('div');
+            strip.style.position = 'absolute';
+            strip.style.left = '50%';
+            strip.style.width = '120%';
+            strip.style.top = '50%';
+            strip.style.height = '12px';
+            strip.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+            strip.style.backgroundImage = 'repeating-linear-gradient(45deg, #ffd54f 0 12px, #111 12px 24px)';
+            strip.style.border = '1px solid rgba(0,0,0,0.25)';
+            strip.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+            strip.style.opacity = '0.95';
+            return strip;
+          };
+            overlay.appendChild(makeStrip(28));
+            overlay.appendChild(makeStrip(-28));
+            const makeLabel = (rotation) => {
+              const lbl = document.createElement('div');
+              lbl.className = 'tape-x-text';
+              lbl.style.position = 'absolute';
+              lbl.style.top = '50%';
+              lbl.style.left = '50%';
+              lbl.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+              lbl.style.transformOrigin = 'center';
+              lbl.style.zIndex = '6';
+              lbl.style.pointerEvents = 'none';
+              lbl.style.color = '#fff';
+              lbl.style.fontWeight = '800';
+              lbl.style.fontSize = '12px';
+              lbl.style.textTransform = 'uppercase';
+              lbl.style.letterSpacing = '1px';
+              lbl.style.whiteSpace = 'nowrap';
+              lbl.style.textShadow = '0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.6)';
+              lbl.innerHTML = '🚧 UNDER CONSTRUCTION — EVENT OVER, SEE YOU NEXT WEEK';
+              return lbl;
+            };
+            overlay.appendChild(makeLabel(28));
+            overlay.appendChild(makeLabel(-28));
+            timerEl.appendChild(overlay);
+          }
+          return overlay;
+        };
+        const showEventOverBanner = () => {
+          const banner = ensureBannerEl();
+          if (banner) banner.style.display = 'block';
+          const overlay = ensureTapeOverlayEl();
+          if (overlay) overlay.style.display = 'block';
+          const timerEl = timerContainer.querySelector('.timer');
+          if (timerEl) { timerEl.style.filter = 'blur(1.5px)'; timerEl.style.opacity = '0.85'; }
+        };
+        const hideEventOverBanner = () => {
+          const banner = ensureBannerEl();
+          if (banner) banner.style.display = 'none';
+          const overlay = ensureTapeOverlayEl();
+          if (overlay) overlay.style.display = 'none';
+          const timerEl = timerContainer.querySelector('.timer');
+          if (timerEl) { timerEl.style.filter = ''; timerEl.style.opacity = ''; }
+        };
+        
+        // Add debug element to show internal state
+        let debugElement = null;
+        // Debug element creation commented out for production
+        // let debugElement = document.createElement('div');
+        // debugElement.style.position = 'fixed';
+        // debugElement.style.bottom = '10px';
+        // debugElement.style.left = '10px';
+        // debugElement.style.backgroundColor = 'rgba(0,0,0,0.9)';
+        // debugElement.style.color = 'white';
+        // debugElement.style.padding = '12px';
+        // debugElement.style.borderRadius = '6px';
+        // debugElement.style.fontSize = '14px';
+        // debugElement.style.fontFamily = 'monospace';
+        // debugElement.style.zIndex = '9999';
+        // debugElement.style.border = '1px solid var(--accent3)';
+        // debugElement.style.boxShadow = '0 4px 12px rgba(75, 118, 180, 0.3)';
+        // document.body.appendChild(debugElement);
+        
+        // Function to get next Saturday at 3pm anchored to IST
+        function getNextSaturday3pmIST(forceNextWeek = false) {
+          const IST_OFFSET_MINUTES = 330; // UTC+5:30
+          const nowLocal = new Date();
+          const nowUTCms = nowLocal.getTime() + nowLocal.getTimezoneOffset() * 60000;
+          const nowISTms = nowUTCms + IST_OFFSET_MINUTES * 60000;
+          const nowIST = new Date(nowISTms);
+          const targetDay = 6; // Saturday
+          const targetHour = 15; // 3 PM IST
+          
+          const eventIST = new Date(nowIST);
+          eventIST.setHours(targetHour, 0, 0, 0);
+          
+          let dayDiff = targetDay - nowIST.getDay();
+          if ((dayDiff === 0 && nowIST.getHours() >= targetHour) || dayDiff < 0 || forceNextWeek) {
+            dayDiff += 7;
+          }
+          eventIST.setDate(nowIST.getDate() + dayDiff);
+          
+          const eventUTCms = eventIST.getTime() - IST_OFFSET_MINUTES * 60000;
+          return new Date(eventUTCms);
+        }
+        
+        // Function to calculate submission end date (2 hours after challenge start)
+        function getSubmissionEndDate(challengeStartDate) {
+          const endDate = new Date(challengeStartDate);
+          endDate.setHours(endDate.getHours() + 2);
+          return endDate;
+        }
+        
+        // Initialize dates
+        countDownDate = getNextSaturday3pmIST();
+        
+        // Validate that critical DOM elements exist
+        if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+          console.error('Timer DOM elements not found. Check HTML structure.');
+          return; // Exit if essential elements are missing
+        }
+        
+        // Function to update the countdown with submission window messaging and freeze
+        function updateCountdown() {
+          const now = new Date();
+          const nowTime = now.getTime();
+          let distance = 0;
+
+          // Admin override: disable timer entirely (global or per-event)
+          if (isEventTimerDisabled('timebound')) {
+            const timerEl = timerContainer ? timerContainer.querySelector('.timer') : null;
+            if (timerEl) timerEl.style.display = 'none';
+            if (timerLabel) timerLabel.textContent = 'TIMER DISABLED BY ADMIN';
+            return;
+          }
+          // Apply admin override for start time
+          const adminCfg = getAdminEventConfig('timebound');
+          if (adminCfg && typeof adminCfg.override_start_ms === 'number') {
+            countDownDate = new Date(adminCfg.override_start_ms);
+          }
+          // Admin: force event-over overlay/freeze
+          if (adminCfg && adminCfg.event_over === true) {
+            const overlay = ensureTapeOverlayEl();
+            if (overlay) overlay.style.display = 'block';
+            return;
+          }
+          
+          // If timer is frozen, show X overlay only (no blur)
+          if (isTimerFrozen) {
+            const overlay = ensureTapeOverlayEl();
+            if (overlay) overlay.style.display = 'block';
+            
+            if (unfreezeAt && now >= unfreezeAt) {
+              // Unfreeze and resume countdown to next event
+              isTimerFrozen = false;
+              unfreezeAt = null;
+              if (overlay) overlay.style.display = 'none';
+              countDownDate = getNextSaturday3pmIST();
+            } else {
+              return; // Keep timer off until next day
+            }
+          }
+          
+          // Determine current timer state and calculate distance
+          if (isSubmissionPeriod && submissionEndDate) {
+            if (timerLabel) {
+              timerLabel.textContent = 'TIMEBOUND SUBMISSION ENDS IN';
+            }
+            distance = submissionEndDate - nowTime;
+          } else {
+            if (timerLabel) {
+              timerLabel.textContent = 'TIMEBOUND CHALLENGE STARTS IN';
+            }
+            distance = countDownDate - nowTime;
+          }
+          
+          // Handle transitions
+          if (distance < 0) {
+            if (isSubmissionPeriod) {
+              // Submission period ended → move to next event
+              isSubmissionPeriod = false;
+              countDownDate = getNextSaturday3pmIST(true);
+              distance = countDownDate - nowTime;
+              if (timerLabel) {
+                timerLabel.textContent = 'TIMEBOUND CHALLENGE STARTS IN';
+              }
+            } else {
+              // Event started → begin 2-hour submission window
+              isSubmissionPeriod = true;
+              submissionEndDate = getSubmissionEndDate(countDownDate);
+              distance = submissionEndDate - nowTime;
+              if (timerLabel) {
+                timerLabel.textContent = 'TIMEBOUND SUBMISSION ENDS IN';
+              }
+            }
+          }
+          // Admin display mode overrides
+          if (adminCfg && adminCfg.display_mode) {
+            if (adminCfg.display_mode === 'start') {
+              isSubmissionPeriod = false;
+              if (timerLabel) timerLabel.textContent = 'TIMEBOUND CHALLENGE STARTS IN';
+              distance = countDownDate - nowTime;
+            } else if (adminCfg.display_mode === 'submission') {
+              isSubmissionPeriod = true;
+              if (!submissionEndDate) {
+                submissionEndDate = getSubmissionEndDate(countDownDate);
+              }
+              if (timerLabel) timerLabel.textContent = 'TIMEBOUND SUBMISSION ENDS IN';
+              distance = submissionEndDate - nowTime;
+            }
+            if (adminCfg.custom_label && timerLabel) {
+              timerLabel.textContent = adminCfg.custom_label;
+            }
+          }
+          
+          // Time calculations for days, hours, minutes and seconds
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          
+          // Pad with leading zero if less than 10
+          const pad = (num) => num < 10 ? '0' + num : num;
+          
+          // Update DOM elements with calculated values
+          daysEl.textContent = pad(days);
+          hoursEl.textContent = pad(hours);
+          minutesEl.textContent = pad(minutes);
+          secondsEl.textContent = pad(seconds);
+        }
+        
+        // Log initial state for debugging
+        console.log('Initialized - Next challenge:', countDownDate.toLocaleString());
+        
+        // Update the countdown immediately and then every 1 second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+      };
+
+      // Inject tiny Admin button
+      (function(){
+        const existing = document.getElementById('adminBtn');
+        if (!existing) {
+          const btn = document.createElement('a');
+          btn.id = 'adminBtn';
+          btn.href = (localStorage.getItem('admin_auth') === 'true') ? 'admin.html' : 'admin_login.html';
+          btn.title = 'Admin';
+          btn.textContent = 'A';
+          btn.style.position = 'fixed';
+          btn.style.right = '8px';
+          btn.style.bottom = '8px';
+          btn.style.width = '26px';
+          btn.style.height = '26px';
+          btn.style.borderRadius = '50%';
+          btn.style.background = '#111';
+          btn.style.color = '#fff';
+          btn.style.border = '1px solid rgba(255,255,255,0.2)';
+          btn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.25)';
+          btn.style.display = 'grid';
+          btn.style.placeItems = 'center';
+          btn.style.fontWeight = '800';
+          btn.style.fontSize = '13px';
+          btn.style.zIndex = '9999';
+          btn.style.textDecoration = 'none';
+          document.body.appendChild(btn);
+        }
+      })();
+    // Admin persistent settings helpers
+    function getAdminSettings() {
+      try { const raw = localStorage.getItem('admin_settings'); return raw ? JSON.parse(raw) : null; } catch(e){ return null; }
+    }
+      function isAdminTimerDisabled() {
+        const s = getAdminSettings();
+        const now = Date.now();
+        if (s && typeof s.persist_until === 'number') {
+          if (now > s.persist_until) {
+            localStorage.removeItem('admin_settings');
+            localStorage.removeItem('admin_timer_disabled');
+            return false;
+          }
+          return s.timer_disabled === true;
+        }
+        return localStorage.getItem('admin_timer_disabled') === 'true';
+      }
+      function getAdminEventConfig(eventType) {
+        const s = getAdminSettings();
+        const now = Date.now();
+        if (!s) return null;
+        if (typeof s.persist_until === 'number' && now > s.persist_until) {
+          localStorage.removeItem('admin_settings');
+          localStorage.removeItem('admin_timer_disabled');
+          return null;
+        }
+        const ev = s.events || {};
+        return ev[eventType] || null;
+      }
+      function isEventTimerDisabled(eventType) {
+        if (isAdminTimerDisabled()) return true;
+        const cfg = getAdminEventConfig(eventType);
+        return !!(cfg && cfg.disabled);
+      }
     </script>
 </body>
 </html>

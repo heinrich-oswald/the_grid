@@ -15,6 +15,9 @@
         --paper: #f0eded;
         --muted: rgba(240, 237, 237, 0.65);
         --glass: rgba(255, 255, 255, 0.03);
+        /* Ensure shared hover glows match TimeBound blue instead of red */
+        --primary-glow: rgba(75,118,180,0.6);
+        --secondary-glow: rgba(115,169,255,0.5);
     }
 
         /* Base styles */
@@ -71,14 +74,14 @@
             box-shadow: 0 0 20px rgba(0, 255, 128, 0.2);
         }
 
-        .brand-title {
-            font-size: 24px;
-            font-weight: 800;
-            font-family: 'Rajdhani', sans-serif;
-            background: linear-gradient(90deg, var(--accent1), var(--accent2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .brand-title{
+            font-size:24px;
+            font-weight:700;
+            color:#fff;
+            text-shadow:0 0 10px rgba(0, 245, 255, 0.5);
+            margin:0;
+            padding:0;
+            line-height:1.2;
         }
 
         /* Main content */
@@ -241,7 +244,7 @@
 
         footer a:hover {
             color: var(--accent2);
-            text-decoration: underline;
+            text-decoration: none;
         }
 
         /* Back link */
@@ -383,7 +386,7 @@
             font-weight: 500;
         }
     </style>
-</head>
+  </head>
 <body>
     <div class="wrap">
         <header class="nav">
@@ -525,7 +528,7 @@
         </main>
 
         <footer>
-            © The Grid • Code Challenges & Hackathons • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a> • <a href="https://discord.gg/Xy28vhgA" style="color: var(--accent1)" target="_blank" rel="noopener noreferrer">Join Discord</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
+© The Grid • Time Bound Event • Contact: <a href="mailto:heinrich.oswald24@gmail.com">heinrich.oswald24@gmail.com</a> • <a href="https://discord.gg/XfbahWtPMg" style="color: var(--accent1)" target="_blank" rel="noopener noreferrer">Join Discord</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
         </footer>
     </div>
 </body>

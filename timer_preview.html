@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timer State Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0a09;
+      --paper: rgba(240,237,237,0.9);
+      --muted: rgba(240,237,237,0.6);
+      --accent1: #4bb47e;
+      --accent2: #d4b858;
+      --accent3: #4b76b4;
+    }
+    body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: #0b0a09; color: var(--paper); }
+    .wrap { max-width: 900px; margin: 24px auto; padding: 20px; }
+    .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; }
+    .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .btn { background: var(--accent3); color: #0b0a09; font-weight: 800; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+    .btn.ghost { background: transparent; color: var(--paper); border: 1px solid rgba(255,255,255,0.15); }
+    .timer-container { margin-top: 16px; }
+    .timer-label { color: var(--accent3); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; text-align: center; }
+    .timer { display: flex; gap: 6px; justify-content: center; }
+    .timer-item { background: linear-gradient(135deg, rgba(75, 118, 180, 0.15), rgba(75, 118, 180, 0.05)); border: 1px solid rgba(75, 118, 180, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center; }
+    .timer-item strong { color: var(--accent3); font-size: 24px; font-weight: 800; line-height: 1; display: inline-block; min-width: 36px; text-align: center; }
+    .timer-item small { color: var(--muted); font-size: 11px; margin-top: 2px; display:block; }
+    .panel { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .panel .card { height: 100%; }
+    .label { font-size: 12px; color: var(--muted); }
+    input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--paper); border-radius: 8px; padding: 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="row" style="justify-content:space-between;">
+      <div class="row">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="multiplier.html">Multiplier</a>
+        <a class="btn ghost" href="timebound.html">Time Bound</a>
+        <a class="btn ghost" href="teams.html">Teams</a>
+      </div>
+      <div style="font-weight:800;">Timer State Preview</div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="label">Event type</div>
+          <select id="eventType">
+            <option value="multiplier">Multiplier</option>
+            <option value="timebound" selected>Time Bound</option>
+            <option value="teams">Teams</option>
+          </select>
+        </div>
+        <div>
+          <div class="label">Submission minutes</div>
+          <input id="submissionMinutes" type="number" min="1" value="120" style="width:100px" />
+        </div>
+        <div>
+          <div class="label">Countdown minutes</div>
+          <input id="countdownMinutes" type="number" min="1" value="240" style="width:100px" />
+        </div>
+        <div class="row">
+          <button class="btn" id="btnCountdown">Pre-Event Countdown</button>
+          <button class="btn" id="btnSubmission">Submission Window</button>
+          <button class="btn" id="btnFreeze">Event Over (Freeze)</button>
+          <button class="btn ghost" id="btnUnfreeze">Unfreeze</button>
+        </div>
+      </div>
+
+      <div id="preview" class="timer-container">
+        <div class="timer-label">TIMEBOUND CHALLENGE STARTS IN</div>
+        <div class="timer">
+          <div class="timer-item">
+            <strong id="days">00</strong>
+            <small>Days</small>
+          </div>
+          <div class="timer-item">
+            <strong id="hours">00</strong>
+            <small>Hours</small>
+          </div>
+          <div class="timer-item">
+            <strong id="minutes">00</strong>
+            <small>Mins</small>
+          </div>
+          <div class="timer-item">
+            <strong id="seconds">00</strong>
+            <small>Secs</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:8px">Notes</div>
+        <ul style="color:var(--muted);margin:0 0 0 18px;">
+          <li>Use buttons to simulate states without waiting for real time.</li>
+          <li>“Event Over” shows a caution-tape banner and hides digits.</li>
+          <li>“Unfreeze” removes the banner and restores the digits.</li>
+          <li>Change event type to preview label wording per page.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:8px">Labels</div>
+        <div id="labels" style="font-size:12px;color:var(--muted)"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const timerContainer = document.querySelector('#preview');
+      const labelEl = timerContainer.querySelector('.timer-label');
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+      const eventTypeSel = document.getElementById('eventType');
+      const submissionMinutesInput = document.getElementById('submissionMinutes');
+      const countdownMinutesInput = document.getElementById('countdownMinutes');
+      const labelsBox = document.getElementById('labels');
+
+      let mode = 'countdown'; // countdown | submission | frozen
+      let targetDate = new Date(Date.now() + parseInt(countdownMinutesInput.value, 10) * 60 * 1000);
+
+      const LABELS = {
+        multiplier: {
+          start: 'NEXT THE GRID MULTIPLIER EVENT STARTS IN',
+          submission: 'MULTIPLIER SUBMISSION ENDS IN'
+        },
+        timebound: {
+          start: 'TIMEBOUND CHALLENGE STARTS IN',
+          submission: 'TIMEBOUND SUBMISSION ENDS IN'
+        },
+        teams: {
+          start: 'NEXT THE GRID TEAMS EVENT STARTS IN',
+          submission: 'THE GRID TEAM CHALLENGE ENDS IN'
+        }
+      };
+
+      const applyAccent = (type) => {
+        const accents = { multiplier: '#4bb47e', timebound: '#4b76b4', teams: '#d4b858' };
+        const color = accents[type] || '#4b76b4';
+        labelEl.style.color = color;
+        document.querySelectorAll('.timer-item').forEach(item => {
+          item.style.background = `linear-gradient(135deg, ${hexToRgba(color, 0.15)}, ${hexToRgba(color, 0.05)})`;
+          item.style.border = `1px solid ${hexToRgba(color, 0.2)}`;
+        });
+        document.querySelectorAll('.timer-item strong').forEach(el => el.style.color = color);
+      };
+
+      const hexToRgba = (hex, alpha) => {
+        const h = hex.replace('#','');
+        const r = parseInt(h.substring(0,2), 16);
+        const g = parseInt(h.substring(2,4), 16);
+        const b = parseInt(h.substring(4,6), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      };
+
+      // Banner helpers (caution tape centered over timer)
+      const ensureBannerEl = () => {
+        const timerEl = timerContainer.querySelector('.timer');
+        if (!timerEl) {
+          // Fallback: keep previous behavior if timer not found
+          let fallback = timerContainer.querySelector('.under-construction-banner');
+          if (!fallback) {
+            fallback = document.createElement('div');
+            fallback.className = 'under-construction-banner';
+            fallback.style.margin = '8px 0';
+            fallback.style.padding = '10px 12px';
+            fallback.style.borderRadius = '8px';
+            fallback.style.color = '#fff';
+            fallback.style.fontWeight = '800';
+            fallback.style.fontSize = '12px';
+            fallback.style.textAlign = 'center';
+            fallback.style.textTransform = 'uppercase';
+            fallback.style.letterSpacing = '1px';
+            fallback.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            fallback.style.border = '1px solid rgba(0,0,0,0.25)';
+            fallback.style.backgroundImage = 'repeating-linear-gradient(45deg, #ffd54f 0 12px, #111 12px 24px)';
+            fallback.style.display = 'none';
+            fallback.style.textShadow = '0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.6)';
+            fallback.innerHTML = '🚧 UNDER CONSTRUCTION — EVENT OVER, SEE YOU NEXT WEEK';
+            timerContainer.appendChild(fallback);
+          }
+          return fallback;
+        }
+        timerEl.style.position = 'relative';
+        let banner = timerEl.querySelector('.under-construction-banner');
+        if (!banner) {
+          banner = document.createElement('div');
+          banner.className = 'under-construction-banner';
+          banner.style.position = 'absolute';
+          banner.style.top = '50%';
+          banner.style.left = '50%';
+          banner.style.transform = 'translate(-50%, -50%)';
+          banner.style.zIndex = '6';
+          banner.style.pointerEvents = 'none';
+          banner.style.padding = '8px 12px';
+          banner.style.borderRadius = '6px';
+          banner.style.color = '#fff';
+          banner.style.fontWeight = '800';
+          banner.style.fontSize = '12px';
+          banner.style.textAlign = 'center';
+          banner.style.textTransform = 'uppercase';
+          banner.style.letterSpacing = '1px';
+          banner.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+          banner.style.border = '1px solid rgba(0,0,0,0.25)';
+          banner.style.backgroundImage = 'repeating-linear-gradient(45deg, #ffd54f 0 12px, #111 12px 24px)';
+          banner.style.display = 'none';
+          banner.style.textShadow = '0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.6)';
+          banner.innerHTML = '🚧 UNDER CONSTRUCTION — EVENT OVER, SEE YOU NEXT WEEK';
+          timerEl.appendChild(banner);
+        }
+        return banner;
+      };
+      // Tape X overlay helpers (fits directly over the timer)
+      const ensureTapeOverlayEl = () => {
+        const timerEl = timerContainer.querySelector('.timer');
+        if (!timerEl) return null;
+        timerEl.style.position = 'relative';
+        let overlay = timerEl.querySelector('.tape-x-overlay');
+        if (!overlay) {
+          overlay = document.createElement('div');
+          overlay.className = 'tape-x-overlay';
+          overlay.style.position = 'absolute';
+          overlay.style.top = '0';
+          overlay.style.left = '0';
+          overlay.style.right = '0';
+          overlay.style.bottom = '0';
+          overlay.style.pointerEvents = 'none';
+          overlay.style.display = 'none';
+          overlay.style.zIndex = '5';
+          overlay.style.overflow = 'hidden';
+          const makeStrip = (rotation) => {
+            const strip = document.createElement('div');
+            strip.style.position = 'absolute';
+            strip.style.left = '50%';
+            strip.style.width = '120%';
+            strip.style.top = '50%';
+            strip.style.height = '12px';
+            strip.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+            strip.style.backgroundImage = 'repeating-linear-gradient(45deg, #ffd54f 0 12px, #111 12px 24px)';
+            strip.style.border = '1px solid rgba(0,0,0,0.25)';
+            strip.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+            strip.style.opacity = '0.95';
+            return strip;
+          };
+          overlay.appendChild(makeStrip(28));
+          overlay.appendChild(makeStrip(-28));
+          const makeLabel = (rotation) => {
+            const lbl = document.createElement('div');
+            lbl.className = 'tape-x-text';
+            lbl.style.position = 'absolute';
+            lbl.style.top = '50%';
+            lbl.style.left = '50%';
+            lbl.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+            lbl.style.transformOrigin = 'center';
+            lbl.style.zIndex = '6';
+            lbl.style.pointerEvents = 'none';
+            lbl.style.color = '#fff';
+            lbl.style.fontWeight = '800';
+            lbl.style.fontSize = '12px';
+            lbl.style.textTransform = 'uppercase';
+            lbl.style.letterSpacing = '1px';
+            lbl.style.whiteSpace = 'nowrap';
+            lbl.style.textShadow = '0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.6)';
+            lbl.innerHTML = '🚧 UNDER CONSTRUCTION — EVENT OVER, SEE YOU NEXT WEEK';
+            return lbl;
+          };
+          overlay.appendChild(makeLabel(28));
+          overlay.appendChild(makeLabel(-28));
+          timerEl.appendChild(overlay);
+        }
+        return overlay;
+      };
+      const showBanner = () => {
+        const overlay = ensureTapeOverlayEl();
+        if (overlay) overlay.style.display = 'block';
+      };
+      const hideBanner = () => {
+        const overlay = ensureTapeOverlayEl();
+        if (overlay) overlay.style.display = 'none';
+      };
+
+      const renderLabelsInfo = () => {
+        const t = eventTypeSel.value;
+        labelsBox.innerHTML = `
+          <div><strong>Start:</strong> ${LABELS[t].start}</div>
+          <div><strong>Submission:</strong> ${LABELS[t].submission}</div>
+          <div style="margin-top:8px;color:var(--paper)">Frozen state shows the caution-tape banner.</div>
+        `;
+      };
+
+      const setMode = (newMode) => {
+        mode = newMode;
+        const t = eventTypeSel.value;
+        if (mode === 'countdown') {
+          labelEl.textContent = LABELS[t].start;
+          hideBanner();
+          const mins = parseInt(countdownMinutesInput.value, 10) || 60;
+          targetDate = new Date(Date.now() + mins * 60 * 1000);
+        } else if (mode === 'submission') {
+          labelEl.textContent = LABELS[t].submission;
+          hideBanner();
+          const mins = parseInt(submissionMinutesInput.value, 10) || 120;
+          targetDate = new Date(Date.now() + mins * 60 * 1000);
+        } else if (mode === 'frozen') {
+          showBanner();
+        }
+      };
+
+      const tick = () => {
+        // Admin override: disable timer entirely
+        if (localStorage.getItem('admin_timer_disabled') === 'true') {
+          const timerEl = timerContainer ? timerContainer.querySelector('.timer') : null;
+          if (timerEl) timerEl.style.display = 'none';
+          if (labelEl) labelEl.textContent = 'TIMER DISABLED BY ADMIN';
+          return;
+        }
+        if (mode === 'frozen') return; // visually obscured by tape + blur
+        const now = Date.now();
+        const dist = targetDate ? (targetDate.getTime ? targetDate.getTime() : targetDate) - now : 0;
+        const d = Math.max(0, Math.floor(dist / (1000*60*60*24)));
+        const h = Math.max(0, Math.floor((dist % (1000*60*60*24)) / (1000*60*60)));
+        const m = Math.max(0, Math.floor((dist % (1000*60*60)) / (1000*60)));
+        const s = Math.max(0, Math.floor((dist % (1000*60)) / 1000));
+        daysEl.textContent = String(d).padStart(2,'0');
+        hoursEl.textContent = String(h).padStart(2,'0');
+        minutesEl.textContent = String(m).padStart(2,'0');
+        secondsEl.textContent = String(s).padStart(2,'0');
+      };
+
+      // Bind controls
+      document.getElementById('btnCountdown').addEventListener('click', () => setMode('countdown'));
+      document.getElementById('btnSubmission').addEventListener('click', () => setMode('submission'));
+      document.getElementById('btnFreeze').addEventListener('click', () => setMode('frozen'));
+      document.getElementById('btnUnfreeze').addEventListener('click', () => setMode('countdown'));
+      eventTypeSel.addEventListener('change', () => {
+        applyAccent(eventTypeSel.value);
+        renderLabelsInfo();
+        setMode(mode); // refresh label wording
+      });
+
+      // Initialize
+      applyAccent(eventTypeSel.value);
+      renderLabelsInfo();
+      setMode('countdown');
+      setInterval(tick, 1000);
+
+      // Inject tiny Admin button
+      (function(){
+        const existing = document.getElementById('adminBtn');
+        if (!existing) {
+          const btn = document.createElement('a');
+          btn.id = 'adminBtn';
+          btn.href = (localStorage.getItem('admin_auth') === 'true') ? 'admin.html' : 'admin_login.html';
+          btn.title = 'Admin';
+          btn.textContent = 'A';
+          btn.style.position = 'fixed';
+          btn.style.right = '8px';
+          btn.style.bottom = '8px';
+          btn.style.width = '26px';
+          btn.style.height = '26px';
+          btn.style.borderRadius = '50%';
+          btn.style.background = '#111';
+          btn.style.color = '#fff';
+          btn.style.border = '1px solid rgba(255,255,255,0.2)';
+          btn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.25)';
+          btn.style.display = 'grid';
+          btn.style.placeItems = 'center';
+          btn.style.fontWeight = '800';
+          btn.style.fontSize = '13px';
+          btn.style.zIndex = '9999';
+          btn.style.textDecoration = 'none';
+          document.body.appendChild(btn);
+        }
+      })();
+    });
+  </script>
+</body>
+</html>

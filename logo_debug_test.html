@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .logo-test {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            background: #fafafa;
+        }
+        .logo-test img {
+            display: block;
+            margin: 10px auto;
+            border: 1px solid #ccc;
+        }
+        .status {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Logo Debug Test</h1>
+    
+    <div class="test-section">
+        <h2>Direct Logo Tests</h2>
+        
+        <div class="logo-test">
+            <h3>logo.png</h3>
+            <img id="logo" src="assets/logo.png" alt="Logo" 
+                 style="max-width: 200px; max-height: 100px;"
+                 onload="document.getElementById('logo-status').innerHTML = '✅ Loaded successfully'; document.getElementById('logo-status').className = 'status success';"
+                 onerror="document.getElementById('logo-status').innerHTML = '❌ Failed to load'; document.getElementById('logo-status').className = 'status error';">
+            <div id="logo-status" class="status info">Loading...</div>
+            <div>Path: assets/logo.png</div>
+        </div>
+        
+        <div class="logo-test">
+            <h3>banner.png</h3>
+            <img id="banner" src="assets/banner.png" alt="Banner" 
+                 style="max-width: 200px; max-height: 100px;"
+                 onload="document.getElementById('banner-status').innerHTML = '✅ Loaded successfully'; document.getElementById('banner-status').className = 'status success';"
+                 onerror="document.getElementById('banner-status').innerHTML = '❌ Failed to load'; document.getElementById('banner-status').className = 'status error';">
+            <div id="banner-status" class="status info">Loading...</div>
+            <div>Path: assets/banner.png</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Cache-Busted Tests</h2>
+        
+        <div class="logo-test">
+            <h3>logo.png (cache-busted)</h3>
+            <img id="logo-cb" src="assets/logo.png?v=debug" alt="Logo Cache Busted" 
+                 style="max-width: 200px; max-height: 100px;"
+                 onload="document.getElementById('logo-cb-status').innerHTML = '✅ Loaded successfully'; document.getElementById('logo-cb-status').className = 'status success';"
+                 onerror="document.getElementById('logo-cb-status').innerHTML = '❌ Failed to load'; document.getElementById('logo-cb-status').className = 'status error';">
+            <div id="logo-cb-status" class="status info">Loading...</div>
+            <div>Path: assets/logo.png?v=debug</div>
+        </div>
+        
+        <div class="logo-test">
+            <h3>banner.png (cache-busted)</h3>
+            <img id="banner-cb" src="assets/banner.png?v=debug" alt="Banner Cache Busted" 
+                 style="max-width: 200px; max-height: 100px;"
+                 onload="document.getElementById('banner-cb-status').innerHTML = '✅ Loaded successfully'; document.getElementById('banner-cb-status').className = 'status success';"
+                 onerror="document.getElementById('banner-cb-status').innerHTML = '❌ Failed to load'; document.getElementById('banner-cb-status').className = 'status error';">
+            <div id="banner-cb-status" class="status info">Loading...</div>
+            <div>Path: assets/banner.png?v=debug</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Simulating Main Page Logo Display</h2>
+        
+        <div class="logo-test">
+            <h3>Logo as used in index.html</h3>
+            <div class="logo" style="width: 60px; height: 60px; border-radius: 6px; overflow: hidden; display: inline-block;">
+                <img src="assets/logo.png" alt="The Grid logo" 
+                     style="width:100%;height:100%;object-fit:cover;border-radius:6px"
+                     onload="document.getElementById('main-logo-status').innerHTML = '✅ Loaded successfully'; document.getElementById('main-logo-status').className = 'status success';"
+                     onerror="document.getElementById('main-logo-status').innerHTML = '❌ Failed to load'; document.getElementById('main-logo-status').className = 'status error';">
+            </div>
+            <div id="main-logo-status" class="status info">Loading...</div>
+            <div>Exact styling from index.html</div>
+        </div>
+        
+        <div class="logo-test">
+            <h3>Banner as used in index.html</h3>
+            <div style="width: 200px; height: 100px; overflow: hidden; display: inline-block;">
+                <img src="assets/banner.png" alt="The Grid banner" 
+                     style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.7);"
+                     onload="document.getElementById('main-banner-status').innerHTML = '✅ Loaded successfully'; document.getElementById('main-banner-status').className = 'status success';"
+                     onerror="document.getElementById('main-banner-status').innerHTML = '❌ Failed to load'; document.getElementById('main-banner-status').className = 'status error';">
+            </div>
+            <div id="main-banner-status" class="status info">Loading...</div>
+            <div>Exact styling from index.html</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>File Information</h2>
+        <div id="file-info">
+            <p>Checking file information...</p>
+        </div>
+    </div>
+    
+    <script>
+        // Check file information
+        fetch('assets/logo.png')
+            .then(response => {
+                const size = response.headers.get('content-length');
+                const type = response.headers.get('content-type');
+                document.getElementById('file-info').innerHTML += 
+                    `<p><strong>logo.png:</strong> Size: ${size} bytes, Type: ${type}</p>`;
+            })
+            .catch(err => {
+                document.getElementById('file-info').innerHTML += 
+                    `<p><strong>logo.png:</strong> Error: ${err.message}</p>`;
+            });
+            
+        fetch('assets/banner.png')
+            .then(response => {
+                const size = response.headers.get('content-length');
+                const type = response.headers.get('content-type');
+                document.getElementById('file-info').innerHTML += 
+                    `<p><strong>banner.png:</strong> Size: ${size} bytes, Type: ${type}</p>`;
+            })
+            .catch(err => {
+                document.getElementById('file-info').innerHTML += 
+                    `<p><strong>banner.png:</strong> Error: ${err.message}</p>`;
+            });
+    </script>
+</body>
+</html>

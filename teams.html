@@ -4,74 +4,306 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>The Grid — Teams Event</title>
+  <!-- Spectacular Enhancements -->
+  <link rel="stylesheet" href="spectacular.css">
+  <script src="spectacular_optimized.js" defer></script>
+  <!-- Common Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;700;900&family=Space+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0b0a09;--card:#151515;--accent1:#8a844e;--accent2:#99718e;--paper:#f0eded;--accent3:#d4b858;--muted:rgba(240,237,237,0.65);--glass:rgba(255,255,255,0.03);--gradient-lightness: rgba(240,240,240,0.85);}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,sans-serif;scroll-behavior:smooth}
-      body{background:linear-gradient(135deg, var(--bg) 0%, #030704 40%, #070f09 80%);color:var(--paper);position:relative}
-      body::before{
-        content:'';
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        background-image:radial-gradient(circle at 20px 20px, rgba(138, 132, 78, 0.05) 1px, transparent 0);
-        background-size:30px 30px;
-        z-index:-1;
+    /* Base CSS Variables */
+    :root {
+      --bg: #050505;
+      --paper: #f5f5f5;
+      --muted: rgba(245, 245, 245, 0.7);
+      --glass: rgba(0, 255, 127, 0.07);
+      --card-glass: rgba(18, 18, 18, 0.75);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --border-glass-hover: rgba(255, 255, 255, 0.12);
+      --accent1:#ffdd00;
+      --accent2:#ccb300;
+      --accent3:#ff69b4;
+      --glass:rgba(255,221,0,0.05);
+      --border-glass:rgba(255,221,0,0.1);
+      --border-glass-hover:rgba(255,221,0,0.2);
+      --accent1-glow:rgba(255,221,0,0.3);
+      /* Override shared glow vars so nav/buttons highlight gold, not red */
+      --primary-glow: rgba(255,221,0,0.6);
+      --secondary-glow: rgba(255, 230, 77, 0.5);
+    }
+    
+    /* Base Styling */
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      scroll-behavior: smooth;
+    }
+    /* Remove default link underlines on this page */
+    a { text-decoration: none; }
+    
+    body {
+      background: linear-gradient(135deg, var(--bg) 0%, #030704 40%, #070f09 80%);
+      color: var(--paper);
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    
+    /* Dynamic Grid Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 30px 30px, rgba(138, 132, 78, 0.05) 1px, transparent 0),
+        linear-gradient(to right, transparent 99.5%, rgba(138, 132, 78, 0.06) 99.5%, rgba(138, 132, 78, 0.06) 100%),
+        linear-gradient(to bottom, transparent 99.5%, rgba(138, 132, 78, 0.06) 99.5%, rgba(138, 132, 78, 0.06) 100%);
+      background-size: 60px 60px, 60px 60px, 60px 60px;
+      z-index: -1;
+    }
+    
+    /* Main Container */
+    .wrap {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 18px;
+    }
+    
+    /* Common Navigation */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 30px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 40, 20, 0.7));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border-glass);
+      position: sticky;
+      top: 24px;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    
+    .logo {
+      width: 45px;
+      height: 45px;
+      margin-right: 12px;
+      transition: transform 0.3s ease;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: var(--paper);
+      font-size: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .logo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: skewX(-20deg);
+      animation: logoShine 3s ease-in-out infinite;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+      box-shadow: var(--accent1-glow);
+    }
+    
+    .brand-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+      margin: 0;
+      padding: 0;
+      line-height: 1.2;
+    }
+    
+    .brand-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Scanline Effect */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 99;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.05),
+        rgba(0, 0, 0, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    }
+    
+    /* Responsive Navigation */
+    @media (max-width: 880px) {
+      .nav {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px 20px;
       }
-    .wrap{max-width:1200px;margin:24px auto;padding:18px}
-      .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--glass);backdrop-filter:blur(10px);border-radius:12px}
+      
+      .brand {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+      }
+      
+      .logo {
+        width: 40px;
+        height: 40px;
+        margin-right: 0;
+      }
+      
+      .brand-title {
+        font-size: 20px;
+      }
+      
+      .nav > div:last-child {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .btn {
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+    }
+    
+    /* Animation keyframes */
+    @keyframes glowPulse{0%{box-shadow:0 0 10px rgba(138, 132, 78, 0.2)}100%{box-shadow:0 0 30px rgba(138, 132, 78, 0.4)}}
+      @keyframes logoShine{0%{transform:translateX(-100%) skewX(-20deg)}100%{transform:translateX(200%) skewX(-20deg)}}
+      @keyframes textGlow{0%{text-shadow:0 0 5px var(--accent1-glow),0 0 10px var(--accent1-glow),0 0 20px rgba(0, 255, 157, 0.3)}100%{text-shadow:0 0 10px var(--accent1-glow),0 0 20px var(--accent1-glow),0 0 30px rgba(0, 255, 157, 0.4)}}
+      @keyframes glowBorder{0%{box-shadow:0 0 15px rgba(255, 215, 0, 0.15)}100%{box-shadow:0 0 20px rgba(255, 215, 0, 0.25)}}
+      .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 30px;border-radius:12px;background:linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));backdrop-filter:blur(10px);border:1px solid var(--border-glass);position:sticky;top:24px;z-index:100}
       .brand{display:flex;align-items:center;gap:16px}
-      .logo{width:76px;height:76px;border-radius:12px;background:linear-gradient(135deg,var(--accent1) 0%, var(--accent3) 100%);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--paper);font-size:24px;box-shadow:0 0 25px rgba(138, 132, 78, 0.25);transition:all 0.3s ease}
-      .logo:hover{transform:scale(1.05);box-shadow:0 0 35px rgba(138, 132, 78, 0.35);}
-      .brand-title {font-weight:900;font-size:36px;letter-spacing:1px;text-shadow:0 0 15px rgba(138, 132, 78, 0.15);background:linear-gradient(90deg, var(--paper), var(--gradient-lightness));-webkit-background-clip:text;background-clip:text;color:transparent}
-      .brand-sub {font-size:14px;color:var(--muted);letter-spacing:0.5px;}
+      .logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:24px;transition:all 0.3s ease;position:relative;overflow:hidden}
+        .logo::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);transform:skewX(-20deg);animation:logoShine 3s ease-in-out infinite}
+      .logo:hover{transform:scale(1.05);box-shadow:var(--accent1-glow);}
+      .brand-title{font-size:24px;font-weight:700;color:#fff;text-shadow:0 0 10px rgba(0, 245, 255, 0.5);margin:0;padding:0;line-height:1.2;}
+      .brand-sub {font-size:12px;color:var(--muted);font-family:'Rajdhani', sans-serif;letter-spacing:0.5px;}
       .cta-row{display:flex;gap:12px;margin-top:8px}
-    .btn{background:linear-gradient(135deg, var(--accent2), var(--accent3));color:var(--bg);padding:12px 20px;border-radius:12px;border:1px solid transparent;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);position:relative;overflow:hidden;box-shadow:0 0 15px rgba(138, 132, 78, 0.25);text-shadow:0 1px 2px rgba(0,0,0,0.3);text-decoration:none;display:inline-block;font-size:15px;letter-spacing:0.5px}
-      .btn::before{
-        content:'';
-        position:absolute;
-        top:0;
-        left:-100%;
-        width:100%;
-        height:100%;
-        background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition:all 0.6s ease;
+    /* Button styling */
+        .btn{padding:12px 24px;border-radius:8px;background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%);color:var(--paper);font-weight:700;transition:all 0.3s ease;border:1px solid var(--border-glass);box-shadow:0 4px 12px rgba(255, 215, 0, 0.15);display:flex;align-items:center;gap:8px;position:relative;overflow:hidden;animation:glowBorder 3s ease-in-out infinite alternate}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(255, 215, 0, 0.3)}
+        .btn:hover::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);transform:skewX(-20deg);animation:logoShine 1.5s ease-out}
+        .btn:active{transform:translateY(0)}
+        .btn.ghost{background:transparent;border:1px solid var(--accent1);color:var(--accent1);box-shadow:0 4px 12px rgba(255, 215, 0, 0.1);position:relative;overflow:hidden}
+        .btn.ghost:hover{background:var(--accent1);color:var(--paper);box-shadow:0 6px 16px rgba(255, 215, 0, 0.3)}}
+        
+      /* Grid layout for main content */
+        .grid{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:start;margin-top:24px;position:relative}
+      
+      /* Scanline effect */
+      .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 2px); }
+      
+      /* Modern card styling */
+      .card{
+        background:linear-gradient(135deg, var(--card-glass), rgba(18, 18, 18, 0.6));
+        border:1px solid var(--border-glass);
+        padding:24px;
+        border-radius:16px;
+        transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        position:relative;
+        overflow:hidden;
       }
-      .btn::after{
-        content:'';
-        position:absolute;
-        bottom:0;
-        left:0;
-        right:0;
-        height:3px;
-        background:linear-gradient(90deg, transparent, var(--accent1), transparent);
-        transform:scaleX(0);
-        transform-origin:left;
-        transition:transform 0.3s ease;
+      
+      /* Card glow element */
+      .card-glow {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, var(--accent1-glow) 0%, transparent 70%);
+        opacity: 0;
+        border-radius: 50%;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        mix-blend-mode: screen;
+        filter: blur(25px);
+        z-index: 0;
       }
-      .btn:hover::before{
-        left:100%;
+      
+      /* Grid pattern on cards */
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.03) 1px, transparent 0);
+        background-size: 40px 40px;
+        opacity: 0.3;
+        z-index: 0;
+        transition: opacity 0.3s ease;
       }
-      .btn:hover::after{
-        transform:scaleX(1);
+      
+
+      
+      .card:hover::before {
+        opacity: 0.5;
       }
-      .btn:hover{
-        background:linear-gradient(135deg, var(--accent1), var(--accent2));
-        transform:translateY(-2px) scale(1.02);
-        box-shadow:0 0 25px rgba(138, 132, 78, 0.5);
-        border-color:rgba(138, 132, 78, 0.5);
-        animation:glowBorder 2s infinite;
+      
+      .card:hover{
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.3);
       }
-      @keyframes glowBorder{
-        0%{box-shadow:0 0 15px rgba(138, 132, 78, 0.4); border-color:rgba(138, 132, 78, 0.3);}
-        50%{box-shadow:0 0 30px rgba(138, 132, 78, 0.6); border-color:rgba(138, 132, 78, 0.7);}
-        100%{box-shadow:0 0 15px rgba(138, 132, 78, 0.4); border-color:rgba(138, 132, 78, 0.3);}
+      
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        
+        .nav {
+          padding: 16px 20px;
+          flex-wrap: wrap;
+        }
+        
+        .logo {
+          width: 40px;
+          height: 40px;
+          font-size: 20px;
+        }
+        
+        .brand-title {
+          font-size: 24px;
+        }
       }
-      .btn.ghost{background:transparent;border:1px solid rgba(138, 132, 78, 0.3);color:var(--paper);transition:all 0.3s ease}
-      .btn.ghost:hover{background:linear-gradient(135deg, rgba(138, 132, 78, 0.1), rgba(138, 132, 78, 0.2));transform:translateY(-2px);box-shadow:0 0 20px rgba(138, 132, 78, 0.2);border-color:rgba(138, 132, 78, 0.5);}
-    .grid{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;margin-top:18px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass);padding:18px;border-radius:12px}
     /* Stats counter */
       .stats{display:flex;justify-content:space-around;padding:24px 16px;border-radius:20px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);margin-top:40px;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px);position:relative;overflow:hidden}
       .stats::before{
@@ -101,7 +333,7 @@
         left:0;
         width:5px;
         height:100%;
-        background:linear-gradient(180deg, var(--accent1), var(--accent3));
+        background:linear-gradient(180deg, var(--accent1) 90%, var(--accent3) 10%);
         border-radius:8px 0 0 8px;
         opacity:0;
         transition:opacity 0.3s ease;
@@ -139,6 +371,8 @@
         background:linear-gradient(90deg, transparent, rgba(138, 132, 78, 0.2), transparent);
       }
       .social-links{display:flex;justify-content:center;gap:16px;margin:16px 0}
+      /* Brighten mail link for visibility */
+      footer a[href^="mailto:"]{color:#ffe64d;font-weight:800;text-shadow:0 0 8px rgba(255,221,0,0.45)}
       .social-link{color:var(--muted);font-size:20px;transition:all 0.3s ease;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:1px solid rgba(138, 132, 78, 0.1);background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);}
       .social-link:hover{color:var(--accent2);transform:translateY(-3px);box-shadow:0 5px 15px rgba(138, 132, 78, 0.2);border-color:var(--accent2);}
     .hero{height:280px;border-radius:20px;overflow:hidden;display:flex;align-items:center;position:relative}
@@ -168,7 +402,7 @@
         z-index:0;
       }
     .ticker{margin-top:12px;padding:10px 16px;border-radius:10px;background:var(--glass);font-size:14px;color:var(--muted);border:1px solid rgba(138, 132, 78, 0.1);backdrop-filter:blur(5px)}
-      .logo-square{width:150px;height:150px;border-radius:16px;background:linear-gradient(135deg, var(--accent1) 0%, var(--accent3) 100%);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:48px;box-shadow:0 0 40px rgba(138, 132, 78, 0.35);animation:glowPulse 3s ease-in-out infinite alternate;position:relative;overflow:hidden;transition:all 0.3s ease}
+      .logo-square{width:150px;height:150px;border-radius:16px;background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:48px;box-shadow:0 0 40px rgba(138, 132, 78, 0.35);animation:glowPulse 3s ease-in-out infinite alternate;position:relative;overflow:hidden;transition:all 0.3s ease}
       @keyframes glowPulse{0%{box-shadow:0 0 10px rgba(138, 132, 78, 0.2)}100%{box-shadow:0 0 30px rgba(138, 132, 78, 0.4)}}
     /* Sponsor carousel */
       .sponsor-carousel {background:var(--card);border-radius:20px;padding:24px;margin-top:40px;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px)}
@@ -177,6 +411,8 @@
       .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:10px 20px;border-radius:12px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);width:220px;height:110px;border:1px solid rgba(138, 132, 78, 0.1);transition:all 0.3s ease;box-shadow:0 0 15px rgba(138, 132, 78, 0.05)}
       .sponsor:hover{transform:scale(1.03);box-shadow:0 0 25px rgba(138, 132, 78, 0.2);border-color:rgba(138, 132, 78, 0.3)}
       @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+      
+
     /* FAQ accordion */
       .faq{margin-top:40px}
       .faq-item{margin-bottom:16px;border-radius:16px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);padding:20px;box-shadow:0 0 15px rgba(138, 132, 78, 0.05);border:1px solid rgba(138, 132, 78, 0.1);transition:all 0.3s ease;position:relative;overflow:hidden}
@@ -187,7 +423,7 @@
         left:0;
         width:5px;
         height:100%;
-        background:linear-gradient(180deg, var(--accent1), var(--accent3));
+        background:linear-gradient(180deg, var(--accent1) 90%, var(--accent3) 10%);
         border-radius:8px 0 0 8px;
         opacity:0;
         transition:opacity 0.3s ease;
@@ -270,10 +506,53 @@
       }
     }
   </style>
+  <script src="assets/admin_sync.js"></script>
 </head>
 <body>
+  <!-- Animated background particles -->
+  <div class="particles-bg" id="particlesContainer"></div>
+  <!-- Modern dynamic background from spectacular shared styles -->
+  <div class="animated-bg"></div>
+  <div class="grid-pattern">
+    <div class="grid-layer grid-layer-1"></div>
+    <div class="grid-layer grid-layer-2"></div>
+    <div class="grid-layer grid-layer-3"></div>
+  </div>
+  
+  <!-- Scanlines effect -->
+  <div class="scanlines"></div>
+  
+  <script>
+    // Create animated particles
+    const particlesContainer = document.getElementById('particlesContainer');
+    const particleCount = 20;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      
+      // Random particle properties
+      const size = Math.random() * 100 + 50;
+      const posX = Math.random() * 100;
+      const posY = Math.random() * 100;
+      const durationFactor = Math.random() * 2 + 1;
+      const delay = Math.random() * 5;
+      const opacity = Math.random() * 0.5 + 0.05;
+      
+      // Apply styles
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${posX}%`;
+      particle.style.top = `${posY}%`;
+      particle.style.setProperty('--duration-factor', durationFactor);
+      particle.style.animationDelay = `${delay}s`;
+      particle.style.opacity = opacity;
+      
+      particlesContainer.appendChild(particle);
+    }
+  </script>
   <div class="wrap">
-    <div class="nav">
+    <div class="nav sticky">
       <div class="brand">
         <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
         <div>
@@ -282,35 +561,69 @@
         </div>
       </div>
       <div style="display:flex;gap:12px;align-items:center">
-        <a class="btn ghost" href="index.html">Home</a>
-        <a class="btn ghost" href="multiplier.html">Multiplier</a>
-        <a class="btn ghost" href="timebound.html">Time Bound</a>
+        <a class="btn" href="index.html">Home</a>
+        <a class="btn" href="multiplier.html">Multiplier</a>
+        <a class="btn" href="timebound.html">Time Bound</a>
         <a class="btn ghost" href="teams_rules.html">Rules</a>
         <a class="btn" href="#register" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Register</a>
       </div>
     </div>
 
     <div class="hero" aria-hidden="true">
-      <img src="assets/banner.png" alt="The Grid banner">
+      <img src="assets/banner.png" alt="The Grid banner" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.7);">
     </div>
 
     <div class="hero-overlay">
-      <div class="hero-card">
+      <div class="hero-card fade-in delay-100">
           <div style="display:flex;align-items:center;gap:20px;position:relative;z-index:1;">
-            <div class="logo-square" style="background:linear-gradient(135deg,var(--accent1),var(--accent3));animation:glowPulse 2s ease-in-out infinite alternate;"><img src="assets/logo.png" alt="The Grid" style="width:86%;height:86%;object-fit:contain;filter:brightness(1.2)"></div>
+            <div class="logo-square" style="background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%);animation:glowPulse 2s ease-in-out infinite alternate;"><img src="assets/logo.png" alt="The Grid" style="width:86%;height:86%;object-fit:contain;filter:brightness(1.2)"></div>
             <div style="flex:1">
-              <h1 style="margin:0 0 8px 0;font-size:32px;font-weight:900;background:linear-gradient(90deg, var(--paper), var(--gradient-lightness));-webkit-background-clip:text;background-clip:text;color:transparent;">Teams Event — Collaborative Challenge</h1>
+              <div style="background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%); display:inline-block; padding:6px 12px; border-radius:6px; font-size:14px; font-weight:700; margin-bottom:8px;">THE GRID</div>
+              <h1 style="margin:0 0 8px 0;font-size:26px;background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">THE GRID Teams Event — Collaborative Challenge</h1>
               <div style="color:var(--muted);font-size:16px;line-height:1.5;">Join forces with friends for a 1-week development marathon. ₹300 per team entry, 5 limited slots, with a ₹750 cash prize for the best collaborative project.</div>
-              <div class="cta-row" style="margin-top:16px">
-                <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank">Form Your Dream Team</a>
+              <div class="cta-row" style="margin-top:24px">
+                <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank">Register Now</a>
                 <a class="btn ghost" href="teams_rules.html">Team Guidelines</a>
               </div>
             </div>
           </div>
           
-          <!-- Team composition visualization -->
+          <!-- Event Timer -->
+          <div class="timer-container" style="margin-top: 24px;">
+            <div class="timer-label" style="color: var(--accent3); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; text-align: center;">NEXT THE GRID TEAMS EVENT STARTS IN</div>
+            <div class="timer" style="display: flex; gap: 6px; justify-content: center;">
+              <div class="timer-item" style="background: linear-gradient(135deg, rgba(138, 132, 78, 0.15), rgba(138, 132, 78, 0.05)); border: 1px solid rgba(138, 132, 78, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                <div id="days" style="color: var(--accent3); font-size: 24px; font-weight: 800; line-height: 1;">00</div>
+                <div style="color: var(--muted); font-size: 11px; margin-top: 2px;">Days</div>
+              </div>
+              <div class="timer-item" style="background: linear-gradient(135deg, rgba(138, 132, 78, 0.15), rgba(138, 132, 78, 0.05)); border: 1px solid rgba(138, 132, 78, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                <div id="hours" style="color: var(--accent3); font-size: 24px; font-weight: 800; line-height: 1;">00</div>
+                <div style="color: var(--muted); font-size: 11px; margin-top: 2px;">Hours</div>
+              </div>
+              <div class="timer-item" style="background: linear-gradient(135deg, rgba(138, 132, 78, 0.15), rgba(138, 132, 78, 0.05)); border: 1px solid rgba(138, 132, 78, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                <div id="minutes" style="color: var(--accent3); font-size: 24px; font-weight: 800; line-height: 1;">00</div>
+                <div style="color: var(--muted); font-size: 11px; margin-top: 2px;">Mins</div>
+              </div>
+              <div class="timer-item" style="background: linear-gradient(135deg, rgba(138, 132, 78, 0.15), rgba(138, 132, 78, 0.05)); border: 1px solid rgba(138, 132, 78, 0.2); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                <div id="seconds" style="color: var(--accent3); font-size: 24px; font-weight: 800; line-height: 1;">00</div>
+                <div style="color: var(--muted); font-size: 11px; margin-top: 2px;">Secs</div>
+              </div>
+            </div>
+        <style>
+          /* Animation for timer pulse */
+          @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+          }
+          
+          .timer-item {
+            animation: pulse 3s infinite;
+          }
+        </style>
+      </div>
+      <!-- Team composition visualization -->
           <div style="margin-top:24px;position:relative;z-index:1;">
-            <div style="font-size:14px;font-weight:700;margin-bottom:8px;color:var(--accent3)">Team Composition</div>
+            <div style="font-size:14px;font-weight:700;margin-bottom:8px;color:var(--accent3)">THE GRID Teams Event — Team Composition</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <div style="background:rgba(255,255,255,0.05);padding:8px 12px;border-radius:8px;border:1px solid rgba(138,132,78,0.1);transition:all 0.3s ease;cursor:default;">2-4 Members</div>
               <div style="background:rgba(255,255,255,0.05);padding:8px 12px;border-radius:8px;border:1px solid rgba(138,132,78,0.1);transition:all 0.3s ease;cursor:default;">All Skills Welcome</div>
@@ -321,7 +634,7 @@
           
           <!-- Current registered teams -->
           <div style="margin-top:16px;position:relative;z-index:1;">
-            <div style="font-size:14px;font-weight:700;margin-bottom:6px;color:var(--accent3)">Registered Teams (2/5 slots filled)</div>
+            <div style="font-size:14px;font-weight:700;margin-bottom:6px;color:var(--accent3)">THE GRID Teams Event — Registered Teams (2/5 slots filled)</div>
             <div style="background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:8px;border:1px solid rgba(138,132,78,0.1);">
               <div style="display:flex;gap:12px;">
                 <span>• Alpha Squad</span>
@@ -346,14 +659,27 @@
         </div>
       </div>
 
-    <div class="grid">
+    <div class="grid fade-in delay-300">
       <div>
         <div class="card">
-          <div class="stats" style="margin-top:6px">
-            <div class="stat-item"><div class="stat-number" data-prefix="">5</div><div class="stat-label">Available slots</div></div>
-            <div class="stat-item"><div class="stat-number" data-prefix="₹">300</div><div class="stat-label">Team fee</div></div>
-            <div class="stat-item"><div class="stat-number" data-prefix="₹">750</div><div class="stat-label">Cash prize</div></div>
-            <div class="stat-item"><div class="stat-number" data-prefix="">1</div><div class="stat-label">Development week</div></div>
+          <!-- Refreshed stats using spectacular shared grid styles -->
+          <div class="stats">
+            <div class="stat">
+              <div style="font-size:28px;font-weight:800;color:var(--accent1)">5</div>
+              <div style="color:var(--muted)">Available slots</div>
+            </div>
+            <div class="stat">
+              <div style="font-size:28px;font-weight:800;color:var(--accent1)">₹300</div>
+              <div style="color:var(--muted)">Team fee</div>
+            </div>
+            <div class="stat">
+              <div style="font-size:28px;font-weight:800;color:var(--accent1)">₹750</div>
+              <div style="color:var(--muted)">Cash prize</div>
+            </div>
+            <div class="stat">
+              <div style="font-size:28px;font-weight:800;color:var(--accent1)">1</div>
+              <div style="color:var(--muted)">Development week</div>
+            </div>
           </div>
 
           <div class="features">
@@ -379,8 +705,9 @@
         </div>
 
         <!-- FAQ accordion -->
-        <div id="faq" class="card faq">
-          <h3>Teams Event FAQ</h3>
+        <div id="faq" class="card faq fade-in delay-500">
+          <div class="card-glow"></div>
+          <h3>THE GRID Teams Event FAQ</h3>
           <div class="faq-item"><div class="faq-q"><span style="margin-right:8px">👥</span> Who can participate?</div><div class="faq-a">Teams of 2-4 developers. All members must have Discord accounts and be added to your team submission.</div></div>
           <div class="faq-item"><div class="faq-q"><span style="margin-right:8px">📅</span> What is the timeline?</div><div class="faq-a">Once registration closes, teams will have exactly 7 days to develop their project before the submission deadline. Judging will take place over the following 3 days.</div></div>
           <div class="faq-item"><div class="faq-q"><span style="margin-right:8px">💰</span> How is the prize calculated?</div><div class="faq-a">The cash prize is half of 5 x 300 (the total entry fees from all slots), which equals ₹750 for the winning team.</div></div>
@@ -389,8 +716,9 @@
         </div>
 
         <!-- Proof of payout template -->
-        <div class="card" style="margin-top:12px">
-          <h3>Proof of Payout (Template)</h3>
+        <div class="card fade-in delay-700" style="margin-top:12px">
+          <div class="card-glow"></div>
+          <h3 style="background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">THE GRID Teams Event — Proof of Payout (Template)</h3>
           <div class="proof-payout-template">
             <strong>Winner:</strong> Team Name<br>
             <strong>Captain:</strong> Member Name<br>
@@ -403,28 +731,32 @@
 
       </div>
 
-      <aside>
+      <aside class="fade-in delay-900">
         <div id="register" class="card register">
-          <h3>Register — Teams Event</h3>
+          <div class="card-glow"></div>
+          <div style="background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%); display:inline-block; padding:6px 12px; border-radius:6px; font-size:14px; font-weight:700; margin-bottom:8px;">THE GRID</div>
+          <h3 style="background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">Register — THE GRID Teams Event</h3>
           <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" style="width: 100%; text-align: center; margin-bottom: 16px;">Register Team</a>
           <div style="color:var(--muted);font-size:13px">Fill out the Google Form to register your team. Payments will be verified by moderators.</div>
 
           <div style="margin-top:12px">
             <div style="font-weight:700">Join our Discord</div>
             <div class="discord-cta">
-              <a class="btn" href="https://discord.gg/Xy28vhgA" target="_blank">Join Discord</a>
+              <a class="btn" href="https://discord.gg/XfbahWtPMg" target="_blank">Join Discord</a>
               <div style="color:var(--muted);font-size:13px">Or search: THE GRID on Discord</div>
             </div>
           </div>
         </div>
 
         <div class="card" style="margin-top:12px">
+          <div class="card-glow"></div>
           <h4>Quick FAQ</h4>
           <div style="color:var(--muted);font-size:13px">How to pay: UPI to <strong>UPI_ID_PLACEHOLDER</strong>. Save txn screenshot. Post txn in #register on Discord with team info.</div>
           <div style="color:var(--muted);font-size:13px;margin-top:8px;">Stay active in Discord: All important announcements will be shared there.</div>
         </div>
 
         <div class="card" style="margin-top:12px">
+          <div class="card-glow"></div>
           <h4>Event Details</h4>
           <div style="color:var(--muted);font-size:13px">Registration closes when all slots are filled. Development period begins immediately after registration closes. Detailed timeline will be shared with registered teams.</div>
         </div>
@@ -438,7 +770,7 @@
         <a href="#" class="social-link" aria-label="Instagram"><i>📸</i></a>
         <a href="#" class="social-link" aria-label="GitHub"><i>💻</i></a>
       </div>
-      © The Grid • Teams Event • Contact: <a href="mailto:admin@thegrid.example">admin@thegrid.example</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
+      © The Grid • Teams Event • Contact: <a href="mailto:heinrich.oswald24@gmail.com">heinrich.oswald24@gmail.com</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
     </footer>
   </div>
 
@@ -499,7 +831,7 @@
 
       // Scroll animations
       function checkScroll() {
-        const elements = document.querySelectorAll('.card, .feature, .stat-item, .hero-card');
+        const elements = document.querySelectorAll('.card, .feature, .stat-item, .stat, .hero-card');
         elements.forEach(element => {
           const elementTop = element.getBoundingClientRect().top;
           const windowHeight = window.innerHeight;
@@ -514,18 +846,395 @@
       }
 
       // Initialize scroll animation styles
-      const elements = document.querySelectorAll('.card, .feature, .stat-item, .hero-card');
+      const elements = document.querySelectorAll('.card, .feature, .stat-item, .stat, .hero-card');
       elements.forEach(element => {
         element.style.opacity = '0';
         element.style.transform = 'translateY(30px)';
         element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
       });
+      
+      // Countdown timer function
+      function initializeCountdown() {
+        // State variables
+        let isSubmissionPeriod = false;
+        let countDownDate;
+        let submissionEndDate;
+        let isTimerFrozen = false;
+        let unfreezeAt = null;
+        
+        // DOM elements - retrieve once for better performance
+        const timerLabel = document.querySelector('.timer-label');
+        const timerContainer = document.querySelector('.timer-container');
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        // Under-Construction banner helpers (caution tape style)
+        const ensureBannerEl = () => {
+          if (!timerContainer) return null;
+          const timerEl = timerContainer.querySelector('.timer');
+          if (!timerEl) return null;
+          timerEl.style.position = 'relative';
+          let banner = timerEl.querySelector('.under-construction-banner');
+          if (!banner) {
+            banner = document.createElement('div');
+            banner.className = 'under-construction-banner';
+            banner.style.position = 'absolute';
+            banner.style.top = '50%';
+            banner.style.left = '50%';
+            banner.style.transform = 'translate(-50%, -50%)';
+            banner.style.zIndex = '6';
+            banner.style.pointerEvents = 'none';
+            banner.style.padding = '8px 12px';
+            banner.style.borderRadius = '6px';
+            banner.style.color = '#fff';
+            banner.style.fontWeight = '800';
+            banner.style.fontSize = '12px';
+            banner.style.textAlign = 'center';
+            banner.style.textTransform = 'uppercase';
+            banner.style.letterSpacing = '1px';
+            banner.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            banner.style.border = '1px solid rgba(0,0,0,0.25)';
+            banner.style.backgroundImage = 'repeating-linear-gradient(45deg, #ffd54f 0 12px, #111 12px 24px)';
+            banner.style.display = 'none';
+            banner.style.textShadow = '0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.6)';
+            banner.innerHTML = '🚧 UNDER CONSTRUCTION — EVENT OVER, SEE YOU NEXT WEEK';
+            timerEl.appendChild(banner);
+          }
+          return banner;
+        };
+        // Tape X overlay helpers (fits directly over the timer)
+        const ensureTapeOverlayEl = () => {
+          if (!timerContainer) return null;
+          const timerEl = timerContainer.querySelector('.timer');
+          if (!timerEl) return null;
+          timerEl.style.position = 'relative';
+          let overlay = timerEl.querySelector('.tape-x-overlay');
+          if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'tape-x-overlay';
+            overlay.style.position = 'absolute';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.right = '0';
+            overlay.style.bottom = '0';
+          overlay.style.pointerEvents = 'none';
+          overlay.style.display = 'none';
+          overlay.style.zIndex = '5';
+          overlay.style.overflow = 'hidden';
+          const makeStrip = (rotation) => {
+            const strip = document.createElement('div');
+            strip.style.position = 'absolute';
+            strip.style.left = '50%';
+            strip.style.width = '120%';
+            strip.style.top = '50%';
+            strip.style.height = '12px';
+            strip.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+            strip.style.backgroundImage = 'repeating-linear-gradient(45deg, #ffd54f 0 12px, #111 12px 24px)';
+            strip.style.border = '1px solid rgba(0,0,0,0.25)';
+            strip.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+            strip.style.opacity = '0.95';
+            return strip;
+          };
+            overlay.appendChild(makeStrip(28));
+            overlay.appendChild(makeStrip(-28));
+            const makeLabel = (rotation) => {
+              const lbl = document.createElement('div');
+              lbl.className = 'tape-x-text';
+              lbl.style.position = 'absolute';
+              lbl.style.top = '50%';
+              lbl.style.left = '50%';
+              lbl.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+              lbl.style.transformOrigin = 'center';
+              lbl.style.zIndex = '6';
+              lbl.style.pointerEvents = 'none';
+              lbl.style.color = '#fff';
+              lbl.style.fontWeight = '800';
+              lbl.style.fontSize = '12px';
+              lbl.style.textTransform = 'uppercase';
+              lbl.style.letterSpacing = '1px';
+              lbl.style.whiteSpace = 'nowrap';
+              lbl.style.textShadow = '0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.6)';
+              lbl.innerHTML = '🚧 UNDER CONSTRUCTION — EVENT OVER, SEE YOU NEXT WEEK';
+              return lbl;
+            };
+            overlay.appendChild(makeLabel(28));
+            overlay.appendChild(makeLabel(-28));
+            timerEl.appendChild(overlay);
+          }
+          return overlay;
+        };
+        const showEventOverBanner = () => {
+          const overlay = ensureTapeOverlayEl();
+          if (overlay) overlay.style.display = 'block';
+        };
+        const hideEventOverBanner = () => {
+          const overlay = ensureTapeOverlayEl();
+          if (overlay) overlay.style.display = 'none';
+        };
+        
+        // Validate that critical DOM elements exist
+        if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+          console.error('Timer DOM elements not found. Check HTML structure.');
+          return; // Exit if essential elements are missing
+        }
+        
+        // Function to get next Saturday at 3pm IST (timezone-anchored to IST)
+        function getNextSaturday3pmIST(forceNextWeek = false) {
+          const IST_OFFSET_MINUTES = 330; // UTC+5:30
+          const nowLocal = new Date();
+          // Convert local time to UTC milliseconds
+          const nowUTCms = nowLocal.getTime() + nowLocal.getTimezoneOffset() * 60000;
+          // Convert UTC to IST timeline for calculating day/hour
+          const nowISTms = nowUTCms + IST_OFFSET_MINUTES * 60000;
+          const nowIST = new Date(nowISTms);
+          const targetDay = 6; // Saturday
+          const targetHour = 15; // 3 PM IST
+          
+          // Build target event time on the IST timeline
+          const eventIST = new Date(nowIST);
+          eventIST.setHours(targetHour, 0, 0, 0);
+          
+          let dayDiff = targetDay - nowIST.getDay();
+          if ((dayDiff === 0 && nowIST.getHours() >= targetHour) || dayDiff < 0 || forceNextWeek) {
+            dayDiff += 7;
+          }
+          eventIST.setDate(nowIST.getDate() + dayDiff);
+          
+          // Convert IST timeline back to a real-world timestamp (UTC-based Date)
+          const eventUTCms = eventIST.getTime() - IST_OFFSET_MINUTES * 60000;
+          return new Date(eventUTCms);
+        }
+        
+        // Function to calculate submission end date (2 hours after start)
+        function getSubmissionEndDate(challengeStartDate) {
+          const endDate = new Date(challengeStartDate);
+          endDate.setHours(endDate.getHours() + 2);
+          return endDate;
+        }
+        
+        // Initialize dates
+        countDownDate = getNextSaturday3pmIST();
+
+        // Admin persistent settings helpers
+        function getAdminSettings() {
+          try { const raw = localStorage.getItem('admin_settings'); return raw ? JSON.parse(raw) : null; } catch(e){ return null; }
+        }
+        function isAdminTimerDisabled() {
+          const s = getAdminSettings();
+          const now = Date.now();
+          if (s && typeof s.persist_until === 'number') {
+            if (now > s.persist_until) {
+              localStorage.removeItem('admin_settings');
+              localStorage.removeItem('admin_timer_disabled');
+              return false;
+            }
+            return s.timer_disabled === true;
+          }
+          return localStorage.getItem('admin_timer_disabled') === 'true';
+        }
+        function getAdminEventConfig(eventType) {
+          const s = getAdminSettings();
+          const now = Date.now();
+          if (!s) return null;
+          if (typeof s.persist_until === 'number' && now > s.persist_until) {
+            localStorage.removeItem('admin_settings');
+            localStorage.removeItem('admin_timer_disabled');
+            return null;
+          }
+          const ev = s.events || {};
+          return ev[eventType] || null;
+        }
+        function isEventTimerDisabled(eventType) {
+          if (isAdminTimerDisabled()) return true;
+          const cfg = getAdminEventConfig(eventType);
+          return !!(cfg && cfg.disabled);
+        }
+        
+        // Function to update the countdown
+        function updateCountdown() {
+          // Admin override: disable timer (global or per-event)
+          if (isEventTimerDisabled('teams')) {
+            const timerEl = timerContainer.querySelector('.timer');
+            if (timerEl) timerEl.style.display = 'none';
+            if (timerLabel) timerLabel.textContent = 'TIMER DISABLED BY ADMIN';
+            return;
+          }
+          // Get today's date and time
+          const now = new Date();
+          const nowTime = now.getTime();
+          let distance = 0;
+          
+          // Read admin config and apply overrides
+          const adminCfg = getAdminEventConfig('teams');
+          // Admin: force event-over overlay/freeze
+          if (adminCfg && adminCfg.event_over === true) {
+            showEventOverBanner();
+            const overlay = ensureTapeOverlayEl();
+            if (overlay) overlay.style.display = 'block';
+            const timerEl = timerContainer.querySelector('.timer');
+            if (timerEl) { timerEl.style.filter = 'blur(1.5px)'; timerEl.style.opacity = '0.85'; }
+            return;
+          } else {
+            // Ensure overlay and blur are removed when not forced event-over
+            const overlay = ensureTapeOverlayEl();
+            if (overlay) overlay.style.display = 'none';
+            const timerEl = timerContainer.querySelector('.timer');
+            if (timerEl) { timerEl.style.filter = ''; timerEl.style.opacity = ''; }
+          }
+          // Apply admin override for start time
+          if (adminCfg && typeof adminCfg.override_start_ms === 'number') {
+            countDownDate = new Date(adminCfg.override_start_ms);
+          }
+          
+          // If timer is frozen, show banner and resume next day
+          if (isTimerFrozen) {
+            showEventOverBanner();
+            const overlay = ensureTapeOverlayEl();
+            if (overlay) overlay.style.display = 'block';
+            // Remove blur during natural freeze; only blur when admin forces event_over
+            const timerEl = timerContainer.querySelector('.timer');
+            if (timerEl) { timerEl.style.filter = ''; timerEl.style.opacity = ''; }
+            
+            if (unfreezeAt && now >= unfreezeAt) {
+              // Unfreeze and resume countdown to next event
+              isTimerFrozen = false;
+              unfreezeAt = null;
+              hideEventOverBanner();
+              if (overlay) overlay.style.display = 'none';
+              if (timerEl) { timerEl.style.filter = ''; timerEl.style.opacity = ''; }
+              countDownDate = getNextSaturday3pmIST();
+            } else {
+              return; // Keep timer off until next day
+            }
+          }
+          
+          // Determine current timer state and calculate distance
+          if (isSubmissionPeriod && submissionEndDate) {
+            // Submission period active
+            if (timerLabel) {
+              timerLabel.textContent = 'TEAMS SUBMISSION ENDS IN';
+            }
+            distance = submissionEndDate - nowTime;
+          } else {
+            // Challenge countdown active
+            if (timerLabel) {
+        timerLabel.textContent = 'NEXT THE GRID TEAMS EVENT STARTS IN';
+      }
+            distance = countDownDate - nowTime;
+          }
+          
+          // Handle timer state transitions when time runs out
+          if (distance < 0) {
+            if (isSubmissionPeriod) {
+              // Submission ended → freeze timer until next day
+              isSubmissionPeriod = false;
+              isTimerFrozen = true;
+              unfreezeAt = new Date(now);
+              unfreezeAt.setDate(unfreezeAt.getDate() + 1);
+              unfreezeAt.setHours(0, 0, 0, 0);
+              showEventOverBanner();
+              const overlay2 = ensureTapeOverlayEl();
+              if (overlay2) overlay2.style.display = 'block';
+              const timerEl2 = timerContainer.querySelector('.timer');
+              if (timerEl2) { timerEl2.style.filter = 'blur(1.5px)'; timerEl2.style.opacity = '0.85'; }
+              return;
+            } else {
+              // Challenge started → begin submission period (2 hours)
+              isSubmissionPeriod = true;
+              submissionEndDate = getSubmissionEndDate(countDownDate);
+              distance = submissionEndDate - nowTime;
+              if (timerLabel) {
+                timerLabel.textContent = 'TEAMS SUBMISSION ENDS IN';
+              }
+            }
+          }
+
+          // Time calculations for days, hours, minutes and seconds
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          // Admin display mode overrides
+          if (adminCfg && adminCfg.display_mode) {
+            if (adminCfg.display_mode === 'start') {
+              isSubmissionPeriod = false;
+              if (timerLabel) timerLabel.textContent = 'NEXT THE GRID TEAMS EVENT STARTS IN';
+              distance = countDownDate - nowTime;
+            } else if (adminCfg.display_mode === 'submission') {
+              isSubmissionPeriod = true;
+              if (!submissionEndDate) {
+                submissionEndDate = getSubmissionEndDate(countDownDate);
+              }
+              if (timerLabel) timerLabel.textContent = 'TEAMS SUBMISSION ENDS IN';
+              distance = submissionEndDate - nowTime;
+            }
+            if (adminCfg.custom_label && timerLabel) {
+              timerLabel.textContent = adminCfg.custom_label;
+            }
+          }
+          
+          // Pad with leading zero if less than 10
+          const pad = (num) => num < 10 ? '0' + num : num;
+          
+          // Log countdown state for debugging
+          console.log(`State: ${isSubmissionPeriod ? 'Submission' : 'Challenge'} | ${days}d ${hours}h ${minutes}m ${seconds}s`);
+          
+          // Update DOM elements with calculated values
+          daysEl.textContent = pad(days);
+          hoursEl.textContent = pad(hours);
+          minutesEl.textContent = pad(minutes);
+          secondsEl.textContent = pad(seconds);
+        }
+        
+        // Log initial state for debugging
+        console.log('Initialized - Next challenge:', countDownDate.toLocaleString());
+        
+        // Update the countdown immediately and then every 1 second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+      }
+      
+      // Initialize the countdown timer
+      initializeCountdown();
 
       // Add event listeners
       window.addEventListener('scroll', checkScroll);
       
       // Initial check
       checkScroll();
+
+      // Inject tiny Admin button
+      (function(){
+        const existing = document.getElementById('adminBtn');
+        if (!existing) {
+          const btn = document.createElement('a');
+          btn.id = 'adminBtn';
+          btn.href = (localStorage.getItem('admin_auth') === 'true') ? 'admin.html' : 'admin_login.html';
+          btn.title = 'Admin';
+          btn.textContent = 'A';
+          btn.style.position = 'fixed';
+          btn.style.right = '8px';
+          btn.style.bottom = '8px';
+          btn.style.width = '26px';
+          btn.style.height = '26px';
+          btn.style.borderRadius = '50%';
+          btn.style.background = '#111';
+          btn.style.color = '#fff';
+          btn.style.display = 'flex';
+          btn.style.alignItems = 'center';
+          btn.style.justifyContent = 'center';
+          btn.style.fontWeight = '800';
+          btn.style.fontSize = '12px';
+          btn.style.textDecoration = 'none';
+          btn.style.border = '1px solid rgba(255,255,255,0.15)';
+          btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.35)';
+          btn.style.zIndex = '50';
+          document.body.appendChild(btn);
+        }
+      })();
     });
   </script>
 </body>

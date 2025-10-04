@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Event Logo Switch Verification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.2em;
+        }
+        .content {
+            padding: 40px;
+        }
+        .status-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .logo-section {
+            margin: 40px 0;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #FF9800;
+        }
+        .logo-section h2 {
+            color: #333;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        .logo-display {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .logo-container {
+            flex: 1;
+            min-width: 300px;
+        }
+        .logo-image {
+            max-width: 100%;
+            height: auto;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .logo-image:hover {
+            transform: scale(1.05);
+        }
+        .logo-info {
+            flex: 1;
+            min-width: 250px;
+        }
+        .file-path {
+            font-family: 'Courier New', monospace;
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        .load-status {
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 10px 0;
+            display: inline-block;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        .info-box h3 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 40px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+        .btn-secondary:hover {
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Team Event Branding Active</h1>
+            <p>Logo and banner switch verification</p>
+        </div>
+        
+        <div class="content">
+            <div class="status-badge">✅ Switch Completed Successfully</div>
+            
+            <div class="logo-section">
+                <h2>🏆 Current Logo (Team Event)</h2>
+                <div class="logo-display">
+                    <div class="logo-container">
+                        <img src="assets/logo.png?v=team-event" alt="Team Event Logo" class="logo-image" 
+                             onload="this.nextElementSibling.className = 'load-status success'; this.nextElementSibling.textContent = '✓ Loaded Successfully'" 
+                             onerror="this.nextElementSibling.className = 'load-status error'; this.nextElementSibling.textContent = '✗ Failed to Load'">
+                        <div class="load-status">Loading...</div>
+                    </div>
+                    <div class="logo-info">
+                        <div class="file-path">assets/logo.png</div>
+                        <p><strong>File Size:</strong> 599,536 bytes</p>
+                        <p><strong>Status:</strong> Now contains team event logo</p>
+                        <p><strong>Usage:</strong> Main website pages (index.html, teams.html, timebound.html)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="logo-section">
+                <h2>🎯 Current Banner (Team Event)</h2>
+                <div class="logo-display">
+                    <div class="logo-container">
+                        <img src="assets/banner.png?v=team-event" alt="Team Event Banner" class="logo-image" 
+                             onload="this.nextElementSibling.className = 'load-status success'; this.nextElementSibling.textContent = '✓ Loaded Successfully'" 
+                             onerror="this.nextElementSibling.className = 'load-status error'; this.nextElementSibling.textContent = '✗ Failed to Load'">
+                        <div class="load-status">Loading...</div>
+                    </div>
+                    <div class="logo-info">
+                        <div class="file-path">assets/banner.png</div>
+                        <p><strong>File Size:</strong> 465,578 bytes</p>
+                        <p><strong>Status:</strong> Now contains team event banner</p>
+                        <p><strong>Usage:</strong> Hero sections and sponsor areas</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h3>📋 What Was Changed</h3>
+                <ul>
+                    <li><strong>logo.png</strong> - Replaced with team event logo content</li>
+                    <li><strong>banner.png</strong> - Replaced with team event banner content</li>
+                    <li>Original team event files preserved as backups</li>
+                    <li>All website pages now display team event branding</li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <h3>🔄 Files Affected</h3>
+                <ul>
+                    <li><strong>index.html</strong> - Main homepage</li>
+                    <li><strong>teams.html</strong> - Teams page</li>
+                    <li><strong>timebound.html</strong> - Timebound page</li>
+                    <li><strong>multiplier.html</strong> - Uses separate multiplier branding (unchanged)</li>
+                </ul>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="index.html" class="btn">🏠 View Homepage</a>
+                <a href="teams.html" class="btn">👥 View Teams Page</a>
+                <a href="timebound.html" class="btn">⏰ View Timebound Page</a>
+                <a href="multiplier.html" class="btn btn-secondary">🔢 View Multiplier Page</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

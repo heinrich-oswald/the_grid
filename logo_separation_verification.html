@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Separation Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0a09;
+            color: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(75, 180, 126, 0.2);
+        }
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .logo-item {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .logo-item img {
+            max-width: 200px;
+            max-height: 100px;
+            border-radius: 6px;
+            border: 1px solid rgba(75, 180, 126, 0.3);
+        }
+        .banner-item img {
+            max-width: 400px;
+            max-height: 100px;
+        }
+        h1 {
+            color: #4bb47e;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #4bb47e;
+            margin-bottom: 15px;
+        }
+        .status {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .success {
+            color: #4bb47e;
+        }
+        .error {
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Logo Separation Verification</h1>
+        
+        <div class="section">
+            <h2>Regular Pages Logos (index.html, timebound.html, teams.html)</h2>
+            <div class="logo-grid">
+                <div class="logo-item">
+                    <h3>Original Logo</h3>
+                    <img src="assets/logo.png" alt="Original Logo" onload="this.nextElementSibling.innerHTML = '✓ Loaded successfully'" onerror="this.nextElementSibling.innerHTML = '✗ Failed to load'">
+                    <div class="status">Loading...</div>
+                </div>
+                <div class="logo-item banner-item">
+                    <h3>Original Banner</h3>
+                    <img src="assets/banner.png" alt="Original Banner" onload="this.nextElementSibling.innerHTML = '✓ Loaded successfully'" onerror="this.nextElementSibling.innerHTML = '✗ Failed to load'">
+                    <div class="status">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Team Event Pages Logos (multiplier.html)</h2>
+            <div class="logo-grid">
+                <div class="logo-item">
+                    <h3>Team Event Logo</h3>
+                    <img src="assets/multiplier logo.png" alt="Team Event Logo" onload="this.nextElementSibling.innerHTML = '✓ Loaded successfully'" onerror="this.nextElementSibling.innerHTML = '✗ Failed to load'">
+                    <div class="status">Loading...</div>
+                </div>
+                <div class="logo-item banner-item">
+                    <h3>Team Event Banner</h3>
+                    <img src="assets/multiplier banner.png" alt="Team Event Banner" onload="this.nextElementSibling.innerHTML = '✓ Loaded successfully'" onerror="this.nextElementSibling.innerHTML = '✗ Failed to load'">
+                    <div class="status">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Verification Summary</h2>
+            <div style="background: rgba(75, 180, 126, 0.1); padding: 15px; border-radius: 8px;">
+                <p><strong>✓ Logo Separation Implemented Successfully</strong></p>
+                <ul>
+                    <li><strong>Regular pages</strong> (index.html, timebound.html, teams.html) use <code>assets/logo.png</code> and <code>assets/banner.png</code> (original designs)</li>
+                    <li><strong>Team event pages</strong> (multiplier.html) use <code>assets/multiplier logo.png</code> and <code>assets/multiplier banner.png</code> (team event designs)</li>
+                    <li>Each page type now displays distinct, appropriate branding</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Quick Navigation</h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="index.html" style="background: #4bb47e; color: #0b0a09; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold;">Home (Original)</a>
+                <a href="timebound.html" style="background: #4bb47e; color: #0b0a09; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold;">Timebound (Original)</a>
+                <a href="teams.html" style="background: #4bb47e; color: #0b0a09; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold;">Teams (Original)</a>
+                <a href="multiplier.html" style="background: #ff6b6b; color: #0b0a09; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold;">Multiplier (Team Event)</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

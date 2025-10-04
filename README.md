@@ -82,4 +82,4 @@ This project is for demonstration purposes only.
 
 ## Contact
 
-For more information, contact the event organizers at admin@thegrid.example
+For more information, contact the event organizers at heinrich.oswald24@gmail.com

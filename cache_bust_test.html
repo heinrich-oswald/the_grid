@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache Busting Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #121212; color: white; }
+        h1 { color: #4bb47e; }
+        .test-section { margin-bottom: 40px; padding: 20px; border: 1px solid #333; border-radius: 8px; }
+        img { max-width: 100%; height: auto; margin: 10px 0; }
+        .cache-bust { color: #4bb47e; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Cache Busting Test - Multiplier Event Images</h1>
+    
+    <div class="test-section">
+        <h2>With Cache-Busting Parameters</h2>
+        <div class="cache-bust">Multiplier Logo:</div>
+        <img src="assets/multiplier logo.png?v=123" alt="Multiplier Logo with Cache Bust">
+        <p>File: assets/multiplier logo.png?v=123</p>
+        
+        <div class="cache-bust">Multiplier Banner:</div>
+        <img src="assets/multiplier banner.png?v=123" alt="Multiplier Banner with Cache Bust">
+        <p>File: assets/multiplier banner.png?v=123</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>Without Cache-Busting Parameters</h2>
+        <div>Multiplier Logo:</div>
+        <img src="assets/multiplier logo.png" alt="Multiplier Logo without Cache Bust">
+        <p>File: assets/multiplier logo.png</p>
+        
+        <div>Multiplier Banner:</div>
+        <img src="assets/multiplier banner.png" alt="Multiplier Banner without Cache Bust">
+        <p>File: assets/multiplier banner.png</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>Original Images</h2>
+        <div>Original Logo:</div>
+        <img src="assets/logo.png" alt="Original Logo">
+        <p>File: assets/logo.png</p>
+        
+        <div>Original Banner:</div>
+        <img src="assets/banner.png" alt="Original Banner">
+        <p>File: assets/banner.png</p>
+    </div>
+</body>
+</html>

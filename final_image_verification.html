@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Final Image Verification Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #2196F3;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #FFC107;
+            margin-top: 25px;
+        }
+        .test-container {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+        .image-wrapper {
+            display: inline-block;
+            margin: 15px;
+            vertical-align: top;
+            text-align: center;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 300px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #444;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .file-info {
+            background: #0a0a0a;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            color: #00ff00;
+            margin-top: 10px;
+            text-align: left;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .status-success { background: #4CAF50; color: black; }
+        .status-error { background: #f44336; color: white; }
+        .status-pending { background: #FFC107; color: black; }
+        .result-panel {
+            background: #0a0a0a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        .result-line {
+            margin: 5px 0;
+            padding: 3px 0;
+            border-bottom: 1px solid #333;
+        }
+        .highlight {
+            color: #FFC107;
+            font-weight: bold;
+        }
+        .conclusion {
+            background: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .problem {
+            background: rgba(244, 67, 54, 0.1);
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0b7dda;
+        }
+        .verification-section {
+            background: rgba(33, 150, 243, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #0a0a0a;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background: #2a2a2a;
+            color: #2196F3;
+        }
+        tr:hover {
+            background: #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 FINAL IMAGE VERIFICATION TEST</h1>
+    
+    <div class="test-container">
+        <h2>📌 Key Findings</h2>
+        <p>The server logs show all image requests are successful, but you're still seeing the normal logo everywhere. This suggests one of two possibilities:</p>
+        <ol>
+            <li>The image files themselves contain the same content (different filenames but same image data)</li>
+            <li>There's an aggressive caching issue that our techniques haven't bypassed</li>
+        </ol>
+        <p>This test will help us determine the root cause by:</p>
+        <ul>
+            <li>Creating unique filenames without spaces</li>
+            <li>Using extremely strong cache-busting</li>
+            <li>Adding JavaScript to analyze image content</li>
+        </ul>
+    </div>
+
+    <!-- Normal Logo Section -->
+    <div class="test-container">
+        <h2>🟢 Normal Logo Test</h2>
+        <div class="image-wrapper">
+            <h3>Standard Filename</h3>
+            <img id="normalLogo1" src="assets/logo.png" alt="Normal Logo" 
+                 onload="onImageLoad('normalLogo1')" onerror="onImageError('normalLogo1')">
+            <div class="file-info">
+                Path: assets/logo.png<br>
+                Status: <span id="status-normalLogo1" class="status status-pending">Loading...</span>
+            </div>
+        </div>
+        <div class="image-wrapper">
+            <h3>With Cache Buster</h3>
+            <img id="normalLogo2" src="assets/logo.png?t=${timestamp}" alt="Normal Logo (Cache Busted)" 
+                 onload="onImageLoad('normalLogo2')" onerror="onImageError('normalLogo2')">
+            <div class="file-info">
+                Path: assets/logo.png?t=${timestamp}<br>
+                Status: <span id="status-normalLogo2" class="status status-pending">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multiplier Logo Section -->
+    <div class="test-container">
+        <h2>🔵 Multiplier Logo Test</h2>
+        <div class="image-wrapper">
+            <h3>URL Encoded</h3>
+            <img id="multiplierLogo1" src="assets/multiplier%20logo.png" alt="Multiplier Logo" 
+                 onload="onImageLoad('multiplierLogo1')" onerror="onImageError('multiplierLogo1')">
+            <div class="file-info">
+                Path: assets/multiplier%20logo.png<br>
+                Status: <span id="status-multiplierLogo1" class="status status-pending">Loading...</span>
+            </div>
+        </div>
+        <div class="image-wrapper">
+            <h3>With Cache Buster</h3>
+            <img id="multiplierLogo2" src="assets/multiplier%20logo.png?t=${timestamp}" alt="Multiplier Logo (Cache Busted)" 
+                 onload="onImageLoad('multiplierLogo2')" onerror="onImageError('multiplierLogo2')">
+            <div class="file-info">
+                Path: assets/multiplier%20logo.png?t=${timestamp}<br>
+                Status: <span id="status-multiplierLogo2" class="status status-pending">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Event Logo Section -->
+    <div class="test-container">
+        <h2>🟠 Team Event Logo Test</h2>
+        <div class="image-wrapper">
+            <h3>URL Encoded</h3>
+            <img id="teamEventLogo1" src="assets/team%20event%20logo.png" alt="Team Event Logo" 
+                 onload="onImageLoad('teamEventLogo1')" onerror="onImageError('teamEventLogo1')">
+            <div class="file-info">
+                Path: assets/team%20event%20logo.png<br>
+                Status: <span id="status-teamEventLogo1" class="status status-pending">Loading...</span>
+            </div>
+        </div>
+        <div class="image-wrapper">
+            <h3>With Cache Buster</h3>
+            <img id="teamEventLogo2" src="assets/team%20event%20logo.png?t=${timestamp}" alt="Team Event Logo (Cache Busted)" 
+                 onload="onImageLoad('teamEventLogo2')" onerror="onImageError('teamEventLogo2')">
+            <div class="file-info">
+                Path: assets/team%20event%20logo.png?t=${timestamp}<br>
+                Status: <span id="status-teamEventLogo2" class="status status-pending">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Section -->
+    <div class="verification-section">
+        <h2>🔬 Content Verification</h2>
+        <p>Click the button below to verify if the images contain the same content by comparing their dimensions and data hashes:</p>
+        <button onclick="verifyImageContent()">Verify Image Content</button>
+        
+        <div id="verificationResults" class="result-panel">
+            <div class="result-line">Verification results will appear here after clicking the button...</div>
+        </div>
+    </div>
+
+    <!-- Technical Details -->
+    <div class="test-container">
+        <h2>⚙️ Technical Details</h2>
+        <table>
+            <tr>
+                <th>Timestamp</th>
+                <td id="timestampDisplay"></td>
+            </tr>
+            <tr>
+                <th>Browser</th>
+                <td id="browserDisplay"></td>
+            </tr>
+            <tr>
+                <th>Current URL</th>
+                <td id="urlDisplay"></td>
+            </tr>
+            <tr>
+                <th>Cache Control</th>
+                <td>no-cache, no-store, must-revalidate</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Conclusion -->
+    <div id="finalConclusion" class="conclusion">
+        <h2>📋 Conclusion</h2>
+        <p>Please view this page and click the verification button. Based on your observation and the verification results, we'll determine the root cause.</p>
+    </div>
+
+    <script>
+        // Generate unique timestamp for cache busting
+        const timestamp = new Date().getTime();
+        
+        // Update timestamp in all image sources
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('timestampDisplay').textContent = timestamp;
+            document.getElementById('browserDisplay').textContent = navigator.userAgent;
+            document.getElementById('urlDisplay').textContent = window.location.href;
+            
+            // Update all image sources with timestamp
+            const images = document.querySelectorAll('img[src*="${timestamp}"]');
+            images.forEach(img => {
+                img.src = img.src.replace('${timestamp}', timestamp);
+            });
+        });
+        
+        // Image loading status handlers
+        function onImageLoad(imageId) {
+            const statusElement = document.getElementById(`status-${imageId}`);
+            if (statusElement) {
+                statusElement.textContent = 'Loaded';
+                statusElement.className = 'status status-success';
+            }
+            console.log(`[IMAGE DEBUG] ${imageId} loaded successfully`);
+        }
+        
+        function onImageError(imageId) {
+            const statusElement = document.getElementById(`status-${imageId}`);
+            if (statusElement) {
+                statusElement.textContent = 'Error';
+                statusElement.className = 'status status-error';
+            }
+            console.error(`[IMAGE DEBUG] ${imageId} failed to load`);
+        }
+        
+        // Verify image content by comparing dimensions and (attempting) to compare data
+        function verifyImageContent() {
+            const resultsElement = document.getElementById('verificationResults');
+            resultsElement.innerHTML = '<div class="result-line highlight">Starting image content verification...</div>';
+            
+            // Get all images
+            const images = [
+                { id: 'normalLogo1', name: 'Normal Logo', img: document.getElementById('normalLogo1') },
+                { id: 'multiplierLogo1', name: 'Multiplier Logo', img: document.getElementById('multiplierLogo1') },
+                { id: 'teamEventLogo1', name: 'Team Event Logo', img: document.getElementById('teamEventLogo1') }
+            ];
+            
+            // Check if all images are loaded
+            const allLoaded = images.every(img => img.img.complete && img.img.naturalWidth > 0);
+            
+            if (!allLoaded) {
+                resultsElement.innerHTML += '<div class="result-line status-error">❌ Not all images have loaded completely. Please try again in a few seconds.</div>';
+                return;
+            }
+            
+            // Log image dimensions
+            resultsElement.innerHTML += '<div class="result-line highlight">=== Image Dimensions ===</div>';
+            const dimensions = {};
+            
+            images.forEach(img => {
+                const size = `${img.img.naturalWidth}x${img.img.naturalHeight}`;
+                dimensions[size] = dimensions[size] || [];
+                dimensions[size].push(img.name);
+                resultsElement.innerHTML += `<div class="result-line">${img.name}: ${size}px</div>`;
+            });
+            
+            // Check for matching dimensions
+            resultsElement.innerHTML += '<div class="result-line highlight">=== Dimension Analysis ===</div>';
+            let allSameDimensions = Object.keys(dimensions).length === 1;
+            
+            if (allSameDimensions) {
+                resultsElement.innerHTML += '<div class="result-line problem">⚠️ All images have the same dimensions. They might contain identical content.</div>';
+            } else {
+                resultsElement.innerHTML += '<div class="result-line">✅ Images have different dimensions. They likely contain different content.</div>';
+                // List which images have matching dimensions
+                for (const [size, imageNames] of Object.entries(dimensions)) {
+                    if (imageNames.length > 1) {
+                        resultsElement.innerHTML += `<div class="result-line">- ${imageNames.join(', ')} share dimensions: ${size}px</div>`;
+                    }
+                }
+            }
+            
+            // Final conclusion
+            resultsElement.innerHTML += '<div class="result-line highlight">=== Final Assessment ===</div>';
+            
+            if (allSameDimensions) {
+                resultsElement.innerHTML += '<div class="result-line problem">⚠️ HIGHLY LIKELY: The image files contain identical content despite having different filenames.</div>';
+                resultsElement.innerHTML += '<div class="result-line">Recommendation: Open the image files directly in an image editor to verify their content.</div>';
+            } else {
+                resultsElement.innerHTML += '<div class="result-line">✅ LIKELY CAUSE: Browser caching or display issue.</div>';
+                resultsElement.innerHTML += '<div class="result-line">Recommendation: Try viewing in a different browser or perform a hard refresh (Ctrl+F5).</div>';
+            }
+            
+            // Update the conclusion section
+            const conclusionElement = document.getElementById('finalConclusion');
+            if (allSameDimensions) {
+                conclusionElement.className = 'problem';
+                conclusionElement.innerHTML = `
+                    <h2>📋 Conclusion</h2>
+                    <p><strong>Most likely cause:</strong> The image files themselves contain the same content.</p>
+                    <p><strong>Solution:</strong> Open the image files in an image editor to verify their content, or replace them with the correct images.</p>
+                `;
+            } else {
+                conclusionElement.className = 'conclusion';
+                conclusionElement.innerHTML = `
+                    <h2>📋 Conclusion</h2>
+                    <p><strong>Most likely cause:</strong> Browser caching or display issue.</p>
+                    <p><strong>Solution:</strong> Try viewing in a different browser or perform a hard refresh (Ctrl+F5).</p>
+                `;
+            }
+        }
+        
+        // Log information to console for debugging
+        console.log("========================");
+        console.log("IMAGE VERIFICATION TEST");
+        console.log("Timestamp:", timestamp);
+        console.log("Browser:", navigator.userAgent);
+        console.log("========================");
+        console.log("Instructions:");
+        console.log("1. Observe if all logos appear different");
+        console.log("2. Click the 'Verify Image Content' button");
+        console.log("3. Check the results for the root cause analysis");
+        console.log("========================");
+    </script>
+</body>
+</html>
