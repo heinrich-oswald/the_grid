@@ -149,3 +149,48 @@ Verification
 1) Confirm RLS: client-side writes via anon should fail; reads succeed.
 2) Confirm Edge Function writes: saving in Admin pushes via `validate-admin-settings` and updates DB.
 3) Confirm realtime: open two browsers and observe instant updates without refresh.
+Admin Panel Sync Across Versions
+--------------------------------
+Goal: Ensure changes made in `admin.html` propagate to ALL site versions (local or deployed) instantly or within fallback polling.
+
+Prerequisites
+- All pages include `assets/config.js` and `assets/admin_sync.js`.
+- Backend running on `:5000` (`python backend/app.py`) or Supabase configured.
+
+Option A: Flask backend (recommended for LAN/local)
+1) In Admin → Connectivity & Config:
+   - Set `Backend Provider`: `Flask`.
+   - Set `API Host`: the backend host reachable by all clients (e.g. your LAN IP `192.168.1.5` or domain).
+   - Set `API Port`: `5000`.
+   - Set `Admin Token`: leave blank unless backend enforces `ADMIN_API_TOKEN`.
+   - Click `Save Config` (writes overrides to `localStorage`, reloads page).
+2) Backend environment:
+   - `GRID_ALLOWED_ORIGIN`: set to the origin(s) serving your pages (e.g. `http://localhost:8000` or your domain). This enables CORS for `/api/*`.
+   - `ADMIN_API_TOKEN` (optional): when set, clients must supply matching token (the admin panel writes it to `localStorage.admin_api_token`).
+3) How sync works (Flask):
+   - Admin saves → `PUT /api/admin/settings` persists to SQLite.
+   - Backend `broadcast_settings()` pushes updates to `/api/admin/stream` via SSE.
+   - Clients (`admin_sync.js`) connect to SSE and write `localStorage.admin_settings`, reducing polling to 60s fallback.
+   - Pages read `localStorage.admin_settings` and react to changes.
+
+Option B: Supabase provider (Lovable Cloud) for multi‑deployment realtime
+1) In `assets/config.js`:
+   - Set `BACKEND_PROVIDER: 'lovable'`.
+   - Provide `LOVABLE_PROJECT_URL` and `LOVABLE_ANON_KEY`.
+   - Keep `LOVABLE_ENABLE_REALTIME: true`.
+   - Optional: `LOVABLE_USE_EDGE_FUNCTION: true` and deploy functions for validated writes.
+2) Create table `grid_admin_settings` (id=1 holds JSON payload). See steps earlier in this file.
+3) How sync works (Supabase):
+   - Admin saves → upsert row id=1.
+   - Clients subscribe to `postgres_changes` → receive payload → write `localStorage.admin_settings`.
+
+Verifying Sync
+- In `admin.html`, toggle `Timers: Disabled` and save.
+- Open `index.html`, `teams.html`, `timebound.html`, `multiplier.html`:
+  - Confirm UI reacts to the new settings.
+  - DevTools → Network: ensure `GET /api/admin/stream` (SSE) returns 200. If blocked, set `GRID_ALLOWED_ORIGIN` correctly and ensure all clients point to the same `API Host` and `API Port`.
+- If deployed across multiple origins, ensure each site’s `localStorage` has matching `GRID_BACKEND_PROVIDER`, `GRID_FLASK_API_HOST`, `GRID_FLASK_API_PORT`, and `admin_api_token` (if used).
+
+Notes
+- `assets/admin_sync.js` is already included on all relevant pages and will keep `localStorage.admin_settings` up to date via SSE or realtime, with 30s polling fallback.
+- If you see `net::ERR_ABORTED` for `/api/admin/stream`, backend may be unreachable from that origin; fix with host/port overrides and CORS as above.

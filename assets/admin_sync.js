@@ -1,15 +1,24 @@
 // Admin settings sync with backend API (Flask on :5000)
 (function(){
   const CFG = window.__GRID_CONFIG__ || {};
-  const provider = (CFG.BACKEND_PROVIDER || 'flask').toLowerCase();
+  // Allow runtime overrides via localStorage to make admin panel cloud-ready without rebuilds
+  const LS = {
+    provider: (localStorage.getItem('GRID_BACKEND_PROVIDER') || CFG.BACKEND_PROVIDER || 'flask').toLowerCase(),
+    host: localStorage.getItem('GRID_FLASK_API_HOST') || CFG.FLASK_API_HOST || location.hostname,
+    port: parseInt(localStorage.getItem('GRID_FLASK_API_PORT') || CFG.FLASK_API_PORT || '5000', 10) || 5000,
+    token: (localStorage.getItem('admin_api_token') || CFG.ADMIN_API_TOKEN || '').trim(),
+  };
+  const provider = LS.provider;
   // Cross-device host override support
-  const API_HOST = CFG.FLASK_API_HOST || location.hostname;
-  const API_PORT = CFG.FLASK_API_PORT || 5000;
+  const API_HOST = LS.host;
+  const API_PORT = LS.port;
   const API_BASE = `${location.protocol}//${API_HOST}:${API_PORT}/api/admin`;
+  // Track SSE client to avoid duplicate connections and enable reconnection
+  let sseClient = null;
 
   async function getSettings() {
     const headers = {};
-    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    const token = LS.token;
     if (token) headers['Authorization'] = `Bearer ${token}`;
     const res = await fetch(`${API_BASE}/settings`, { cache: 'no-store', headers });
     if (!res.ok) throw new Error(`GET settings failed: ${res.status}`);
@@ -18,7 +27,7 @@
 
   async function putSettings(payload) {
     const headers = { 'Content-Type': 'application/json' };
-    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    const token = LS.token;
     if (token) headers['Authorization'] = `Bearer ${token}`;
     const res = await fetch(`${API_BASE}/settings`, {
       method: 'PUT',
@@ -31,7 +40,7 @@
 
   async function deleteSettings() {
     const headers = {};
-    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    const token = LS.token;
     if (token) headers['Authorization'] = `Bearer ${token}`;
     const res = await fetch(`${API_BASE}/settings`, { method: 'DELETE', headers });
     if (!res.ok) throw new Error(`DELETE settings failed: ${res.status}`);
@@ -40,7 +49,7 @@
 
   async function getEvent(type) {
     const headers = {};
-    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    const token = LS.token;
     if (token) headers['Authorization'] = `Bearer ${token}`;
     const res = await fetch(`${API_BASE}/events/${encodeURIComponent(type)}`, { cache: 'no-store', headers });
     if (!res.ok) throw new Error(`GET event ${type} failed: ${res.status}`);
@@ -49,7 +58,7 @@
 
   async function putEvent(type, payload) {
     const headers = { 'Content-Type': 'application/json' };
-    const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+    const token = LS.token;
     if (token) headers['Authorization'] = `Bearer ${token}`;
     const res = await fetch(`${API_BASE}/events/${encodeURIComponent(type)}`, {
       method: 'PUT',
@@ -226,11 +235,15 @@
 
     // Flask SSE realtime
     try {
-      const token = (CFG.ADMIN_API_TOKEN || localStorage.getItem('admin_api_token') || '').trim();
+      const token = LS.token;
       const baseUrl = `${location.protocol}//${API_HOST}:${API_PORT}/api/admin/stream`;
       const sseUrl = token ? `${baseUrl}?token=${encodeURIComponent(token)}` : baseUrl;
-      const es = new EventSource(sseUrl);
-      es.onopen = () => {
+      // Close any previous SSE client before creating a new one
+      if (sseClient && typeof sseClient.close === 'function') {
+        try { sseClient.close(); } catch (e) {}
+      }
+      sseClient = new EventSource(sseUrl);
+      sseClient.onopen = () => {
         // Connected: reduce polling to 60s fallback
         if (pollTimer) {
           clearInterval(pollTimer);
@@ -240,7 +253,7 @@
         }
         setStatus(true);
       };
-      es.onmessage = (evt) => {
+      sseClient.onmessage = (evt) => {
         try {
           const msg = JSON.parse(evt.data);
           const newSettings = msg?.settings;
@@ -252,13 +265,37 @@
           }
         } catch (e) {}
       };
-      es.onerror = () => { setStatus(false); };
+      sseClient.onerror = () => {
+        // Mark offline and attempt a clean reconnection after a short delay
+        setStatus(false);
+        try { sseClient.close(); } catch (e) {}
+        sseClient = null;
+        // Ensure normal polling resumes promptly
+        if (pollTimer) {
+          clearInterval(pollTimer);
+        }
+        pollTimer = setInterval(async () => {
+          try { await syncNow(); setStatus(true); } catch (e) { setStatus(false); }
+        }, 30000);
+        // Retry SSE connection with a simple backoff
+        setTimeout(() => {
+          try { startRealtime(); } catch (e) {}
+        }, 5000);
+      };
     } catch (e) {
       // SSE not available; keep normal polling
     }
   }
 
-  window.AdminAPI = { ...AdminAPIImpl, syncNow, startPolling, startRealtime, setStatus };
+  async function getDbHealth(){
+    try {
+      const res = await fetch(`${API_BASE}/db_health`, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`db_health failed: ${res.status}`);
+      return res.json();
+    } catch (e) { return { ok: false, error: String(e) }; }
+  }
+
+  window.AdminAPI = { ...AdminAPIImpl, syncNow, startPolling, startRealtime, setStatus, getDbHealth };
 
   document.addEventListener('DOMContentLoaded', () => {
     // Initial sync and begin polling

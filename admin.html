@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Grid — Admin Panel</title>
   <link rel="stylesheet" href="spectacular.css" />
+  <link rel="stylesheet" href="assets/ui.css" />
   <style>
     :root {
       --bg: #050505;
@@ -96,9 +97,45 @@
       <section class="card">
         <div class="hero">
           <h1>Admin Panel</h1>
-          <p>Override site behavior. Settings persist via localStorage.</p>
+          <p>Override site behavior. Settings persist via backend and localStorage.</p>
         </div>
         <div class="controls" id="controls">
+          <div class="card" style="padding:12px; margin-bottom:12px;">
+            <div class="row" style="justify-content:space-between; align-items:center;">
+              <div style="font-weight:700;">Connectivity & Config</div>
+              <div id="connStatus" class="pill off">Backend: Offline</div>
+            </div>
+            <div class="row" style="gap:8px; align-items:center; margin-top:8px;">
+              <label style="width:150px;color:var(--muted)">Backend Provider</label>
+              <select id="cfgProvider" style="flex:1">
+                <option value="flask">Flask (LAN/Cloud)</option>
+                <option value="lovable">Lovable (Supabase)</option>
+              </select>
+            </div>
+            <div class="row" style="gap:8px; align-items:center;">
+              <label style="width:150px;color:var(--muted)">API Host</label>
+              <input type="text" id="cfgHost" placeholder="e.g. 192.168.1.5 or api.example.com" style="flex:1" />
+            </div>
+            <div class="row" style="gap:8px; align-items:center;">
+              <label style="width:150px;color:var(--muted)">API Port</label>
+              <input type="number" id="cfgPort" placeholder="5000" style="flex:1" />
+            </div>
+            <div class="row" style="gap:8px; align-items:center;">
+              <label style="width:150px;color:var(--muted)">Admin Token</label>
+              <input type="text" id="cfgToken" placeholder="Bearer token" style="flex:1" />
+            </div>
+            <div class="row" style="gap:8px; margin-top:8px;">
+              <button class="btn" id="cfgSave">Save Config</button>
+              <button class="btn ghost" id="cfgReset">Reset Config</button>
+              <button class="btn ghost" id="cfgHealth">Check DB Health</button>
+              <span id="dbHealth" class="pill off" style="margin-left:auto">DB: Unknown</span>
+            </div>
+            <div class="row" style="gap:8px; margin-top:8px;">
+              <button class="btn" id="cfgOneClick">One‑Click: Use this host (port 5000)</button>
+              <span style="font-size:12px;color:var(--muted)">Sets provider=flask, host=this page’s host, port=5000</span>
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-top:8px;">These overrides apply instantly via localStorage. All site versions pointing to the same backend will sync via SSE or Supabase realtime.</div>
+          </div>
           <div class="row">
             <label class="row" style="gap:6px;">
               <input type="checkbox" id="disableTimers" />
@@ -206,6 +243,42 @@
           <a class="btn ghost" href="teams.html">Teams</a>
           <a class="btn ghost" href="timer_preview.html">Timer Preview</a>
         </div>
+        <hr style="border-color: var(--border-glass); opacity:0.4; margin: 12px 0;" />
+        <div>
+          <div class="hero" style="margin-bottom:6px;">
+            <h2 style="margin:0; font-size: 18px;">Help & Tutorial</h2>
+            <p style="margin:0; color: var(--muted);">A quick guide to connect and sync.</p>
+          </div>
+          <div class="row" style="gap:8px; justify-content:flex-end; margin-top:6px;">
+            <button class="btn ghost" id="tutorialToggle">Hide Tutorial</button>
+          </div>
+          <div id="tutorialBody" style="margin-top:6px;">
+            <ol style="margin:0 0 8px 18px; line-height:1.6;">
+              <li>Start backend (local). In a terminal run <code>python backend/app.py</code>. It should say listening on <code>http://localhost:5000</code>.</li>
+              <li>Open Admin Panel at <code>http://localhost:8000/admin.html</code>.</li>
+              <li>Click <code>One‑Click: Use this host (port 5000)</code> to auto‑set the API host/port.</li>
+              <li>If your backend requires a token, paste it in <code>Admin Token</code> then click <code>Save Config</code>. (On Flask set env <code>ADMIN_API_TOKEN</code> to the same value.)</li>
+              <li>Click <code>Check DB Health</code>. Expected: <code>Online</code> and <code>DB: sqlite</code>. If not, see Troubleshooting below.</li>
+              <li>Make a quick change: set a timer or label in Admin, then open <code>index.html</code> and <code>multiplier.html</code> in other tabs. They should update within seconds.</li>
+              <li>Optional cloud: choose provider <code>lovable</code> for Supabase/Postgres. Set keys in <code>assets/config.js</code> (<code>LOVABLE_URL</code>, <code>LOVABLE_ANON_KEY</code>). Health will show <code>postgres</code>.</li>
+              <li>To undo config, use <code>Reset Overrides</code> then reload the page.</li>
+            </ol>
+            <div style="font-size:12px;color:var(--muted);margin:8px 0 10px 0;">
+              <strong>Tip:</strong> When health shows <code>DB: sqlite</code>, you are connected to the local Flask backend using SQLite (<code>backend/admin.db</code>). Changes persist and sync via server‑sent events (SSE) to all pages.
+            </div>
+            <div style="border-top:1px solid var(--border); padding-top:8px; margin-top:10px;">
+              <div style="font-weight:600; font-size:13px; margin-bottom:6px;">Troubleshooting</div>
+              <ul style="margin:0 0 8px 18px; line-height:1.6;">
+                <li><strong>Health fails</strong>: Ensure backend is running, host is <code>localhost</code>, port is <code>5000</code>, and token (if set) matches.</li>
+                <li><strong>SSE error</strong>: An initial red error like <code>/api/admin/stream</code> can appear until backend connects. It should clear after health is OK.</li>
+                <li><strong>Port conflict</strong>: Change backend port in <code>backend/app.py</code> or set <code>GRID_FLASK_API_PORT</code> in the Admin Panel.</li>
+                <li><strong>Reset config</strong>: Click <code>Reset Overrides</code> or in DevTools run <code>localStorage.clear()</code> and reload.</li>
+                <li><strong>LAN devices</strong>: Use your PC’s IP (e.g., <code>192.168.x.x</code>) as host; keep port <code>5000</code>. Then click health.</li>
+              </ul>
+              <div style="font-size:12px;color:var(--muted);">Need more help? Toggle this card open and follow each step; your changes should reflect immediately across pages.</div>
+            </div>
+          </div>
+        </div>
       </aside>
     </main>
 
@@ -300,6 +373,18 @@
       const timerStatus = document.getElementById('timerStatus');
       const resetBtn = document.getElementById('resetOverrides');
       const logoutBtn = document.getElementById('logout');
+      const connStatus = document.getElementById('connStatus');
+      const cfgProvider = document.getElementById('cfgProvider');
+      const cfgHost = document.getElementById('cfgHost');
+      const cfgPort = document.getElementById('cfgPort');
+      const cfgToken = document.getElementById('cfgToken');
+      const cfgSave = document.getElementById('cfgSave');
+      const cfgReset = document.getElementById('cfgReset');
+      const cfgHealth = document.getElementById('cfgHealth');
+      const dbHealth = document.getElementById('dbHealth');
+      const cfgOneClick = document.getElementById('cfgOneClick');
+      const tutorialBody = document.getElementById('tutorialBody');
+      const tutorialToggle = document.getElementById('tutorialToggle');
 
       // Per-event controls
       const els = {
@@ -335,6 +420,13 @@
         timerStatus.textContent = disabled ? 'Timers: Disabled' : 'Timers: Enabled';
         timerStatus.className = 'pill ' + (disabled ? 'on' : 'off');
 
+        // Config → UI
+        const provider = (localStorage.getItem('GRID_BACKEND_PROVIDER') || (window.__GRID_CONFIG__?.BACKEND_PROVIDER) || 'flask').toLowerCase();
+        cfgProvider.value = provider;
+        cfgHost.value = localStorage.getItem('GRID_FLASK_API_HOST') || (window.__GRID_CONFIG__?.FLASK_API_HOST) || '';
+        cfgPort.value = localStorage.getItem('GRID_FLASK_API_PORT') || (window.__GRID_CONFIG__?.FLASK_API_PORT) || 5000;
+        cfgToken.value = localStorage.getItem('admin_api_token') || (window.__GRID_CONFIG__?.ADMIN_API_TOKEN) || '';
+
         const s = getAdminSettings() || {};
         const ev = s.events || {};
         ['multiplier','timebound','teams'].forEach((key) => {
@@ -363,6 +455,77 @@
         saveAdminSettings(settings);
         syncUI();
       });
+
+      // Connectivity & Config handlers
+      function setConn(online){
+        connStatus.textContent = online ? 'Backend: Online' : 'Backend: Offline';
+        connStatus.className = 'pill ' + (online ? 'on' : 'off');
+      }
+      cfgSave.addEventListener('click', () => {
+        localStorage.setItem('GRID_BACKEND_PROVIDER', (cfgProvider.value || 'flask').toLowerCase());
+        localStorage.setItem('GRID_FLASK_API_HOST', (cfgHost.value || '').trim());
+        localStorage.setItem('GRID_FLASK_API_PORT', String(cfgPort.value || '5000'));
+        localStorage.setItem('admin_api_token', (cfgToken.value || '').trim());
+        alert('Configuration saved. Reloading to apply...');
+        location.reload();
+      });
+      cfgReset.addEventListener('click', () => {
+        localStorage.removeItem('GRID_BACKEND_PROVIDER');
+        localStorage.removeItem('GRID_FLASK_API_HOST');
+        localStorage.removeItem('GRID_FLASK_API_PORT');
+        // Do not remove admin_auth on reset; keep login state
+        alert('Configuration reset. Reloading...');
+        location.reload();
+      });
+      cfgHealth.addEventListener('click', async () => {
+        try {
+          const info = await (window.AdminAPI?.getDbHealth ? AdminAPI.getDbHealth() : Promise.resolve({ ok:false }));
+          if (info && info.ok) {
+            dbHealth.textContent = `DB: ${info.driver || 'ok'}`;
+            dbHealth.className = 'pill on';
+            setConn(true);
+          } else {
+            dbHealth.textContent = 'DB: Error';
+            dbHealth.className = 'pill off';
+            setConn(false);
+          }
+        } catch (e) {
+          dbHealth.textContent = 'DB: Error';
+          dbHealth.className = 'pill off';
+          setConn(false);
+        }
+      });
+
+      // One-click setup to make this trivial
+      if (cfgOneClick) {
+        cfgOneClick.addEventListener('click', () => {
+          try {
+            const host = location.hostname;
+            localStorage.setItem('GRID_BACKEND_PROVIDER', 'flask');
+            localStorage.setItem('GRID_FLASK_API_HOST', host);
+            localStorage.setItem('GRID_FLASK_API_PORT', '5000');
+            alert(`Configured to use Flask backend on ${host}:5000. Reloading…`);
+            location.reload();
+          } catch (e) {
+            alert('One-click setup failed: ' + String(e));
+          }
+        });
+      }
+
+      // Tutorial toggle with persisted state
+      if (tutorialBody && tutorialToggle) {
+        const hidden = localStorage.getItem('admin_tutorial_hidden') === 'true';
+        if (hidden) {
+          tutorialBody.style.display = 'none';
+          tutorialToggle.textContent = 'Show Tutorial';
+        }
+        tutorialToggle.addEventListener('click', () => {
+          const isHidden = tutorialBody.style.display === 'none';
+          tutorialBody.style.display = isHidden ? '' : 'none';
+          tutorialToggle.textContent = isHidden ? 'Hide Tutorial' : 'Show Tutorial';
+          localStorage.setItem('admin_tutorial_hidden', (!isHidden).toString());
+        });
+      }
 
       // Save helpers
       function saveEventConfig(key, updates) {
@@ -449,7 +612,7 @@
       });
 
       if (window.AdminAPI && AdminAPI.syncNow) {
-        AdminAPI.syncNow().then(syncUI).catch(syncUI);
+        AdminAPI.syncNow().then(() => { syncUI(); setConn(true); }).catch(() => { syncUI(); setConn(false); });
       } else {
         syncUI();
       }
