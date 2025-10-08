@@ -246,6 +246,15 @@
     .logo-square{width:140px;height:140px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:40px;box-shadow:0 12px 32px rgba(0,0,0,0.6);transition:transform 0.3s ease;}
     /* Sponsor carousel */
     .sponsor-row{display:flex;overflow:hidden;border-radius:10px;padding:10px;gap:20px;align-items:center;background:var(--glass);margin-top:16px;border:1px solid var(--border-glass);}
+    /* Mobile-specific breaks */
+    @media (max-width: 768px) {
+      .grid{grid-template-columns:1fr;gap:28px;margin-top:24px}
+      .cta-row{flex-direction:column;gap:12px}
+      .stats{flex-direction:column;gap:12px}
+      .features{grid-template-columns:1fr;gap:14px}
+      .card{padding:24px}
+      .card + .card{margin-top:16px}
+    }
     .sponsor-track{display:flex;gap:28px;animation:scroll 20s linear infinite;align-items:center;}
     .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:8px;background:var(--glass);width:200px;height:100px;transition:all 0.3s ease;}
     .sponsor:hover{background:var(--card-glass);transform:scale(1.05);}

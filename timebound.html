@@ -235,6 +235,13 @@
       
       /* Grid layout for main content */
       .grid{display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:start;margin-top:28px;position:relative}
+      /* Mobile-specific breaks */
+      @media (max-width: 768px) {
+        .grid{grid-template-columns:1fr;gap:28px;margin-top:24px}
+        .cta-row{flex-direction:column;gap:12px}
+        .card{padding:24px}
+        .card + .card{margin-top:16px}
+      }
       
       /* Scanline effect */
       .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 2px); }
