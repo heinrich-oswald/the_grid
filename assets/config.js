@@ -1,21 +1,12 @@
-// Global configuration for backend provider selection
-// Set BACKEND_PROVIDER to 'flask' (default) or 'lovable'
-// For Lovable Cloud (Supabase), provide project URL and anon key
-window.__GRID_CONFIG__ = {
-  BACKEND_PROVIDER: 'flask', // 'flask' or 'lovable'
-  // Lovable (Supabase) project settings
-  LOVABLE_PROJECT_URL: '', // e.g. 'https://your-project-ref.supabase.co'
-  LOVABLE_ANON_KEY: '', // public anon key
-  // Optional: route writes through an Edge Function (service role) for strict validation
-  LOVABLE_USE_EDGE_FUNCTION: false,
-  // Optional: enable realtime channel subscription for instant propagation
-  LOVABLE_ENABLE_REALTIME: true,
-  // Flask (SQLite) backend host overrides for cross-device access
-  // Set to your server's LAN IP if other devices connect via that IP
-  FLASK_API_HOST: '', // e.g. '192.168.1.5'
-  FLASK_API_PORT: 5000
-  ,
-  // Admin API token for protected endpoints (optional; can also be set via localStorage)
-  // e.g. localStorage.setItem('admin_api_token', 'your-secret')
-  ADMIN_API_TOKEN: ''
-};
+// Unified client config for cloud Admin API
+// If you deploy your own API, update API_BASE_URL below.
+
+(function(){
+  var CFG = (window.__GRID_CONFIG__ || {});
+  var override = (localStorage.getItem('API_BASE_URL') || '').trim();
+  window.__GRID_CONFIG__ = Object.assign({}, CFG, {
+    API_BASE_URL: override || 'https://the-grid-admin-1.onrender.com/api/admin'
+  });
+  // Compatibility alias for guides using APP_CONFIG; keeps existing consumers intact
+  window.APP_CONFIG = Object.assign({}, window.APP_CONFIG || {}, window.__GRID_CONFIG__);
+})();

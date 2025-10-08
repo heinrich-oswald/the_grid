@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Grid · Developer Index</title>
+  <link rel="stylesheet" href="spectacular.css" />
+  <link rel="stylesheet" href="assets/ui.css" />
+  <style>
+    .wrap { max-width: 1000px; margin: 24px auto; padding: 18px; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+    .card { border:1px solid var(--border); border-radius:12px; padding:16px; background: var(--paper2); }
+    .hero { margin-bottom:8px; }
+    .hero h1 { margin:0; font-size:22px; }
+    .list { display:flex; flex-direction:column; gap:8px; }
+    a.btn { display:inline-block; }
+  </style>
+  <script>
+    // Small helper to show API base/token status from config
+    document.addEventListener('DOMContentLoaded', () => {
+      const CFG = window.__GRID_CONFIG__ || window.APP_CONFIG || {};
+      const apiBase = (CFG.API_BASE_URL || localStorage.getItem('API_BASE_URL') || '').trim();
+      const tok = (localStorage.getItem('admin_api_token') || CFG.ADMIN_API_TOKEN || '').trim();
+      document.getElementById('apiBase').textContent = apiBase || '(not set)';
+      const pill = document.getElementById('tokenStatus');
+      const ok = !!tok; pill.textContent = ok ? 'Token: Set' : 'Token: Not Set'; pill.className = 'pill ' + (ok ? 'on' : 'off');
+    });
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="hero">
+        <h1>Developer Index</h1>
+        <p style="color:var(--muted)">Quick links for pages, diagnostics, and documentation.</p>
+      </div>
+      <div class="row" style="gap:8px; align-items:center;">
+        <label style="width:150px;color:var(--muted)">Current API Base</label>
+        <div id="apiBase" style="flex:1; font-size:12px; opacity:0.85; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></div>
+        <span id="tokenStatus" class="pill off">Token: Not Set</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="hero"><h2 style="margin:0; font-size:18px;">Main Pages</h2></div>
+        <div class="list">
+          <a class="btn" href="index.html">Home</a>
+          <a class="btn" href="teams.html">Teams</a>
+          <a class="btn" href="timebound.html">Time Bound</a>
+          <a class="btn" href="multiplier.html">Multiplier</a>
+          <a class="btn" href="timer_preview.html">Timer Preview</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hero"><h2 style="margin:0; font-size:18px;">Admin & Diagnostics</h2></div>
+        <div class="list">
+          <a class="btn" href="admin_login.html">Admin Login</a>
+          <a class="btn" href="admin.html">Admin Panel</a>
+          <a class="btn" href="final_image_verification.html">Final Image Verification</a>
+          <a class="btn" href="logo_implementation_verification.html">Logo Implementation Verification</a>
+          <a class="btn" href="cache_bust_test.html">Cache Bust Test</a>
+          <a class="btn" href="cache_bust_diagnostic.html">Cache Bust Diagnostic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hero"><h2 style="margin:0; font-size:18px;">Documentation</h2></div>
+        <div class="list">
+          <a class="btn" href="README.md">README (repo root)</a>
+          <a class="btn" href="README_DEPLOY.txt">Deployment Guide</a>
+          <a class="btn" href="docs/code-organization.md">Code Organization</a>
+          <a class="btn" href="docs/architecture.md">Architecture Overview</a>
+          <a class="btn" href="render.yaml">Render Blueprint</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hero"><h2 style="margin:0; font-size:18px;">Backends</h2></div>
+        <div class="list">
+          <a class="btn" href="node-admin-api/server.js">Node Admin API · server.js</a>
+          <a class="btn" href="node-admin-api/Dockerfile">Node Admin API · Dockerfile</a>
+          <a class="btn" href="backend/app.py">Flask Admin API · app.py</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

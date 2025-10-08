@@ -150,6 +150,20 @@ body::before {
   background-size: 60px 60px, 60px 60px, 60px 60px;
 }
 
+/* Neat mode — minimal shadows, tighter spacing, cleaner presentation (opt-in) */
+.neat .wrap { max-width: 980px; }
+.neat .card { box-shadow: none; border-color: var(--border); }
+.neat .card:hover { transform: none; box-shadow: none; border-color: var(--border); }
+.neat .nav { backdrop-filter: blur(8px); box-shadow: none; }
+.neat .btn { box-shadow: none; }
+.neat .btn:hover { box-shadow: none; transform: translateY(-1px); }
+.neat .leaderboard-list li,
+.neat .schedule-list li { box-shadow: none; transform: none; }
+.neat .hero-title { text-shadow: none; -webkit-text-stroke: 0; }
+.neat .hero-sub { color: var(--muted); }
+.neat h1, .neat h2, .neat h3 { margin-bottom: var(--space-2); }
+.neat p { color: var(--muted); line-height: 1.7; }
+
 /* Utility classes */
 .mb-1{ margin-bottom: var(--space-2); }
 .mb-2{ margin-bottom: var(--space-3); }
@@ -201,7 +215,7 @@ body::before {
 /* Schedule */
 .schedule-list { list-style: none; padding: 0; margin: var(--space-2) 0 0; display: grid; gap: 10px; }
 .schedule-list li { display: grid; grid-template-columns: 84px 1fr 96px; align-items: center; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: rgba(255,255,255,0.04); }
-.schedule-list .date { font-weight: 700; color: #d1fae5; background: rgba(34,197,94,0.2); border: 1px solid rgba(34,197,94,0.35); border-radius: 8px; padding: 6px 8px; text-align: center; }
+.schedule-list .date { font-weight: 700; color: #ffe5e8; background: rgba(232, 76, 94, 0.18); border: 1px solid rgba(232, 76, 94, 0.35); border-radius: 8px; padding: 6px 8px; text-align: center; }
 .schedule-list .event { font-weight: 600; }
 .schedule-list .time { text-align: right; color: var(--muted); font-weight: 600; }
 
@@ -213,7 +227,7 @@ body::before {
 /* Tabs */
 .tabs { display:flex; gap:8px; margin: 0 0 var(--space-2); }
 .tab { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,0.06); font-weight: 700; font-size: 13px; cursor: pointer; }
-.tab.active { background: linear-gradient(135deg, var(--accent2), var(--accent3)); color: #0a0a0a; border-color: rgba(34,197,94,0.45); }
+.tab.active { background: linear-gradient(135deg, var(--accent2), var(--accent3)); color: #0a0a0a; border-color: rgba(232, 76, 94, 0.45); }
 
 /* Badges */
 .badge-row { display:flex; gap: 10px; flex-wrap: wrap; }
@@ -344,3 +358,34 @@ body::before {
 .hero::after { pointer-events: none; }
 
 /* (Reverted) Removed ambient orb and hover micro-interactions */
+
+/* Updated logo effects */
+.logo, .logo-square {
+  position: relative;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.logo img, .logo-square img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+.logo::after, .logo-square::after {
+  content: '';
+  position: absolute; top: 0; left: -25%; width: 20%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+  transform: skewX(-18deg);
+  transition: left .4s ease;
+  pointer-events: none;
+}
+.logo:hover, .logo-square:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+}
+.logo:hover::after, .logo-square:hover::after {
+  left: 120%;
+}

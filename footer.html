@@ -81,14 +81,11 @@
           });
         }
         
-        // Add event listeners to all register buttons
-        document.querySelectorAll('.btn[href*="register"], a[href*="register"]').forEach(button => {
+        // Only intercept local #register section links; allow navigation to register.html
+        document.querySelectorAll('a[href^="#register"], .btn[href^="#register"]').forEach(button => {
           button.addEventListener('click', function(e) {
-            // Only intercept the click if we're dealing with a local register button, not external links
-            if (this.getAttribute('href').startsWith('#') || this.getAttribute('href').toLowerCase().includes('register')) {
-              e.preventDefault();
-              openRegister();
-            }
+            e.preventDefault();
+            openRegister();
           });
         });
       }

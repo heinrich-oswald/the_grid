@@ -459,6 +459,9 @@
                             <div class="label">Optimization Techniques</div>
                         </div>
                     </div>
+                    <div class="chart-wrap" style="margin-top:16px">
+                        <canvas id="multiplierCriteriaChart" height="160"></canvas>
+                    </div>
                     <p>Judges will use automated testing to evaluate performance against large input sets.</p>
                 </div>
 
@@ -510,5 +513,17 @@
 © The Grid • Multiplier Event • Contact: <a href="mailto:heinrich.oswald24@gmail.com">heinrich.oswald24@gmail.com</a> • <a href="https://discord.gg/XfbahWtPMg" style="color: var(--accent1)" target="_blank" rel="noopener noreferrer">Join Discord</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
         </footer>
     </div>
+  <!-- Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/charts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      GridCharts.renderPieChart(
+        'multiplierCriteriaChart',
+        ['Algorithm Efficiency','Correctness','Code Quality','Optimization'],
+        [40,30,20,10]
+      );
+    });
+  </script>
   </body>
 </html>

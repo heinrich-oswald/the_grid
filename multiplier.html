@@ -67,8 +67,8 @@
     /* Main Container */
     .wrap {
       max-width: 1200px;
-      margin: 24px auto;
-      padding: 18px;
+      margin: 32px auto;
+      padding: 24px;
     }
     
     /* Common Navigation */
@@ -182,17 +182,17 @@
       100% { transform: translateY(0) rotate(0deg); }
     }
     .particle { animation-duration: calc(8s * var(--duration-factor)); }
-    .cta-row{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+    .cta-row{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
     .btn{background:linear-gradient(135deg, var(--accent2), var(--accent3));color:var(--bg);padding:12px 24px;border-radius:8px;border:0;font-weight:700;cursor:pointer;transition:all 0.3s ease;text-decoration:none;display:inline-block}
     .btn:hover{transform:translateY(-2px);}
     .btn:active{transform:translateY(0);}
     .btn.ghost{background:transparent;border:1px solid var(--accent2);color:var(--accent3);}
     .btn.ghost:hover{background:var(--glass);}
-    .grid{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:start;margin-top:24px;position:relative}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:start;margin-top:28px;position:relative}
     .card{
         background:linear-gradient(135deg, var(--card-glass), rgba(18, 18, 18, 0.6));
         border:1px solid var(--border-glass);
-        padding:24px;
+        padding:28px;
         border-radius:16px;
         transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         position:relative;
@@ -225,13 +225,13 @@
         border-color: var(--border-glass-hover);
       }
 
-    .stats{display:flex;gap:12px;flex-wrap:wrap}
-    .stat{flex:1;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;text-align:center;transition:all 0.3s ease;min-width:100px}
+    .stats{display:flex;gap:16px;flex-wrap:wrap}
+    .stat{flex:1;padding:12px;background:rgba(255,255,255,0.02);border-radius:8px;text-align:center;transition:all 0.3s ease;min-width:100px}
     .stat:hover{background:var(--glass);transform:scale(1.03);}
-    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
-    .feature{background:rgba(255,255,255,0.01);padding:10px;border-radius:8px;transition:all 0.3s ease;display:flex;align-items:center;gap:8px}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
+    .feature{background:rgba(255,255,255,0.01);padding:12px;border-radius:8px;transition:all 0.3s ease;display:flex;align-items:center;gap:10px}
     .feature:hover{background:var(--glass);transform:translateX(4px);}
-    .register{display:flex;flex-direction:column;gap:8px}
+    .register{display:flex;flex-direction:column;gap:12px}
     input,select,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;transition:all 0.3s ease;}
     input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent3);background:rgba(255,255,255,0.02);}
     footer{margin-top:20px;color:var(--muted);font-size:13px;padding-top:20px;border-top:1px solid var(--glass);}
@@ -239,13 +239,13 @@
     .hero:hover{transform: scale(1.02)}
     .hero img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.7);transition: filter 0.3s ease}
     .hero:hover img{filter: brightness(0.8)}
-    .hero-overlay{position:relative;margin-top:-100px;padding:14px}
-    .hero-card{background:linear-gradient(180deg, rgba(5,5,5,0.8), rgba(5,5,5,0.6));border-radius:12px;padding:14px;border:1px solid var(--border-glass);backdrop-filter: blur(6px);position:relative;z-index:1;transition: transform 0.3s ease, box-shadow 0.3s ease}
+    .hero-overlay{position:relative;margin-top:-100px;padding:18px}
+    .hero-card{background:linear-gradient(180deg, rgba(5,5,5,0.8), rgba(5,5,5,0.6));border-radius:12px;padding:18px;border:1px solid var(--border-glass);backdrop-filter: blur(6px);position:relative;z-index:1;transition: transform 0.3s ease, box-shadow 0.3s ease}
     .hero-card:hover{transform: translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,0.4)}
-    .ticker{margin-top:12px;padding:8px;border-radius:8px;background:var(--glass);font-size:14px;color:var(--paper);font-weight:600;border-left:3px solid var(--accent3);}
-    .logo-square{width:140px;height:140px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:40px;box-shadow:0 10px 30px rgba(0,0,0,0.6);transition:transform 0.3s ease;}
+    .ticker{margin-top:16px;padding:10px;border-radius:8px;background:var(--glass);font-size:14px;color:var(--paper);font-weight:600;border-left:3px solid var(--accent3);}
+    .logo-square{width:140px;height:140px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:40px;box-shadow:0 12px 32px rgba(0,0,0,0.6);transition:transform 0.3s ease;}
     /* Sponsor carousel */
-    .sponsor-row{display:flex;overflow:hidden;border-radius:10px;padding:8px;gap:18px;align-items:center;background:var(--glass);margin-top:14px;border:1px solid var(--border-glass);}
+    .sponsor-row{display:flex;overflow:hidden;border-radius:10px;padding:10px;gap:20px;align-items:center;background:var(--glass);margin-top:16px;border:1px solid var(--border-glass);}
     .sponsor-track{display:flex;gap:28px;animation:scroll 20s linear infinite;align-items:center;}
     .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:8px;background:var(--glass);width:200px;height:100px;transition:all 0.3s ease;}
     .sponsor:hover{background:var(--card-glass);transform:scale(1.05);}
@@ -328,7 +328,7 @@
     <div class="wrap">
     <div class="nav sticky">
       <div class="brand">
-        <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
+        <div class="logo"><img src="assets/logo.png" alt="The Grid logo"></div>
         <div>
           <div class="brand-title">THE GRID</div>
           <div class="brand-sub">Multiplier Event</div>
@@ -339,7 +339,7 @@
         <a class="btn" href="timebound.html">Time Bound</a>
         <a class="btn" href="teams.html">Teams</a>
         <a class="btn ghost" href="multiplier_rules.html">Rules</a>
-        <a class="btn" href="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/viewform" target="_blank" rel="noopener noreferrer">Register</a>
+        <a class="btn" href="register.html" target="_self">Register</a>
       </div>
     </div>
 
@@ -387,7 +387,7 @@
                 First round: 10 people/₹500, second round: 20 people/₹1000, third round: 40 people/₹2000, and so on. Participate in any round you want! Every 3 months, we reset to 10 people to maintain competition quality.
               </div>
               <div class="cta-row" style="margin-top:16px;gap:14px;">
-                <a class="btn" href="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/viewform" target="_blank" rel="noopener noreferrer" style="font-size:16px;padding:12px 24px;">Secure Your Slot</a>
+                <a class="btn" href="register.html" target="_self" style="font-size:16px;padding:12px 24px;">Secure Your Slot</a>
                 <a class="btn ghost" href="multiplier_rules.html" style="font-size:16px;padding:12px 24px;">Event Rules</a>
               </div>
             </div>
@@ -533,7 +533,7 @@
           <h3 style="background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">Register — THE GRID Multiplier Event</h3>
           <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">Secure your spot in our most exclusive challenge</div>
           
-          <a class="btn" href="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/viewform" target="_blank" rel="noopener noreferrer" style="margin-top:24px;padding:14px 0px;width:100%;font-size:16px;text-align:center;display:block;">Register Through Form</a>
+          <a class="btn" href="register.html" target="_self" style="margin-top:24px;padding:14px 0px;width:100%;font-size:16px;text-align:center;display:block;">Register Through Form</a>
           
           <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--glass);">
             <div style="font-weight:700;">Join our Discord</div>
@@ -565,7 +565,7 @@
   </div>
 
   <!-- Sticky register button -->
-  <a class="sticky-register-btn" href="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/viewform" target="_blank" rel="noopener noreferrer">CLAIM SLOT</a>
+  <a class="sticky-register-btn" href="register.html" target="_self" rel="noopener noreferrer">CLAIM SLOT</a>
 
   <script>
     // FAQ accordion behavior with smooth animations
@@ -1054,5 +1054,12 @@
     });
 
   </script>
-</body>
-</html>
+  <script>
+    // Apply "neat" UI mode for cleaner look on event pages
+    document.addEventListener('DOMContentLoaded', function(){
+      document.body.classList.add('neat');
+    });
+  </script>
+  
+  </body>
+  </html>

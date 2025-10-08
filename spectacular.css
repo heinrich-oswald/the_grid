@@ -488,7 +488,7 @@
   margin-bottom: 24px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 255, 128, 0.2);
+  border: 1px solid rgba(232, 76, 94, 0.2);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: hidden;
   position: relative;
@@ -501,7 +501,7 @@
   margin-bottom: 24px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 255, 128, 0.2);
+  border: 1px solid rgba(232, 76, 94, 0.2);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: hidden;
   position: relative;
@@ -559,8 +559,8 @@
 }
 
 .event-btn.multiplier {
-  background: linear-gradient(135deg, rgba(75, 180, 126, 0.15), rgba(70, 109, 104, 0.05));
-  border-color: rgba(75, 180, 126, 0.4);
+  background: linear-gradient(135deg, rgba(232, 76, 94, 0.15), rgba(75, 118, 180, 0.08));
+  border-color: rgba(232, 76, 94, 0.35);
   animation: eventGlow 2s ease-in-out infinite;
 }
 
@@ -616,7 +616,7 @@
 
 .event-btn.multiplier:hover {
   border-color: #ff6b6b;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(75, 180, 126, 0.35);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px var(--accent1-glow);
 }
 
 .event-btn.timebound:hover {
@@ -643,9 +643,9 @@
 }
 
 @keyframes eventGlow {
-  0% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(75, 180, 126, 0.3); }
-  50% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 30px rgba(75, 180, 126, 0.5); }
-  100% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(75, 180, 126, 0.3); }
+  0% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px var(--accent1-glow); }
+  50% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 30px var(--accent1-glow); }
+  100% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px var(--accent1-glow); }
 }
 
 .event-card::before {
@@ -679,13 +679,13 @@
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 15px;
-  box-shadow: 0 2px 8px rgba(0, 255, 128, 0.3);
+  box-shadow: 0 2px 8px var(--accent1-glow);
   animation: badgePulse 2s ease-in-out infinite alternate;
 }
 
 @keyframes badgePulse {
-  0% { box-shadow: 0 2px 8px rgba(0, 255, 128, 0.3); }
-  100% { box-shadow: 0 2px 16px rgba(0, 255, 128, 0.5); }
+  0% { box-shadow: 0 2px 8px var(--accent1-glow); }
+  100% { box-shadow: 0 2px 16px var(--accent1-glow); }
 }
 
 /* === Enhanced Stats & Features with Better Alignment === */

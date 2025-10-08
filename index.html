@@ -9,6 +9,10 @@
   <!-- Common External Resources -->
     <link rel="stylesheet" href="spectacular.css">
     <link rel="stylesheet" href="assets/ui.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
       /* Common CSS Variables */
       :root {
@@ -39,7 +43,7 @@
         html, body {
           height: 100%;
           margin: 0;
-          font-family: Inter, system-ui, sans-serif;
+          font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
           scroll-behavior: smooth;
         }
         
@@ -148,20 +152,9 @@
           z-index:2;
         }
         
-        /* Logo shine effect */
-      .logo::before{
-        content:'';
-        position:absolute;
-        top:-50%;
-        left:-50%;
-        width:200%;
-        height:200%;
-        background:linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-        transform:rotate(30deg);
-        animation: logoShine 2s infinite;
-      }
-      /* Ensure top-bar logo image shifts away from green hue */
-      .logo img { filter: hue-rotate(-120deg) saturate(1.05) brightness(1.02); }
+      /* Updated: rely on shared logo effects in assets/ui.css */
+      .logo::before{ display:none; }
+      .logo img { filter: none; }
         
         @keyframes logoShine {
           0% { transform: translateX(-100%) rotate(30deg); }
@@ -169,10 +162,7 @@
         }
         
         /* Logo hover effect */
-        .logo:hover{
-          transform:scale(1.08) translateY(-2px);
-          box-shadow:0 0 40px var(--accent1-glow), 0 0 60px rgba(232, 76, 94, 0.3);
-        }
+        .logo:hover{ transform: translateY(-2px) scale(1.03); }
         
         /* Brand title */
         .brand-title{
@@ -183,14 +173,23 @@
           margin:0;
           padding:0;
           line-height:1.2;
-          font-family:Inter, system-ui, Roboto, sans-serif;
+          font-family:'Plus Jakarta Sans', system-ui, Roboto, sans-serif;
         }
       /* Brand Subtitle */
       .brand-sub {
         font-size: 12px;
         color: var(--muted);
-        font-family: 'Rajdhani', sans-serif;
+        font-family: 'Sora', system-ui, sans-serif;
         letter-spacing: 0.5px;
+      }
+      /* Distinct font for Hackathon/Challenges taglines */
+      .hero-caption {
+        font-family: 'Sora', system-ui, sans-serif;
+        letter-spacing: 0.6px;
+      }
+      /* Apply distinct font to the hero title as well */
+      .hero-title {
+        font-family: 'Sora', system-ui, sans-serif;
       }
       /* CTA Row */
       .cta-row {
@@ -216,7 +215,7 @@
         display: inline-block;
         font-size: 16px;
         letter-spacing: 0.8px;
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: 'Manrope', sans-serif;
         z-index: 1;
         }
       /* Button Glow Effects */
@@ -257,7 +256,7 @@
       }
       
       .btn:hover {
-        background: linear-gradient(135deg, var(--accent1), var(--accent2));
+        background: linear-gradient(135deg, var(--accent1) 0%, var(--accent1) 99%, #4b76b4 100%);
         transform: translateY(-3px) scale(1.04);
         box-shadow: 0 0 25px var(--accent1-glow), 0 0 40px rgba(232, 76, 94, 0.3);
         border-color: var(--accent1);
@@ -835,7 +834,7 @@
     <div class="hero" aria-hidden="true">
       <img src="assets/banner.png" alt="The Grid banner" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.7);">
       <!-- Banner caption -->
-      <div style="position:absolute;bottom:20px;left:20px;right:20px;z-index:2;">
+      <div class="hero-caption" style="position:absolute;bottom:20px;left:20px;right:20px;z-index:2;">
         <div style="font-size:18px;font-weight:800;color:var(--paper);text-shadow:0 2px 10px rgba(0,0,0,0.8);">THE GRID • CODE CHALLENGES & HACKATHONS</div>
       </div>
     </div>
@@ -848,7 +847,7 @@
           <h1 class="hero-title">Code Challenges & Hackathons</h1>
           <p class="hero-sub">Join THE GRID, an online hackathon platform where developers compete in various coding challenges, collaborate in teams, and win exciting prizes.</p>
           <div class="cta-row" style="margin-top:10px">
-            <a class="btn shine" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer">
+            <a class="btn shine" href="register.html" target="_self">
               Register Now
             </a>
             <a class="btn ghost" href="rules.html" target="_self">
@@ -863,26 +862,56 @@
     </div>
 
     <!-- Event selection buttons -->
-    <div style="margin-top:24px;display:flex;flex-direction:column;gap:16px">
+    <div class="event-section" style="margin-top:24px;display:flex;flex-direction:column;gap:16px">
       <h3 style="text-align:center">Choose Your Challenge</h3>
-      <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="event-list">
         <a href="multiplier.html" class="event-btn multiplier">
+          <div class="event-icon" aria-hidden="true">🎯</div>
           <div class="event-btn-content">
-            <h4 style="color: var(--accent1);">Multiplier Event</h4>
-            <p>10 slots • ₹100 entry • ₹500 prize • 7 days prep</p>
+            <div class="event-header">
+              <h4>Multiplier Event</h4>
+              <span class="event-badge">Solo</span>
+            </div>
+            <div class="event-meta" aria-label="Event details">
+              <span>10 slots</span>
+              <span>₹100 entry</span>
+              <span>₹500 prize</span>
+              <span>7 days prep</span>
+            </div>
           </div>
+          <span class="event-chevron" aria-hidden="true">›</span>
         </a>
         <a href="timebound.html" class="event-btn timebound">
+          <div class="event-icon" aria-hidden="true">⏱️</div>
           <div class="event-btn-content">
-            <h4>Time Bound Challenge</h4>
-            <p>10 slots • ₹100 entry • ₹500 prize • 2-hour coding</p>
+            <div class="event-header">
+              <h4>Time Bound Challenge</h4>
+              <span class="event-badge">Timed</span>
+            </div>
+            <div class="event-meta" aria-label="Event details">
+              <span>10 slots</span>
+              <span>₹100 entry</span>
+              <span>₹500 prize</span>
+              <span>2-hour coding</span>
+            </div>
           </div>
+          <span class="event-chevron" aria-hidden="true">›</span>
         </a>
         <a href="teams.html" class="event-btn teams">
+          <div class="event-icon" aria-hidden="true">👥</div>
           <div class="event-btn-content">
-            <h4>Teams Competition</h4>
-            <p>5 team slots • ₹300/team • ₹750 prize • 1-week dev</p>
+            <div class="event-header">
+              <h4>Teams Competition</h4>
+              <span class="event-badge">Team</span>
+            </div>
+            <div class="event-meta" aria-label="Event details">
+              <span>5 team slots</span>
+              <span>₹300/team</span>
+              <span>₹750 prize</span>
+              <span>1-week dev</span>
+            </div>
           </div>
+          <span class="event-chevron" aria-hidden="true">›</span>
         </a>
       </div>
     </div>
@@ -952,13 +981,13 @@
             overflow: hidden;
           }
           .event-btn.multiplier {
-            background: linear-gradient(135deg, rgba(232, 76, 94, 0.15), rgba(178, 58, 72, 0.05));
+            background: linear-gradient(135deg, rgba(232, 76, 94, 0.15) 0%, rgba(232, 76, 94, 0.15) 99%, rgba(75, 118, 180, 0.08) 100%);
           }
           .event-btn.timebound {
-            background: linear-gradient(135deg, rgba(232, 76, 94, 0.12), rgba(178, 58, 72, 0.05));
+            background: linear-gradient(135deg, rgba(232, 76, 94, 0.12) 0%, rgba(232, 76, 94, 0.12) 99%, rgba(75, 118, 180, 0.08) 100%);
           }
           .event-btn.teams {
-            background: linear-gradient(135deg, rgba(232, 76, 94, 0.12), rgba(178, 58, 72, 0.05));
+            background: linear-gradient(135deg, rgba(232, 76, 94, 0.12) 0%, rgba(232, 76, 94, 0.12) 99%, rgba(75, 118, 180, 0.08) 100%);
           }
           .event-btn::before {
             content: '';
@@ -1023,6 +1052,69 @@
 
         </style>
 
+        <!-- Refreshed styles for the Choose Your Challenge buttons -->
+        <style>
+          .event-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+          }
+          .event-list .event-btn {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+          }
+          .event-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(232, 76, 94, 0.12) 0%, rgba(232, 76, 94, 0.12) 99%, rgba(75, 118, 180, 0.10) 100%);
+            flex-shrink: 0;
+            font-size: 18px;
+          }
+          .event-list .event-btn.multiplier .event-icon { background: linear-gradient(135deg, rgba(232, 76, 94, 0.15) 0%, rgba(232, 76, 94, 0.15) 99%, rgba(75, 118, 180, 0.10) 100%); }
+          .event-list .event-btn.timebound .event-icon { background: linear-gradient(135deg, rgba(232, 76, 94, 0.12) 0%, rgba(232, 76, 94, 0.12) 99%, rgba(75, 118, 180, 0.10) 100%); }
+          .event-list .event-btn.teams .event-icon { background: linear-gradient(135deg, rgba(232, 76, 94, 0.12) 0%, rgba(232, 76, 94, 0.12) 99%, rgba(75, 118, 180, 0.10) 100%); }
+
+          .event-btn-content { flex: 1; }
+          .event-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+          }
+          .event-header h4 { margin: 0; font-size: 18px; }
+          .event-badge {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(232, 76, 94, 0.3);
+            color: var(--muted);
+          }
+          .event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 4px;
+          }
+          .event-meta span::after { content: "•"; margin: 0 4px; opacity: 0.6; }
+          .event-meta span:last-child::after { content: ""; margin: 0; }
+          .event-chevron {
+            margin-left: auto;
+            color: var(--muted);
+            transition: transform 0.2s ease, color 0.2s ease;
+            font-size: 20px;
+          }
+          .event-list .event-btn:hover .event-chevron { transform: translateX(3px); color: var(--accent1); }
+        </style>
+
         <!-- Live Leaderboard with tabs -->
         <div class="card mt-2" id="leaderboardCard">
           <div class="row" style="justify-content:space-between; align-items:center;">
@@ -1062,7 +1154,7 @@
         <!-- FAQ Section -->
         <div id="faq" class="card faq fade-in delay-500">
           <h3>Frequently Asked Questions</h3>
-          <div class="faq-item"><div class="faq-q">Who can join THE GRID?</div><div class="faq-a">Anyone with a Discord account and an interest in coding! We welcome developers of all skill levels to join our coding competitions and challenge themselves on THE GRID.</div></div>
+          <div class="faq-item"><div class="faq-q">Who can join THE GRID?</div><div class="faq-a">THE GRID is a coding arena built for young developers under 18. If you love coding, problem-solving, and creative challenges — and you’re under 18 — this is your stage to compete, learn, and rise through the ranks.</div></div>
           <div class="faq-item"><div class="faq-q">What event formats are available?</div><div class="faq-a">THE GRID features three different event types: Multiplier Challenges (strategic long-term challenges), Time Bound Competitions (short, intensive coding sessions), and Teams Competitions (collaborative team projects).</div></div>
           <div class="faq-item"><div class="faq-q">How do I register for an event?</div><div class="faq-a">Register through our Google Form to create your profile. Then, check the event calendar, pick your challenge, and complete the registration process for that specific event.</div></div>
           <div class="faq-item"><div class="faq-q">How are event winners determined?</div><div class="faq-a">Our panel of expert developers judges projects on innovation, code quality, and overall performance. Detailed scoring rubrics are available for each event.</div></div>
@@ -1101,7 +1193,7 @@
         <div class="card fade-in delay-400">
           <h3 style="color:var(--accent1);text-align:center">Register Now</h3>
           <p style="text-align:center;margin-bottom:20px;">Click below to register through our Google Form:</p>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer" class="btn">
+          <a href="register.html" target="_self" class="btn">
             Register via Google Form
           </a>
         </div>
@@ -1393,7 +1485,6 @@
     <span>© The Grid</span>
     <a href="code_of_conduct.html">Code of Conduct</a>
     <a href="rules.html">Rules</a>
-    <a href="admin_login.html">Admin</a>
     <a href="https://discord.gg/XfbahWtPMg" target="_blank" rel="noopener noreferrer">Discord</a>
     <a href="mailto:heinrich.oswald24@gmail.com">Contact</a>
   </div>
@@ -1401,9 +1492,28 @@
   </div>
 
   <!-- Sticky register button -->
-  <button class="sticky-register-btn" id="stickyRegisterBtn">
-    Register Now
-  </button>
+  <a class="sticky-register-btn" id="stickyRegisterBtn" href="register.html">Register Now</a>
+
+  <!-- Subtle admin access, bottom-left -->
+  <a href="admin_login.html" class="admin-access" aria-label="Admin access">Admin</a>
+  <style>
+    .admin-access {
+      position: fixed;
+      left: 12px;
+      bottom: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass);
+      padding: 6px 10px;
+      border-radius: 6px;
+      opacity: 0.25;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 9999;
+      text-decoration: none;
+    }
+    .admin-access:hover { opacity: 0.6; transform: translateY(-1px); }
+  </style>
 
   <script>
     // FAQ accordion behavior with smooth animations
@@ -1476,19 +1586,12 @@
         }
       });
       
-      // Add event listener to sticky register button
-      if (stickyRegisterBtn) {
-        stickyRegisterBtn.addEventListener('click', openRegister);
-      }
-      
-      // Add event listeners to all register buttons
-      document.querySelectorAll('.btn[href*="register"], a[href*="register"]').forEach(button => {
+      // Do not intercept navigation to register hub; only handle local section links
+      // (Keep modal system available for pages that use #register sections)
+      document.querySelectorAll('a[href^="#register"], .btn[href^="#register"]').forEach(button => {
         button.addEventListener('click', function(e) {
-          // Only intercept the click if we're dealing with a local register button, not external links
-          if (this.getAttribute('href').startsWith('#') || this.getAttribute('href').toLowerCase().includes('register')) {
-            e.preventDefault();
-            openRegister();
-          }
+          e.preventDefault();
+          openRegister();
         });
       });
     }

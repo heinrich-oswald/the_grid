@@ -499,6 +499,9 @@
                             <div class="label">Presentation</div>
                         </div>
                     </div>
+                    <div class="chart-wrap" style="margin-top:16px">
+                        <canvas id="teamsCriteriaChart" height="160"></canvas>
+                    </div>
                     <p>Judges will evaluate each project holistically, considering both technical excellence and creative problem-solving.</p>
                 </div>
 
@@ -550,5 +553,17 @@
 © The Grid • Teams Event • Contact: <a href="mailto:heinrich.oswald24@gmail.com">heinrich.oswald24@gmail.com</a> • <a href="https://discord.gg/XfbahWtPMg" style="color: var(--accent1)" target="_blank" rel="noopener noreferrer">Join Discord</a> • <a href="code_of_conduct.html" style="color: var(--accent3); text-decoration: none; padding: 4px 8px; border-radius: 4px; background-color: rgba(75, 118, 180, 0.1); transition: all 0.3s ease;">Code of Conduct</a>
         </footer>
     </div>
+<!-- Charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="assets/charts.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    GridCharts.renderPieChart(
+      'teamsCriteriaChart',
+      ['Innovation','Functionality','Design & UI/UX','Presentation'],
+      [30,30,20,20]
+    );
+  });
+</script>
 </body>
 </html>

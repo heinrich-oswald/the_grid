@@ -1,6 +1,52 @@
 
 The Grid — Deploy Instructions
------------------------------
+------------------------------
+
+Permanent Production Setup (Express API + Static Site)
+=====================================================
+Overview
+- Host the Admin API (`node-admin-api`) on a cloud provider (Render recommended).
+- Host the static site (HTML in project root) on Netlify or Vercel.
+- Point clients at your production API via `API_BASE_URL`.
+
+Admin API (Render)
+1) Ensure `render.yaml` and `node-admin-api/Dockerfile` exist (they’re included).
+2) Push this repo to Git and connect it to Render.
+3) Render will create a Docker Web Service from `render.yaml`.
+4) Set environment variables on the service:
+   - `GRID_ALLOWED_ORIGIN` = `https://your-site.example.com` (static site origin)
+   - `ADMIN_API_TOKEN` = your secret admin token
+   - `ADMIN_DB_PATH` = `/data/admin-settings.json` (attach persistent disk)
+5) Deploy. Note the API base, e.g. `https://the-grid-admin-api.onrender.com/api/admin`.
+
+Static Site (Netlify)
+1) Use `netlify.toml` (publish directory is project root `.`).
+2) Connect repo to Netlify, deploy. Your site URL becomes `https://your-site.example.com`.
+
+Static Site (GitHub Pages)
+1) Push your repo to GitHub and ensure default branch is `main`.
+2) The included GitHub Actions workflow `.github/workflows/deploy-pages.yml` publishes the project root on each push.
+3) In GitHub → Settings → Pages, set the source to "GitHub Actions".
+4) Your site URL will be `https://<username>.github.io/<repo>` or a custom domain if configured.
+5) Optional: add a `CNAME` file at project root containing your custom domain to enforce it.
+
+Client Configuration
+1) In `assets/config.js`, set the production default:
+   - `API_BASE_URL: 'https://api.your-site.example.com/api/admin'`
+2) Optionally override per‑browser in DevTools:
+   - `localStorage.setItem('API_BASE_URL', 'https://the-grid-admin-api.onrender.com/api/admin')`
+3) In `admin.html`, paste your Admin Token and click `Save`.
+4) If you host the site on GitHub Pages, set the API’s `GRID_ALLOWED_ORIGIN` to your Pages origin (e.g., `https://<username>.github.io`).
+
+Verification
+1) Open `/admin.html` → click `Check DB Health` → expect `Online · DB: file`.
+2) Change a setting → open `index.html` and other pages → observe instant updates via SSE.
+
+Security
+- Keep `ADMIN_API_TOKEN` private (do not commit).
+- CORS is restricted by `GRID_ALLOWED_ORIGIN` on the API.
+
+Legacy/Alternative (Supabase) content remains below for reference.
 Files:
 - index.html
 - rules.html

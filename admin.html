@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -90,6 +90,7 @@
         <a class="btn ghost" href="teams.html">Teams</a>
         <a class="btn ghost" href="timebound.html">Time Bound</a>
         <a class="btn ghost" href="multiplier.html">Multiplier</a>
+        <a class="btn ghost" href="dev_index.html">Dev Index</a>
       </div>
     </header>
 
@@ -129,6 +130,16 @@
               <button class="btn ghost" id="cfgReset">Reset Config</button>
               <button class="btn ghost" id="cfgHealth">Check DB Health</button>
               <span id="dbHealth" class="pill off" style="margin-left:auto">DB: Unknown</span>
+            </div>
+            <div class="row" style="gap:8px; align-items:center; margin-top:8px;">
+              <label style="width:150px;color:var(--muted)">Current API Base</label>
+              <div id="cfgApiBase" style="flex:1; font-size:12px; opacity:0.85; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></div>
+              <button class="btn ghost" id="cfgCopyApiBase">Copy</button>
+              <button class="btn ghost" id="cfgOpenHealth">Open Health</button>
+            </div>
+            <div class="row" style="gap:8px; align-items:center; margin-top:8px;">
+              <label style="width:150px;color:var(--muted)">Token</label>
+              <div id="cfgTokenStatus" class="pill off" style="flex:0">Not Set</div>
             </div>
             <div class="row" style="gap:8px; margin-top:8px;">
               <button class="btn" id="cfgOneClick">One‑Click: Use this host (port 5000)</button>
@@ -254,26 +265,22 @@
           </div>
           <div id="tutorialBody" style="margin-top:6px;">
             <ol style="margin:0 0 8px 18px; line-height:1.6;">
-              <li>Start backend (local). In a terminal run <code>python backend/app.py</code>. It should say listening on <code>http://localhost:5000</code>.</li>
               <li>Open Admin Panel at <code>http://localhost:8000/admin.html</code>.</li>
-              <li>Click <code>One‑Click: Use this host (port 5000)</code> to auto‑set the API host/port.</li>
-              <li>If your backend requires a token, paste it in <code>Admin Token</code> then click <code>Save Config</code>. (On Flask set env <code>ADMIN_API_TOKEN</code> to the same value.)</li>
-              <li>Click <code>Check DB Health</code>. Expected: <code>Online</code> and <code>DB: sqlite</code>. If not, see Troubleshooting below.</li>
-              <li>Make a quick change: set a timer or label in Admin, then open <code>index.html</code> and <code>multiplier.html</code> in other tabs. They should update within seconds.</li>
-              <li>Optional cloud: choose provider <code>lovable</code> for Supabase/Postgres. Set keys in <code>assets/config.js</code> (<code>LOVABLE_URL</code>, <code>LOVABLE_ANON_KEY</code>). Health will show <code>postgres</code>.</li>
-              <li>To undo config, use <code>Reset Overrides</code> then reload the page.</li>
+              <li>The site now uses a single cloud API base defined in <code>assets/config.js</code> (<code>API_BASE_URL</code>). No LAN/local host/port config is needed.</li>
+              <li>If your backend requires a token, paste it in <code>Admin Token</code> then click <code>Save</code>. This adds <code>Authorization: Bearer</code> to all admin requests.</li>
+              <li>Click <code>Check DB Health</code>. Expected: <code>Online</code> and <code>DB: file</code>. If not, see Troubleshooting below.</li>
+              <li>Make a quick change (e.g., disable timers or set a label). Other pages should reflect changes instantly via SSE.</li>
+              <li>To reset local overrides, use <code>Reset Overrides</code> then reload.</li>
             </ol>
             <div style="font-size:12px;color:var(--muted);margin:8px 0 10px 0;">
-              <strong>Tip:</strong> When health shows <code>DB: sqlite</code>, you are connected to the local Flask backend using SQLite (<code>backend/admin.db</code>). Changes persist and sync via server‑sent events (SSE) to all pages.
+              <strong>Tip:</strong> The Admin API broadcasts updates via server‑sent events (SSE). All devices pointing to the same <code>API_BASE_URL</code> receive settings instantly and store them in <code>localStorage.admin_settings</code> for quick reads.
             </div>
             <div style="border-top:1px solid var(--border); padding-top:8px; margin-top:10px;">
               <div style="font-weight:600; font-size:13px; margin-bottom:6px;">Troubleshooting</div>
               <ul style="margin:0 0 8px 18px; line-height:1.6;">
-                <li><strong>Health fails</strong>: Ensure backend is running, host is <code>localhost</code>, port is <code>5000</code>, and token (if set) matches.</li>
-                <li><strong>SSE error</strong>: An initial red error like <code>/api/admin/stream</code> can appear until backend connects. It should clear after health is OK.</li>
-                <li><strong>Port conflict</strong>: Change backend port in <code>backend/app.py</code> or set <code>GRID_FLASK_API_PORT</code> in the Admin Panel.</li>
+                <li><strong>Health fails</strong>: Ensure your Admin API is reachable at <code>API_BASE_URL</code> and token (if set) matches.</li>
+                <li><strong>SSE error</strong>: A red error for <code>/api/admin/stream</code> can appear until the API connects; it clears once health is OK.</li>
                 <li><strong>Reset config</strong>: Click <code>Reset Overrides</code> or in DevTools run <code>localStorage.clear()</code> and reload.</li>
-                <li><strong>LAN devices</strong>: Use your PC’s IP (e.g., <code>192.168.x.x</code>) as host; keep port <code>5000</code>. Then click health.</li>
               </ul>
               <div style="font-size:12px;color:var(--muted);">Need more help? Toggle this card open and follow each step; your changes should reflect immediately across pages.</div>
             </div>
@@ -616,6 +623,21 @@
       } else {
         syncUI();
       }
+    })();
+  </script>
+  <script>
+    (function(){
+      const CFG = window.__GRID_CONFIG__ || window.APP_CONFIG || {};
+      const apiBase = (CFG.API_BASE_URL || localStorage.getItem('API_BASE_URL') || '').trim();
+      const tok = (localStorage.getItem('admin_api_token') || CFG.ADMIN_API_TOKEN || '').trim();
+      const apiEl = document.getElementById('cfgApiBase');
+      if (apiEl) apiEl.textContent = apiBase || '(not set)';
+      const tokEl = document.getElementById('cfgTokenStatus');
+      if (tokEl) { tokEl.textContent = tok ? 'Set' : 'Not Set'; tokEl.className = 'pill ' + (tok ? 'on' : 'off'); }
+      const copyBtn = document.getElementById('cfgCopyApiBase');
+      if (copyBtn) copyBtn.addEventListener('click', async () => { if (!apiBase) return; try { await navigator.clipboard.writeText(apiBase); copyBtn.textContent = 'Copied!'; setTimeout(()=>copyBtn.textContent='Copy',1000);} catch(e){} });
+      const openBtn = document.getElementById('cfgOpenHealth');
+      if (openBtn) openBtn.addEventListener('click', ()=> { if (!apiBase) return; const url = apiBase.replace(/\/$/,'') + '/db_health'; window.open(url,'_blank'); });
     })();
   </script>
 </body>

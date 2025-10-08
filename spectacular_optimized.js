@@ -364,7 +364,7 @@ function initHoverEffects() {
       } else if (window.location.pathname.includes('teams')) {
         card.style.backgroundImage = `linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(255, 240, 128, 0.05))`; // Yellow gradient
       } else {
-        card.style.backgroundImage = `linear-gradient(135deg, rgba(0, 255, 128, 0.05), rgba(0, 255, 255, 0.05))`;
+        card.style.backgroundImage = `linear-gradient(135deg, rgba(232, 76, 94, 0.05), rgba(75, 118, 180, 0.05))`;
       }
       card.style.backgroundSize = '200% 200%';
       card.style.backgroundPosition = `${x / rect.width * 100}% ${y / rect.height * 100}%`;

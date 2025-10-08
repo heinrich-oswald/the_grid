@@ -71,8 +71,8 @@
     /* Main Container */
     .wrap {
       max-width: 1200px;
-      margin: 24px auto;
-      padding: 18px;
+      margin: 32px auto;
+      padding: 24px;
     }
     
     /* Common Navigation */
@@ -84,8 +84,9 @@
       padding: 20px 30px;
       border-radius: 12px;
       background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 40, 20, 0.7));
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      /* Remove backdrop blur to avoid clipping/artefacts */
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
       border: 1px solid var(--border-glass);
       position: sticky;
       top: 24px;
@@ -209,14 +210,14 @@
       @keyframes logoShine{0%{transform:translateX(-100%) skewX(-20deg)}100%{transform:translateX(200%) skewX(-20deg)}}
       @keyframes textGlow{0%{text-shadow:0 0 5px var(--accent1-glow),0 0 10px var(--accent1-glow),0 0 20px rgba(0, 255, 157, 0.3)}100%{text-shadow:0 0 10px var(--accent1-glow),0 0 20px var(--accent1-glow),0 0 30px rgba(0, 255, 157, 0.4)}}
       @keyframes glowBorder{0%{box-shadow:0 0 15px rgba(255, 215, 0, 0.15)}100%{box-shadow:0 0 20px rgba(255, 215, 0, 0.25)}}
-      .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 30px;border-radius:12px;background:linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));backdrop-filter:blur(10px);border:1px solid var(--border-glass);position:sticky;top:24px;z-index:100}
+      .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 30px;border-radius:12px;background:linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));backdrop-filter:none;border:1px solid var(--border-glass);position:sticky;top:24px;z-index:100}
       .brand{display:flex;align-items:center;gap:16px}
       .logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:24px;transition:all 0.3s ease;position:relative;overflow:hidden}
         .logo::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);transform:skewX(-20deg);animation:logoShine 3s ease-in-out infinite}
       .logo:hover{transform:scale(1.05);box-shadow:var(--accent1-glow);}
       .brand-title{font-size:24px;font-weight:700;color:#fff;text-shadow:0 0 10px rgba(0, 245, 255, 0.5);margin:0;padding:0;line-height:1.2;}
       .brand-sub {font-size:12px;color:var(--muted);font-family:'Rajdhani', sans-serif;letter-spacing:0.5px;}
-      .cta-row{display:flex;gap:12px;margin-top:8px}
+      .cta-row{display:flex;gap:16px;margin-top:12px}
     /* Button styling */
         .btn{padding:12px 24px;border-radius:8px;background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%);color:var(--paper);font-weight:700;transition:all 0.3s ease;border:1px solid var(--border-glass);box-shadow:0 4px 12px rgba(255, 215, 0, 0.15);display:flex;align-items:center;gap:8px;position:relative;overflow:hidden;animation:glowBorder 3s ease-in-out infinite alternate}
         .btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(255, 215, 0, 0.3)}
@@ -226,7 +227,7 @@
         .btn.ghost:hover{background:var(--accent1);color:var(--paper);box-shadow:0 6px 16px rgba(255, 215, 0, 0.3)}}
         
       /* Grid layout for main content */
-        .grid{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:start;margin-top:24px;position:relative}
+        .grid{display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:start;margin-top:28px;position:relative}
       
       /* Scanline effect */
       .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 2px); }
@@ -235,7 +236,7 @@
       .card{
         background:linear-gradient(135deg, var(--card-glass), rgba(18, 18, 18, 0.6));
         border:1px solid var(--border-glass);
-        padding:24px;
+        padding:28px;
         border-radius:16px;
         transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         position:relative;
@@ -306,7 +307,7 @@
         }
       }
     /* Stats counter */
-      .stats{display:flex;justify-content:space-around;padding:24px 16px;border-radius:20px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);margin-top:40px;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px);position:relative;overflow:hidden}
+      .stats{display:flex;justify-content:space-around;padding:24px 16px;border-radius:20px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);margin-top:40px;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:none;position:relative;overflow:hidden}
       .stats::before{
         content:'';
         position:absolute;
@@ -389,7 +390,7 @@
         z-index:1;
       }
       .hero-overlay{position:relative;margin-top:-180px;padding:24px;z-index:2}
-      .hero-card{background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.9) 100%);border-radius:24px;padding:40px 48px;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px);transition:all 0.3s ease}
+      .hero-card{background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.9) 100%);border-radius:24px;padding:40px 48px;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:none;transition:all 0.3s ease}
       .hero-card:hover{box-shadow:0 0 50px rgba(138, 132, 78, 0.2);transform:translateY(-5px)}
       .hero-card::before{
         content:'';
@@ -402,11 +403,11 @@
         background-size:20px 20px;
         z-index:0;
       }
-    .ticker{margin-top:12px;padding:10px 16px;border-radius:10px;background:var(--glass);font-size:14px;color:var(--muted);border:1px solid rgba(138, 132, 78, 0.1);backdrop-filter:blur(5px)}
+      .ticker{margin-top:12px;padding:10px 16px;border-radius:10px;background:var(--glass);font-size:14px;color:var(--muted);border:1px solid rgba(138, 132, 78, 0.1);backdrop-filter:none}
       .logo-square{width:150px;height:150px;border-radius:16px;background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--paper);font-size:48px;box-shadow:0 0 40px rgba(138, 132, 78, 0.35);animation:glowPulse 3s ease-in-out infinite alternate;position:relative;overflow:hidden;transition:all 0.3s ease}
       @keyframes glowPulse{0%{box-shadow:0 0 10px rgba(138, 132, 78, 0.2)}100%{box-shadow:0 0 30px rgba(138, 132, 78, 0.4)}}
     /* Sponsor carousel */
-      .sponsor-carousel {background:var(--card);border-radius:20px;padding:24px;margin-top:40px;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px)}
+      .sponsor-carousel {background:var(--card);border-radius:20px;padding:24px;margin-top:40px;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:none}
       .sponsor-row{display:flex;overflow:hidden;border-radius:12px;padding:12px;gap:24px;align-items:center;background:linear-gradient(90deg, var(--glass), transparent, var(--glass));margin-top:16px}
       .sponsor-track{display:flex;gap:32px;animation:scroll 25s linear infinite;align-items:center}
       .sponsor{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:10px 20px;border-radius:12px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);width:220px;height:110px;border:1px solid rgba(138, 132, 78, 0.1);transition:all 0.3s ease;box-shadow:0 0 15px rgba(138, 132, 78, 0.05)}
@@ -455,7 +456,7 @@
     .sticky-register-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent3),var(--accent1));color:var(--paper);border-radius:999px;padding:14px 18px;font-weight:800;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:999;transition:all 0.3s ease}
     .sticky-register-btn:hover{transform:scale(1.05);box-shadow:0 12px 35px rgba(0,0,0,0.7)}
     
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);}
+      .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:none;display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);}
     .modal-backdrop.active{opacity:1;pointer-events:auto;}
     
     .modal{background:linear-gradient(135deg, var(--bg-900), var(--bg-800));padding:32px;border-radius:16px;width:min(600px,95%);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);transform:scale(0.95) translateY(-20px);transition:transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);position:relative;}
@@ -471,7 +472,7 @@
     .modal h3{margin-top:0;}
     .discord-cta{display:flex;gap:10px;align-items:center;margin-top:12px}
     /* Proof of payout template */
-      .proof-payout-template{margin-top:32px;padding:24px;border-radius:20px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);position:relative;overflow:hidden;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:blur(10px);transition:all 0.3s ease}
+      .proof-payout-template{margin-top:32px;padding:24px;border-radius:20px;background:linear-gradient(135deg, var(--card) 0%, rgba(21,21,21,0.8) 100%);position:relative;overflow:hidden;box-shadow:0 0 30px rgba(138, 132, 78, 0.15);border:1px solid var(--glass);backdrop-filter:none;transition:all 0.3s ease}
       .proof-payout-template:hover{box-shadow:0 0 40px rgba(138, 132, 78, 0.25);transform:translateY(-2px)}
       .proof-payout-template::before{
         content:'';
@@ -577,7 +578,7 @@
   <div class="wrap">
     <div class="nav sticky">
       <div class="brand">
-        <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
+        <div class="logo"><img src="assets/logo.png" alt="The Grid logo"></div>
         <div>
           <div class="brand-title">THE GRID</div>
           <div class="brand-sub">Teams Event</div>
@@ -599,13 +600,13 @@
     <div class="hero-overlay">
       <div class="hero-card fade-in delay-100">
           <div style="display:flex;align-items:center;gap:20px;position:relative;z-index:1;">
-            <div class="logo-square" style="background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%);animation:glowPulse 2s ease-in-out infinite alternate;"><img src="assets/logo.png" alt="The Grid" style="width:86%;height:86%;object-fit:contain;filter:brightness(1.2)"></div>
+            <div class="logo-square"><img src="assets/logo.png" alt="The Grid"></div>
             <div style="flex:1">
               <div style="background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%); display:inline-block; padding:6px 12px; border-radius:6px; font-size:14px; font-weight:700; margin-bottom:8px;">THE GRID</div>
               <h1 style="margin:0 0 8px 0;font-size:26px;background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">THE GRID Teams Event — Collaborative Challenge</h1>
               <div style="color:var(--muted);font-size:16px;line-height:1.5;">Join forces with friends for a 1-week development marathon. ₹300 per team entry, 5 limited slots, with a ₹750 cash prize for the best collaborative project.</div>
               <div class="cta-row" style="margin-top:24px">
-                <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank">Register Now</a>
+                <a class="btn" href="register.html" target="_self">Register Now</a>
                 <a class="btn ghost" href="teams_rules.html">Team Guidelines</a>
               </div>
             </div>
@@ -759,7 +760,7 @@
           <div class="card-glow"></div>
           <div style="background:linear-gradient(135deg, var(--accent1) 90%, var(--accent3) 10%); display:inline-block; padding:6px 12px; border-radius:6px; font-size:14px; font-weight:700; margin-bottom:8px;">THE GRID</div>
           <h3 style="background:linear-gradient(90deg, var(--accent3), var(--accent1));-webkit-background-clip:text;background-clip:text;color:transparent;">Register — THE GRID Teams Event</h3>
-          <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" style="width: 100%; text-align: center; margin-bottom: 16px;">Register Team</a>
+          <a class="btn" href="register.html" target="_self" style="width: 100%; text-align: center; margin-bottom: 16px;">Register Team</a>
           <div style="color:var(--muted);font-size:13px">Fill out the Google Form to register your team. Payments will be verified by moderators.</div>
 
           <div style="margin-top:12px">
@@ -1260,5 +1261,12 @@
       })();
     });
   </script>
-</body>
-</html>
+  <script>
+    // Apply "neat" UI mode for cleaner look on event pages
+    document.addEventListener('DOMContentLoaded', function(){
+      document.body.classList.add('neat');
+    });
+  </script>
+  
+  </body>
+  </html>

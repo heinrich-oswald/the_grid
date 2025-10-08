@@ -69,8 +69,8 @@
     /* Main Container */
     .wrap {
       max-width: 1200px;
-      margin: 24px auto;
-      padding: 18px;
+      margin: 32px auto;
+      padding: 24px;
     }
     
     /* Common Navigation */
@@ -219,7 +219,7 @@
         }
       }
       /* Main container */
-      .wrap{max-width:1200px;margin:24px auto;padding:18px}
+      .wrap{max-width:1200px;margin:32px auto;padding:24px}
       
       .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 30px;border-radius:12px;background:var(--glass);border:1px solid var(--border-glass);position:sticky;top:24px;z-index:100}
       .brand{display:flex;align-items:center;gap:16px}
@@ -227,14 +227,14 @@
       .logo:hover{transform:scale(1.05);box-shadow:0 0 25px var(--accent1-glow);}
       .brand-title{font-size:24px;font-weight:700;color:#fff;text-shadow:0 0 10px rgba(0, 245, 255, 0.5);margin:0;padding:0;line-height:1.2;}
       .brand-sub {font-size:12px;color:var(--muted);font-family:'Rajdhani', sans-serif;letter-spacing:0.5px;}
-      .cta-row{display:flex;gap:12px;margin-top:8px}
+      .cta-row{display:flex;gap:16px;margin-top:12px}
       .btn{background:linear-gradient(135deg, var(--accent2), var(--accent3));color:var(--bg);padding:12px 24px;border-radius:8px;border:0;font-weight:700;cursor:pointer;transition:all 0.3s ease;position:relative;box-shadow:0 0 15px var(--accent1-glow);text-decoration:none;display:inline-block}
       .btn:hover{transform:translateY(-2px);box-shadow:0 0 25px var(--accent1-glow);}
       .btn.ghost{background:transparent;border:1px solid var(--accent2);color:var(--accent3);}
       .btn.ghost:hover{background:var(--glass);}
       
       /* Grid layout for main content */
-      .grid{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:start;margin-top:24px;position:relative}
+      .grid{display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:start;margin-top:28px;position:relative}
       
       /* Scanline effect */
       .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 2px); }
@@ -423,7 +423,7 @@
     <div class="wrap">
     <div class="nav sticky">
       <div class="brand">
-        <div class="logo"><img src="assets/logo.png" alt="The Grid logo" style="width:100%;height:100%;object-fit:cover;border-radius:6px"></div>
+        <div class="logo"><img src="assets/logo.png" alt="The Grid logo"></div>
         <div>
           <div class="brand-title">THE GRID</div>
           <div class="brand-sub">Time Bound Event</div>
@@ -450,8 +450,8 @@
             <div style="position:absolute;bottom:-10px;left:40%;width:80px;height:80px;background:var(--accent1);opacity:0.1;border-radius:50%;filter:blur(15px);z-index:0;"></div>
             
             <!-- Logo -->
-            <div class="logo-square" style="animation: pulse 2s infinite;">
-              <img src="assets/logo.png" alt="The Grid" style="width:86%;height:86%;object-fit:contain;filter:brightness(1.2)">
+            <div class="logo-square">
+              <img src="assets/logo.png" alt="The Grid">
             </div>
             
             <!-- Hero content -->
@@ -627,7 +627,7 @@
           <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">
             Limited to 10 slots • ₹100 entry fee • ₹500 grand prize
           </div>
-          <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank" style="width: 100%; text-align: center; margin-bottom: 16px; padding: 12px;">Register Now</a>
+          <a class="btn" href="register.html" target="_self" style="width: 100%; text-align: center; margin-bottom: 16px; padding: 12px;">Register Now</a>
           <div style="color:var(--muted);font-size:13px">Fill out the Google Form to register. Payments will be verified by moderators within 12 hours.</div>
 
           <!-- Registration progress bar -->
@@ -690,7 +690,7 @@
   </div>
 
   <!-- Sticky register button -->
-  <a class="sticky-register-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdBH8VZp9Y78BnVrG6fLc3eV8J9N-VkX0u5dZ1hQH7Y6VJQPQ/viewform?usp=sf_link" target="_blank">CLAIM SLOT</a>
+  <a class="sticky-register-btn" href="register.html" target="_self">CLAIM SLOT</a>
 
   <script>
       // FAQ accordion with smooth animations
@@ -1112,6 +1112,13 @@
         const cfg = getAdminEventConfig(eventType);
         return !!(cfg && cfg.disabled);
       }
-    </script>
-</body>
-</html>
+  </script>
+  <script>
+    // Apply "neat" UI mode for cleaner look on event pages
+    document.addEventListener('DOMContentLoaded', function(){
+      document.body.classList.add('neat');
+    });
+  </script>
+  
+  </body>
+  </html>

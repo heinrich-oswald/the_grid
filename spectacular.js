@@ -288,9 +288,8 @@ function initHoverEffects() {
       const maxDistance = Math.sqrt(Math.pow(centerX, 2) + Math.pow(centerY, 2));
       const glowIntensity = 1 - (distance / maxDistance);
       
-      // Create dynamic glow color based on cursor position
-      const hue = (x / rect.width) * 180; // 0-180 for green to blue
-      const glowColor = `hsla(${hue}, 100%, 50%, ${0.3 * glowIntensity})`;
+      // Create glow color leaning red (removes green)
+      const glowColor = `hsla(0, 85%, 60%, ${0.3 * glowIntensity})`;
       
       // Apply transform with enhanced perspective
       card.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03)`;
@@ -312,7 +311,7 @@ function initHoverEffects() {
     } else if (window.location.pathname.includes('teams')) {
       card.style.backgroundImage = `linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(255, 240, 128, 0.05))`; // Yellow gradient
     } else {
-      card.style.backgroundImage = `linear-gradient(135deg, rgba(0, 255, 128, 0.05), rgba(0, 255, 255, 0.05))`;
+      card.style.backgroundImage = `linear-gradient(135deg, rgba(232, 76, 94, 0.05), rgba(75, 118, 180, 0.05))`;
     }
       card.style.backgroundSize = '200% 200%';
       card.style.backgroundPosition = `${x / rect.width * 100}% ${y / rect.height * 100}%`;

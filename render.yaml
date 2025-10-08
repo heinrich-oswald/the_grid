@@ -1,0 +1,14 @@
+services:
+  - name: the-grid-admin-api
+    type: web
+    runtime: docker
+    rootDir: node-admin-api
+    dockerfilePath: node-admin-api/Dockerfile
+    envVars:
+      - key: GRID_ALLOWED_ORIGIN
+        value: https://heinrich-oswald.github.io
+      - key: ADMIN_API_TOKEN
+        sync: false
+      - key: ADMIN_DB_PATH
+        value: /data/admin-settings.json
+    autoDeploy: true
